@@ -1,0 +1,12 @@
+[core]
+  editor = nvim
+
+[credential]
+  helper = cache --timeout=7200
+[push]
+  default = simple
+[alias]
+  unadd = reset HEAD
+[user]
+  email = eli.mulhall@gmail.com
+  name = Elias Mulhall

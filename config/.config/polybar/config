@@ -1,0 +1,132 @@
+[colors]
+white = #cccccc
+grey = #333333
+black = #222222
+red = #900000
+blue = #285577
+
+
+[bar/laptop]
+monitor = eDP1
+bottom = true
+width = 100%
+height = 30
+padding-right = 1
+line-size = 3
+
+background = ${colors.black}
+border-color = ${colors.black}
+foreground = ${colors.white}
+
+font-0 = Inconsolata:pixelsize=13;3
+font-1 = Font Awesome 5 Free Solid:size=12;3
+font-2 = Font Awesome 5 Brands:size=12;3
+
+module-margin = 1
+modules-left = i3
+modules-right = volume backlight battery1 battery0 wlan date
+
+
+[bar/external]
+monitor = HDMI2
+bottom = true
+width = 100%
+height = 30
+padding-right = 1
+line-size = 3
+
+background = ${colors.black}
+border-color = ${colors.black}
+foreground = ${colors.white}
+
+font-0 = Inconsolata:pixelsize=13;3
+font-1 = Font Awesome 5 Free Solid:size=12;3
+font-2 = Font Awesome 5 Brands:size=12;3
+
+module-margin = 1
+modules-left = i3
+modules-right = date
+
+
+[module/i3]
+type = internal/i3
+
+pin-workspaces = true
+enable-scroll = true
+wrapping-scroll = false
+
+label-focused = %index%
+label-focused-foreground = ${colors.white}
+label-focused-background = ${colors.grey}
+label-focused-underline = ${colors.blue}
+label-focused-padding = 1
+
+label-unfocused = %index%
+label-unfocused-foreground = ${colors.white}
+label-unfocused-background = ${colors.black}
+label-unfocused-padding = 1
+
+label-urgent = %index%
+label-urgent-foreground = ${colors.white}
+label-urgent-background = ${colors.black}
+label-urgent-underline = ${colors.red}
+label-urgent-padding = 1
+
+
+[module/date]
+type = internal/date
+interval = 5
+date = %b %d
+time = %I:%M %p
+label = " %date%, %time%"
+
+
+[module/battery]
+type = internal/battery
+poll-interval = 5
+full-at = 95
+time-format = %H:%M
+
+label-discharging = %time%
+label-charging = %time%
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-charging =  <label-charging>
+format-full =  00:00
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+
+[module/battery0]
+inherit = module/battery
+battery = BAT0
+
+
+[module/battery1]
+inherit = module/battery
+battery = BAT1
+
+
+[module/volume]
+type = internal/alsa
+format-volume = <ramp-volume> <label-volume>
+format-muted =  0%
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+
+[module/backlight]
+type = internal/xbacklight
+label =  %percentage%%
+
+
+[module/wlan]
+type = internal/network
+interface = wlp4s0
+interval = 5
+label-connected = %{A1:connman-gtk:} %signal%%%{A}
+label-disconnected = %{A1:connman-gtk:} --%{A}

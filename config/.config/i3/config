@@ -1,0 +1,172 @@
+# i3 config file (v4)
+#
+# Please see http://i3wm.org/docs/userguide.html for a complete reference!
+#
+#
+#
+# All shortcuts in one place
+#
+# mod+enter             open terminal
+# mod+shift+enter       firefox
+# mod+control+enter     pcmanfm
+# mod+shift+c           close window
+# mod+b                 dmenu listing all binaries
+# mod+p                 dmenu listing all .desktop programs
+# mod+h/j/k/l           move focus
+# mod+arrows            move focus
+# mod+shift+h/j/k/l     move window
+# mod+shift+arrows      move window
+# mod+f                 fullscreen
+# mod+s                 stack mode
+# mod+e                 split mode
+# mod+w                 tab mode
+# mod+space             focus tiling / floating layer
+# mod+shift+space       toggle tiling / floating layer
+# mod+(1-0)             switch to workspace 1-10
+# mod+shift+(1-0)       move window to workspace 1-10
+# mod+r                 resize window
+# mod+shift+r           reload i3 config
+# mod+shift+e           restart i3
+# mod+shift+q           exit x session
+#
+######
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id xcape -e '#66=Escape'
+exec_always --no-startup-id xmodmap $HOME/.config/X11/Xmodmap
+
+#basic wm behavior
+workspace_layout stacking
+hide_edge_borders both
+
+
+#fonts and color stuff
+font xft:Sans 9
+
+# class                         border  backgr. text    indicator
+client.focused                  #285577 #285577 #ffffff #285577
+client.focused_inactive         #222222 #333333 #bbbbbb #333333
+client.unfocused                #222222 #333333 #bbbbbb #333333
+client.urgent                   #900000 #900000 #ffffff #900000
+
+for_window [class="Connman*"] floating enable
+
+#key bindings
+
+set $mod Mod4
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec kitty
+
+# start browser
+bindsym $mod+Shift+Return exec firefox
+
+# start file manager
+bindsym $mod+Control+Return exec thunar
+
+#search google
+# bindsym $mod+slash exec google_selection
+
+# configure external monitor
+bindsym $mod+F1 exec $HOME/bin/work_external_monitor.sh
+
+# kill focused window
+bindsym $mod+Shift+c kill
+
+# start dmenu (a program launcher)
+bindsym $mod+p exec i3-dmenu-desktop
+
+# use the scratchpad
+bindsym $mod+Shift+backslash move scratchpad
+bindsym $mod+backslash scratchpad show
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+#
+bindsym $mod+Left workspace prev
+bindsym $mod+Right workspace next
+bindsym $mod+Shift+Left move container to workspace prev
+bindsym $mod+Shift+Right move container to workspace next
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# reload the configuration file
+bindsym $mod+Shift+r reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+e restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+q exec "xfce4-session-logout"
+
+# resize window (you can also use the mouse for that)
+bindsym $mod+r mode "resize"
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym h resize shrink width 2 px or 2 ppt
+        bindsym j resize shrink height 2 px or 2 ppt
+        bindsym k resize grow height 2 px or 2 ppt
+        bindsym l resize grow width 2 px or 2 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize shrink height 10 px or 10 ppt
+        bindsym Up resize grow height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
