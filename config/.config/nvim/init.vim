@@ -124,10 +124,10 @@ autocmd vimrc BufWritePre * NeoformatIfEnabled
 " :ALEInfo         report available liners, settings, and linter log
 Plug 'w0rp/ale'
 let g:ale_linters = {
-  \ 'typescript': ['tslint']
+  \ 'typescript': ['eslint', 'tslint']
   \}
 let g:ale_fixers = {
-  \ 'typescript': ['tslint']
+  \ 'typescript': ['eslint', 'tslint']
   \}
 let g:ale_open_list = 0
 let g:ale_list_window_size = 5
@@ -232,31 +232,6 @@ Plug 'jreybert/vimagit'
 Plug 'justinmk/vim-dirvish'
 let g:dirvish_mode = ':sort ,^.*[\/],' " show directories first
 
-" Test integration
-" Run tests using the nvim terminal, with some extra conveniences provided by
-" the neoterm plugin. Test runners can be defined per language/framework, as
-" necessary.
-" <Leader>tt       test this (run test under cursor)
-" <Leader>tf       test file
-" <Leader>ts       test suite
-" <Leader>tl       test last
-" <Leader>tg       test go (return to last ran test)
-Plug 'janko-m/vim-test'
-let g:test#strategy = 'neoterm'
-
-" Better terminal integration
-" Use neovim terminal to run tests with vim-test. Starts the terminal out
-" small, use '<Leader>=' to resize windows for more space.
-" <Leader><TAB>    toggle a terminal open/close
-" <leader><ESC>    leave terminal mode and treat terminal as read-only buffer
-" <Leader>RR       send the current line or visual selection to a REPL
-" <Leader>RF       send the current file to a REPL
-Plug 'kassio/neoterm'
-let g:neoterm_size = 15
-let g:neoterm_autoinsert = 1
-let g:neoterm_use_relative_path = 1
-let g:neoterm_repl_ruby = 'pry'
-
 " Smart commenting
 " gc{motion}       toggle commenting on lines that {motion} moves over
 " gcc              comment/uncomment line
@@ -306,7 +281,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 
 " Unix file management integration
-" Includes ':SudoEdit', ':SudoWrite', ':Move', ':Remove'.
+" Includes ':Move', ':Rename', ':Delete', ':Mkdir'. Note that ':SudoEdit' and
+" ':SudoWrite' are broken in nvim.
 Plug 'tpope/vim-eunuch'
 
 " Better in-buffer search defaults
@@ -351,7 +327,8 @@ let g:polyglot_disabled = [
   \ 'elm',
   \ 'ruby',
   \ 'javascript',
-  \ 'clojure'
+  \ 'clojure',
+  \ 'elixir'
   \ ]
 
 " Elm
@@ -362,6 +339,7 @@ let g:polyglot_disabled = [
 " :ElmMakeMain     compile 'Main.elm'
 " :ElmTest         run all tests, for specific files use vim-test
 " :ElmFormat       run elm-format manually, instead of waiting for neoformat
+" :ElmShowDocs      doc results from elm-oracle for word under cursor
 " <LocalLeader>m   compile current file
 " <LocalLeader>M   compile 'Main.elm'
 " <LocalLeader>t   run all tests
@@ -388,10 +366,17 @@ Plug 'tpope/vim-rails'
 Plug 'pangloss/vim-javascript'
 Plug 'hotoo/jsgf.vim'
 let g:javascript_plugin_flow = 1
+let g:javascript_plugin_jsdoc = 1
+
+" Typescript
+Plug 'herringtondarkholme/yats.vim'
 
 " Clojure
 Plug 'tpope/vim-fireplace'
 Plug 'venantius/vim-cljfmt'
+
+" Elixir
+Plug 'elixir-editors/vim-elixir'
 
 " ColorSchemes
 " Some nice colorschemes, most of which require true color.
@@ -491,6 +476,7 @@ set tabline=%!MyTabLine()  " Build the tabline by iterating through the tab list
 "   cos            toggle spell check
 "   cow            toggle wrap
 "   co|            toggle colorcolumn at column 81
+"   co-            toggle cursor line highlight
 " c.{motion}       change text, find and repeat with .
 " c>{motion}       change text backwards, find and repeat with .
 noremap C "_c
@@ -857,13 +843,6 @@ nnoremap <silent> <Leader>p :GFiles<CR>
 " <Leader>q  toggle the quickfix list, using ListToggle plugin
 
 " <Leader>r             TODO
-" <Leader>R{*}          neoterm REPL
-"   <Leader>RR          send the current line to a REPL
-"   {Visual}<Leader>RR  send selection to a REPL
-"   <Leader>RF          send the current file to a REPL
-nnoremap <Leader>RR :TREPLSendLine<CR>
-vnoremap <Leader>RR :TREPLSendSelection<CR>
-nnoremap <Leader>RF :TREPLSendFile<CR>
 
 " <Leader>s  TODO
 
@@ -920,10 +899,7 @@ nnoremap <Leader>* :BLines <C-r><C-w><CR>
 " <Leader><Leader>  switch between current and last buffer
 nnoremap <Leader><Leader> <c-^>
 
-" <Leader><TAB>        toggle a terminal open/close
-" {Term}<Leader><TAB>  toggle a terminal open/close
-nnoremap <leader><TAB> :Ttoggle<CR>
-tnoremap <leader><TAB> <C-\><C-n>:Ttoggle<CR>
+" <Leader><TAB>        TODO
 
 " {Term}<Leader><ESC>  switch from terminal mode to reading terminal as buffer
 tnoremap <Leader><ESC> <C-\><C-n>
@@ -1030,7 +1006,8 @@ command! -bang -nargs=* Ag
 
 " Git starts with ':G*', includes blame, diff. Use ':GV' to view git history.
 
-" Unix utilities include ':SudoEdit', ':Mkdir', ':Move', and ':Remove'.
+" Unix utilities include ':Move', ':Rename', ':Delete', ':Mkdir'. Note that
+" ':SudoEdit' and ':SudoWrite' are broken in nvim.
 
 " Rails
 " ':Rpreview' open webpage, ':A' edit 'alternate' file (usually test)
