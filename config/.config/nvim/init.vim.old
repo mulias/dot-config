@@ -1,22 +1,21 @@
 "===============================================================================
 " init.vim
-" My cleaned up and documented config for neovim.
+"
+" Setup
+" * Run ':DownloadPlug' to download the vim-plug package manager. Restart.
+" * Run ':PlugInstall' to fetch and install plugins.
+" * Run ':checkhealth' and make sure all checks are green. Install any missing
+"   libraries needed for Ruby, Python2, and Python3 support.
+" * FZF, SearchReplace: Install Ripgrep.
+" * Neoformat: Install formatters for regularly used languages.
+" * ALE: Install linters for regularly used languages. Use ':ALEInfo' on a file
+"   to find out about linting that file type.
+" * Gutentags: Install Universal Ctags.
 "
 " Vim Compatibility
 " This config is only intended to work for neovim. If I only have access to
 " standard vim then I use a minimal config with the addition of the plugin
 " 'tpope/vim-sensible'.
-"
-" Setup
-" * Run ':DownloadPlug' to download the vim-plug package manager. Restart.
-" * Run ':PlugInstall' to fetch and install plugins.
-" * Run ':CheckHealth' and make sure all checks are green. Install any missing
-"   libraries needed for Ruby, Python2, and Python3 support.
-" * FZF: Install Ag.
-" * Neoformat: Install formatters for regularly used languages.
-" * ALE: Install linters for regularly used languages. Use ':ALEInfo' on a file
-"   to find out about linting that file type.
-" * Gutentags: Install Universal Ctags, or disable gutentags.
 "
 " Documentation
 " The goal is to over-document, so that this file can act not only as a
@@ -58,31 +57,34 @@ call plug#begin(g:nvim_config_dir . '/plugged')
 " Search and navigate with fuzzy find
 " Open fzf in a terminal buffer, with values loaded in from different sources.
 " Installs fzf locally to vim, instead or globally on the system.
-" <Leader>a        fzf search with ag (search all text in project)
-" <Leader>A        fzf search with ag, full screen with preview
+" <Leader>a        fzf search all text in project
+" <Leader>A        fzf search all text in project, full screen
 " <Leader>b        fzf search buffer list
-" <Leader>e        fzf search all files under home dir
+" <Leader>e        fzf search everything on disk (like ':e /foo/bar')
+" <Leader>f        fzf search file paths, insert selected file path into buffer
 " <Leader>gc       fzf search git commits
-" <Leader>gf       fzf search all files in current git repo (alias '<leader>p')
+" <Leader>gf       fzf search all files in current git repo (alias '<Leader>p')
 " <Leader>gh       fzf search git commits for buffer (buffer's git history)
 " <Leader>gs       fzf search `git status`, meaning files with unstaged changes
 " <Leader>h        fzf search recently opened files history
-" <Leader>p        fzf search current project, meaning current git repo
+" <Leader>p        fzf search project files, meaning files in root dir git repo
 " <Leader>z        fzf search ctags (ctag[z])
 " <Leader>Z        fzf search helptags (helptag[Z])
-" <Leader>/        fzf search current buffer
-" <Leader>*        fzf search current buffer for text under cursor
+" <Leader>/        fzf search text in current buffer
+" <Leader>*        fzf search text in current buffer for word under cursor
+" <Leader><TAB>    fzf search mappings in normal/visual/pending mode
 " {FZF}<TAB>       select multiple results to open
 " {FZF}<C-t>       open in new tab
 " {FZF}<C-s>       open in horizontal split
 " {FZF}<C-v>       open in vertical split
-Plug 'junegunn/fzf', { 'dir': g:nvim_config_dir . '/fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf', { 'dir': g:nvim_config_dir . '/fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \ }
+let g:fzf_layout = { 'down': '40%' }
 
 " Formatting
 " Find and run code formatters on buffer write. Neoformat automatically
@@ -95,18 +97,31 @@ let g:fzf_action = {
 Plug 'sbdchd/neoformat'
 let g:neoformat_basic_format_retab = 1
 let g:neoformat_basic_format_trim = 1
-let g:neoformat_javascript_localprettier = {
+let g:localprettier = {
   \ 'exe': './node_modules/.bin/prettier',
   \ 'args': ['--stdin', '--stdin-filepath', '"%:p"'],
   \ 'stdin': 1
   \ }
+let g:neoformat_javascript_localprettier = g:localprettier
 let g:neoformat_enabled_javascript = ['localprettier', 'prettier']
-let g:neoformat_typescript_localprettier = {
-  \ 'exe': './node_modules/.bin/prettier',
-  \ 'args': ['--stdin', '--stdin-filepath', '"%:p"', '--parser', 'typescript'],
-  \ 'stdin': 1
-  \ }
+let g:neoformat_typescript_localprettier = g:localprettier
 let g:neoformat_enabled_typescript = ['localprettier', 'prettier']
+let g:neoformat_typescriptreact_localprettier = g:localprettier
+let g:neoformat_enabled_typescriptreact = ['localprettier', 'prettier']
+let g:neoformat_scss_localprettier = g:localprettier
+let g:neoformat_enabled_scss = ['localprettier', 'prettier']
+let g:neoformat_elm_localelmformat = {
+  \ 'exe': './node_modules/.bin/elm-format',
+  \ 'args': ['--stdin', '--elm-version=0.19'],
+  \ 'stdin': 1,
+  \ }
+let g:neoformat_enabled_elm = ['localelmformat', 'elmformat']
+let g:neoformat_reason_localrefmt = {
+  \ 'exe': './node_modules/.bin/bsrefmt',
+  \ 'args': ["--interface=" . (expand('%:e') == "rei" ? "true" : "false")],
+  \ 'stdin': 1,
+  \ }
+let g:neoformat_enabled_reason = ['localrefmt', 'refmt']
 autocmd vimrc BufWritePre * NeoformatIfEnabled
 
 " Linting
@@ -114,21 +129,21 @@ autocmd vimrc BufWritePre * NeoformatIfEnabled
 " errors and warning for the current buffer. ALE will automatically find and
 " use linters installed on your system, unless 'g:ale_linters' is set
 " otherwise. ALE can be set to lint as you type, but I find that distracting.
-" coa              shortcut for :ALEToggle
-" [l, [L, ]l, ]L   jump to previous, first, next, last location list entry
-" <Leader>i        linting info related to error on line
-" <Leader>l        toggle location list
-" :ALELint         manually run linters
-" :ALEToggle       turn ALE on/off for current buffer
-" :ALEDetail       show expanded message for error on line
-" :ALEInfo         report available liners, settings, and linter log
+" coa                shortcut for :ALEToggle
+" [l, [L, ]l, ]L     jump to previous, first, next, last location list entry
+" <Leader>l          toggle location list, where errors are populated
+" <Leader>i          call :ALEDetail
+" <Leader>k          call :ALEHover
+" <Leader>r          call :ALERename
+" <C-g><C-]>         call :ALEGoToDefinition
+" :ALELint           manually run linters
+" :ALEToggle         turn ALE on/off for current buffer
+" :ALEDetail         show expanded message for error on line
+" :ALEInfo           report available liners, settings, and linter log
+" :ALEHover          LSP hover, eg shows type signature in typescript
+" :ALEGoToDefinition LSP jump to symbol definition
+" :ALERename         LSP refactor symbol
 Plug 'w0rp/ale'
-let g:ale_linters = {
-  \ 'typescript': ['eslint', 'tslint']
-  \}
-let g:ale_fixers = {
-  \ 'typescript': ['eslint', 'tslint']
-  \}
 let g:ale_open_list = 0
 let g:ale_list_window_size = 5
 let g:ale_set_highlights = 1
@@ -138,6 +153,10 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
+let g:ale_elixir_elixir_ls_release = $ELIXIR_LS_DIR
+let g:ale_linters = {
+  \ 'elixir': ['credo', 'elixir-ls'],
+  \ }
 
 " Toggle location and quickfix lists
 " These lists may be used in a number of situations. Of note, ALE populates
@@ -147,30 +166,20 @@ let g:ale_fix_on_save = 1
 " <Leader>q        toggle quickfix list
 Plug 'Valloric/ListToggle'
 
-" Completion (NCM)
-" Provides a dropdown menu with completion suggestions. Completion sources are
-" configured with NCM specific plugins. NCM can be set to make suggestions as
-" you type, but I prefer to call NCM manually with <TAB>.
-" {Insert}<Tab>    open popup menu with completion suggestions
-" {Insert}<S-Tab>  insert the tab character
-" {Pmenu}<Tab>     scroll down through completion suggestions
-" {Pmenu}<S-Tab>   scroll up through completion suggestions
-" Plug 'ncm2/ncm2', { 'do': ':UpdateRemotePlugins' }
-" Plug 'roxma/nvim-yarp'           " ncm2 dependency
-" Plug 'ncm2/ncm2-bufword'         " open buffer contents
-" Plug 'ncm2/ncm2-gtags'           " ctags/gtags managed by gutentags
-" Plug 'ncm2/ncm2-path'            " file paths
-" Plug 'ncm2/ncm2-tmux'            " tmux contents
-" Plug 'ncm2/ncm2-syntax'          " language keywords from vim syntax files
-" Plug 'Shougo/neco-syntax'        " ncm2-syntax dependency
-" Plug 'ncm2/ncm2-cssomni'         " css, scss, sass, etc.
-" let g:ncm2#auto_popup = 0
-" let g:ncm2#complete_length=[[1,1]]
-" autocmd vimrc BufEnter * call ncm2#enable_for_buffer()
-" imap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Plug>(ncm2_manual_trigger)"
-
 " Completion
+" Manually activated completion suggestions. Deoplete uses many different
+" completion sources out of the box. Additionally add a source for completion
+" from ctags.
+" {Insert}<TAB>    open the popup menu with autocomplete suggestions
+" {PUM}<TAB>       scroll down through the popup menu
+" {PUM}<S-TAB>     scroll up through the popup menu
+" {PUM}<CR>        insert current popup menu selection
+" {PUM}<ESC>       cancel completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neco-vim'
+Plug 'Shougo/neoinclude.vim'
+Plug 'Shougo/neco-syntax'
+Plug 'deoplete-plugins/deoplete-tag'
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#disable_auto_complete = 1
 
@@ -214,8 +223,10 @@ Plug 'junegunn/gv.vim'
 " {Magit}R         refresh magit buffer
 " {Magit}S         stage/unstage selection or chunk
 " {Magit}L         stage/unstage line
+" {Magit}E         go to line in file for editing
 " {Magit}CC        commit staged changes
 " {Magit}CF        commit fixup to head and autosquash
+" {Magit}CA        amend last commit message
 " zo               open a fold
 " zc               close a fold
 " zi               toggle fold
@@ -229,8 +240,17 @@ Plug 'jreybert/vimagit'
 " {Dirvish}-       move up to the parent directory
 " {Dirvish}q       return to buffer dirvish was called from
 " {Dirvish}<CR>    go to directory/edit file under cursor
+" {Dervish}L       show file info, like `ls -l`
 Plug 'justinmk/vim-dirvish'
 let g:dirvish_mode = ':sort ,^.*[\/],' " show directories first
+
+" Multi-file search/replace
+" Perform a substitution across multiple files
+" :Search          open the prompt window to enter a search pattern
+" :Search pattern  search for a find/replace pattern to stage
+" :Replace newStr  Complete the replacement on staged search results
+" {SearchReplace}d delete a line/file from the staged results
+Plug 'romgrk/searchReplace.vim'
 
 " Smart commenting
 " gc{motion}       toggle commenting on lines that {motion} moves over
@@ -238,26 +258,57 @@ let g:dirvish_mode = ':sort ,^.*[\/],' " show directories first
 Plug 'tpope/vim-commentary'
 
 " Manipulate surrounding pairs
-" cs{c1}{c1}       change surrounding chars from {c1} to {c2}
-" ds{c}            delete surrounding chars {c}
-" ys{motion}{c}    add new surrounding chars {c}
-" {Visual}S{c}     surround selection with {c}
-" <Leader>y{c}     shortcut for ysiw{c}, surround word under cursor with {c}
-" <Leader>Y{c}     shortcut for ysiW{c}, surround WORD under cursor with {c}
+" cs{c1}{c1}            change surrounding chars from {c1} to {c2}
+" ds{c}                 delete surrounding chars {c}
+" ys{motion}{c}         add new surrounding chars {c}
+" {Visual}vs{c}         surround visual selection with {c}
+" <Leader>y{c}          surround word under cursor with {c}
+" <Leader>Y{c}          surround WORD under cursor with {c}
+" {Visual}<Leader>y{c}  surround visual selection with {c}
 Plug 'tpope/vim-surround'
+
+" Change variable case/delineation
+" These bindings simplify the rare but tedious task of converting from one
+" style of variable naming to another. Two possible mnemonics are that cx is
+" 'change variable', or that <Leader>x is 'targeting' a word for change.
+" cx{*}            change case with a motion or selection
+"   cxc            to camelCase
+"   cxC            to CamelCase
+"   cxs            to snake_case
+"   cxS            to SNAKE_CASE
+"   cxk            to kabab-case
+"   cxK            to KABAB-CASE
+"   cxd            to dot.case
+"   cxd            to DOT.CASE
+"   cxw            to word case
+"   cxW            to WORD CASE
+"   cxt            to Title Case
+"   cxl            to lowercase
+"   cxU            to UPPERCASE
+" <Leader>x{*}     change case for word under the cursor, as with cx{*}iw
+" <Leader>X{*}     change case for WORD under the cursor, as with cx{*}iW
+Plug '~/src/vim-caser'
+let g:caser_prefix = 'cx'
+let g:caser_custom_mappings = {
+      \ 'CamelCase': ['c'],
+      \ 'MixedCase': ['C'],
+      \ 'SnakeCase': ['s'],
+      \ 'UpperCase': ['S'],
+      \ 'KebabCase': ['k'],
+      \ 'KebabCapsCase': ['K'],
+      \ 'DotCase': ['d'],
+      \ 'DotCapsCase': ['D'],
+      \ 'SpaceCase': ['w'],
+      \ 'SpaceCapsCase': ['W'],
+      \ 'TitleCase': ['t'],
+      \ 'SentenceCase': []
+      \ }
 
 " Repeat find and 'till easily
 " f or t           repeat last f/F/t/T motion forward
 " F or T           repeat last f/F/t/T motion backward
 Plug 'rhysd/clever-f.vim'
 let g:clever_f_fix_key_direction = 1
-
-" Change and repeat
-" New edit action which replaces text like c{motion}, but can be repeated to
-" find and replaces the next instance of the replaced text.
-" c.{motion}       change text, find and repeat with .
-" c>{motion}       change text backwards, find and repeat with .
-Plug 'hauleth/sad.vim'
 
 " Useful pairs of keybindings, toggle vim settings
 " [b, [B, ]b, ]B   previous, first, next, last buffer
@@ -277,13 +328,23 @@ Plug 'hauleth/sad.vim'
 " cow              toggle wrap
 Plug 'tpope/vim-unimpaired'
 
-" Make surround and unimpaired work with the "." repeat command
+" Make surround and unimpaired work with the '.' repeat command
 Plug 'tpope/vim-repeat'
 
 " Unix file management integration
 " Includes ':Move', ':Rename', ':Delete', ':Mkdir'. Note that ':SudoEdit' and
 " ':SudoWrite' are broken in nvim.
 Plug 'tpope/vim-eunuch'
+
+" Read/Write protected files
+" Alternative to ':SudoEdit' and ':SudoWrite'. Automatically runs when a new
+" protected file is opened.
+" :e sudo://%      open the current file with sudo
+" :w sudo://%      save the current file with sudo
+" :w sudo:///foo   write contents to /foo
+Plug 'lambdalisue/suda.vim'
+let g:suda_smart_edit = 1
+let g:suda#prefix = 'sudo://'
 
 " Better in-buffer search defaults
 " Remove highlight after moving cursor, allow * search for selection.
@@ -308,6 +369,16 @@ let g:undotree_SetFocusWhenToggle = 1
 " iS/aS            new mappings for sentence text object
 Plug 'bkad/CamelCaseMotion'
 
+" Text object after a given character
+" Operate on text relative to characters specified in the
+" `after_object#enable` call.
+" a{c}             text object for part of line after next {c}
+" aa{c}            text object for part of line after previous {c}
+Plug 'junegunn/vim-after-object'
+autocmd vimrc VimEnter * call after_object#enable(
+  \ '=', ':', '-', '_', ' ', '#', '?', '$', '!', '&'
+  \ )
+
 " Additional text objects
 " l                text object for a whole line or text in a line
 " e                text object for entire buffer, with/without trailing new lines
@@ -316,38 +387,6 @@ Plug 'kana/vim-textobj-user' " dependency for textobj plugins
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-entire'
 Plug 'glts/vim-textobj-comment'
-
-" Syntax/indent/compiler support
-" Provides general functionality for many popular file types. Best used for
-" languages that are rarely needed, or require no special functionality.
-" Commonly used languages should be required separately and explicitly
-" disabled for polyglot.
-Plug 'sheerun/vim-polyglot'
-let g:polyglot_disabled = [
-  \ 'elm',
-  \ 'ruby',
-  \ 'javascript',
-  \ 'clojure',
-  \ 'elixir'
-  \ ]
-
-" Elm
-" Integrate with elm tooling. These features require that the vim root
-" directory is also the base directory of the elm project. If vim is opened
-" from the elm project's 'src/' then elm-make and elm-oracle will fail.
-" :ElmMake         compile the current file
-" :ElmMakeMain     compile 'Main.elm'
-" :ElmTest         run all tests, for specific files use vim-test
-" :ElmFormat       run elm-format manually, instead of waiting for neoformat
-" :ElmShowDocs      doc results from elm-oracle for word under cursor
-" <LocalLeader>m   compile current file
-" <LocalLeader>M   compile 'Main.elm'
-" <LocalLeader>t   run all tests
-" <LocalLeader>f   formal buffer
-" <LocalLeader>d   shows the docs for the word under the cursor
-" <LocalLeader>D   opens web browser to docs for the word under the cursor
-Plug 'elmcast/elm-vim'
-let g:elm_setup_keybindings = 0
 
 " Ruby
 Plug 'vim-ruby/vim-ruby'
@@ -371,21 +410,34 @@ let g:javascript_plugin_jsdoc = 1
 " Typescript
 Plug 'herringtondarkholme/yats.vim'
 
-" Clojure
-Plug 'tpope/vim-fireplace'
-Plug 'venantius/vim-cljfmt'
-
 " Elixir
 Plug 'elixir-editors/vim-elixir'
+
+" Syntax/indent/compiler support
+" Provides general functionality for many popular file types. Best used for
+" languages that are rarely needed, or require no special functionality.
+" Commonly used languages should be required separately and explicitly
+" disabled for polyglot.
+Plug 'sheerun/vim-polyglot'
+let g:polyglot_disabled = [
+  \ 'ruby',
+  \ 'javascript',
+  \ 'typescript',
+  \ 'elixir'
+  \ ]
 
 " ColorSchemes
 " Some nice colorschemes, most of which require true color.
 Plug 'iCyMind/NeoSolarized'
-Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-two-firewatch'
 Plug 'rakr/vim-colors-rakr'
 Plug 'reedes/vim-colors-pencil'
-Plug 'morhetz/gruvbox'
+Plug 'owickstrom/vim-colors-paramount'
+" Some colorschemes use the 'undercurle' squiggly line, which can be
+" distracting. This sets incorrect words and ALE errors to use an underline
+" instead.
+autocmd vimrc ColorScheme * highlight clear SpellBad
+                        \ | highlight SpellBad cterm=underline gui=underline
 
 call plug#end()
 
@@ -409,13 +461,14 @@ call plug#end()
 "===============================================================================
 
 if $TERM =~# 'xterm-256color' ||
- \ $TERM =~# 'screen-256color'      " true color terminals
+ \ $TERM =~# 'screen-256color' ||
+ \ $TERM =~# 'xterm-kitty'          " true color terminals
   set termguicolors
   set background=dark
   colorscheme NeoSolarized
 else                                " limited pallet terminals
   set background=light
-  colorscheme my_theme_light
+  colorscheme paramount
 endif
 
 set statusline=%f                         " full filepath
@@ -477,20 +530,34 @@ set tabline=%!MyTabLine()  " Build the tabline by iterating through the tab list
 "   cow            toggle wrap
 "   co|            toggle colorcolumn at column 81
 "   co-            toggle cursor line highlight
-" c.{motion}       change text, find and repeat with .
-" c>{motion}       change text backwards, find and repeat with .
+" cs{c1}{c1}       change surrounding chars from {c1} to {c2}
+" cx{*}            change case with a motion or selection
+"   cxc            to camelCase
+"   cxC            to CamelCase
+"   cxs            to snake_case
+"   cxS            to SNAKE_CASE
+"   cxk            to kabab-case
+"   cxK            to KABAB-CASE
+"   cxd            to dot.case
+"   cxD            to DOT.CASE
+"   cxw            to word case
+"   cxW            to WORD CASE
+"   cxt            to Title Case
+"   cxl            to lowercase
+"   cxU            to UPPERCASE
 noremap C "_c
 noremap CC "_cc
 nnoremap coa :ALEToggle<CR>
 nnoremap cof :NeoformatToggle<CR>
 nnoremap <silent> co<bar> :TCC<CR>
-nmap c. <Plug>(sad-change-forward)
-nmap c> <Plug>(sad-change-backward)
-xmap c. <Plug>(sad-change-forward)
-xmap c> <Plug>(sad-change-backward)
+noremap cxl gu
+noremap cxU gU
+" ignore unimpaired's warnings about switching from co to yo
+nmap co yo
 
 " d{motion}        delete text
 " dd               delete line
+" ds{c}            delete surrounding chars {c}
 " D{motion}        delete text, do not save to register
 " DD               delete line, do not save to register
 noremap D "_d
@@ -530,7 +597,11 @@ noremap DD "_dd
 "   {Visual}gy     yank selection to system clipboard
 "   gz             center window on cursor line
 "   g?             rot13 selection/motion
+"   g!             arbitrary namespace saved for vim-caser bindings
+"   g<C-]>         LSP goto definition
 " G                jump to end of file
+" <C-g>{*}         misc/variant CTRL actions
+"   <C-g><C-]>     LSP goto definition, alias for g<C-]>
 nnoremap gb :Gblame<CR>
 nmap gl v_]e
 nmap gL v_[e
@@ -541,6 +612,8 @@ nnoremap gs z=
 nmap gy "+y
 vnoremap <silent> gy "+y`]
 noremap gz zz
+nnoremap g<C-]> :ALEGoToDefinition<CR>
+nnoremap <C-g><C-]> :ALEGoToDefinition<CR>
 
 " h                left
 " H                left 3 columns
@@ -549,6 +622,7 @@ noremap gz zz
 " <C-h>            focus window left
 " {Term}<C-h>      focus window left
 nnoremap H hhh
+vnoremap H hhh
 nnoremap <A-h> :bprevious<CR>
 tnoremap <A-h> <C-\><C-n>:bprevious<CR>
 nnoremap <C-h> <C-w>h
@@ -562,20 +636,24 @@ tnoremap <C-h> <C-\><C-n><C-w>h
 " J                down 3 lines
 " <C-j>            focus window below
 " {Term}<C-j>      focus window below
+" {Visual}<C-j>    move selection down one line
 nnoremap J jjj
 vnoremap J jjj
 nnoremap <C-j> <C-w>j
 tnoremap <C-j> <C-\><C-n><C-w>j
+vnoremap <C-j> :m '>+1<CR>gv=gv
 
 " k                up
 " K                up 3 lines
 " <C-k>            focus window above
 " {Term}<C-k>      focus window above
 " {Insert}<C-k>    insert a diagraph (e.g. 'e' + ':' = 'ë')
+" {Visual}<C-k>    move selection up one line
 nnoremap K kkk
 vnoremap K kkk
 nnoremap <C-k> <C-w>k
 tnoremap <C-k> <C-\><C-n><C-w>k
+vnoremap <C-k> :m '<-2<CR>gv=gv
 
 " l                right
 " L                right 3 columns
@@ -585,6 +663,7 @@ tnoremap <C-k> <C-\><C-n><C-w>k
 " {Insert}<C-l>    focus window right, leave insert mode
 " {Term}<C-l>      focus window right
 nnoremap L lll
+vnoremap L lll
 nnoremap <A-l> :bnext<CR>
 tnoremap <A-l> <C-\><C-n>:bnext<CR>
 nnoremap <C-l> <C-w>l
@@ -620,11 +699,11 @@ noremap Q @q
 
 " s                move forward by one camelCase or under_score word section
 " S                move backwards by one camelCase or under_score word section
-" s and S          surround actions
+" {*}s and {*}S    surround actions
 "   cs{c1}{c1}     change surrounding chars from {c1} to {c2}
 "   ds{c}          delete surrounding chars {c}
 "   ys{motion}{c}  add new surrounding chars {c}
-"   {Visual}S{c}   surround selection with {c}
+"   {Visual}vs{c}  surround visual selection with {c}
 map <silent> s <Plug>CamelCaseMotion_w
 map <silent> S <Plug>CamelCaseMotion_b
 
@@ -640,9 +719,11 @@ map <silent> S <Plug>CamelCaseMotion_b
 nnoremap U <C-r>
 
 " v                enter visual mode
+" {Visual}vs{c}    surround visual selection with {c}
 " V                enter visual line mode
 " <C-v>            enter blockwise visual mode
 " {Insert}<C-v>    insert a character literal (e.g. <TAB> instead of 2 spaces)
+xmap vs <Plug>VSurround
 
 " w                move word forward
 " W                move WORD forward
@@ -655,6 +736,7 @@ noremap X "_X
 
 " y                yank/copy text
 " {Visual}y        yank selection, place cursor at end of selection
+" ys{motion}{c}    add new surrounding chars {c}
 " Y                join two lines (Y looks like two lines joining into one)
 map y <Plug>(highlightedyank)
 vnoremap <silent> y y`]
@@ -677,6 +759,7 @@ noremap Y J
 "   [t, [T         previous, first tag stack entry
 "   [s             previous misspelled word
 "   [e             previous change list entry
+"   [j             previous jump list location
 " ]{*}             forward list entry actions
 "   ]b, ]B         next, last buffer
 "   ]l, ]L         next, last location list entry
@@ -684,18 +767,22 @@ noremap Y J
 "   ]t, ]T         next, last tag stack entry
 "   ]s             next misspelled word
 "   ]e             next change list entry
+"   ]j             next jump list location
 " [y{motion}       encode string with c-style escape sequences
 " ]y{motion}       decode string with c-style escape sequences
 " [<space>         insert [count] blank line(s) above
 " ]<space>         insert [count] blank line(s) below
 " <A-[>            previous jump list location
 " <A-]>            next jump list location
-" <C-]>            follow ctag
+" <C-]>            follow ctag, list all tags if there is more than one match
 " <C-[>            <ESC>
 nnoremap [e g;
 nnoremap ]e g,
+nnoremap [j <C-o>
+nnoremap ]j <C-i>
 nnoremap <A-[> <C-o>
 nnoremap <A-]> <C-i>
+nnoremap <C-]> g<C-]>
 
 " 0                go to first character of line
 " ^                go to start of line
@@ -759,7 +846,7 @@ nnoremap <Tab> >>
 nnoremap <S-Tab> <<
 vnoremap <Tab> >
 vnoremap <S-Tab> <
-inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#mappings#manual_complete()
+inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : deoplete#manual_complete()
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
 
 
@@ -772,10 +859,10 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
 " Leader
 let g:mapleader = "\<Space>"
 
-" <Leader>a  fzf search with ag (search all text in project)
-" <Leader>A  fzf search with ag, full screen with preview
-nnoremap <silent> <Leader>a :execute 'Ag ' . input('Ag: ')<CR>
-nnoremap <silent> <Leader>A :execute 'Ag! ' . input('Ag!: ')<CR>
+" <Leader>a  fzf search all text in project
+" <Leader>A  fzf search all text in project, full screen with preview
+nnoremap <silent> <Leader>a :execute 'Rg ' . input('Search project for: ')<CR>
+nnoremap <silent> <Leader>A :execute 'Rg! ' . input('Search project for: ')<CR>
 
 " <Leader>b  fzf search buffer list
 nnoremap <silent> <Leader>b :Buffers<CR>
@@ -786,25 +873,26 @@ nnoremap <Leader>c <C-w><C-q>
 " <Leader>d  delete this buffer from buffer list, keep window if possible
 nnoremap <Leader>d :bp<bar>sp<bar>bn<bar>bd<CR>
 
-" <Leader>e  edit any file, fzf search all files under home (except hidden dirs)
-nnoremap <silent> <Leader>e :Files ~<CR>
+" <Leader>e  fzf search everything on disk (like ':e /foo/bar')
+nnoremap <silent> <Leader>e :Files /<CR>
 
-" <Leader>f  TODO
+" <Leader>f  fzf search file paths, insert selected file path into buffer
+nmap <Leader>f i<Plug>(fzf-complete-file-ag)
 
 " <Leader>g{*}  git bindings
 "   <Leader>gb  fugitive git blame
 "   <Leader>gc  fzf search git commits
 "   <Leader>gd  fugitive git diff
+"   <Leader>gf  fzf search all files in current git repo
 "   <Leader>gh  fzf search git commits for buffer (buffer's git history)
 "   <Leader>gm  open magit in current buffer
-"   <Leader>gf  fzf search all files in current git repo
 "   <Leader>gs  fzf search `git status`, meaning files with unstaged changes
 nnoremap <silent> <Leader>gb :Gblame<CR>
 nnoremap <silent> <Leader>gc :Commits<CR>
 nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap <silent> <Leader>gf :GFiles<CR>
 nnoremap <silent> <Leader>gh :BCommits<CR>
 nnoremap <silent> <Leader>gm :MagitOnly<CR>
-nnoremap <silent> <Leader>gf :GFiles<CR>
 nnoremap <silent> <Leader>gs :GFiles?<CR>
 
 " <Leader>h  fzf search recently opened files history
@@ -813,16 +901,16 @@ nnoremap <silent> <Leader>h :History<CR>
 nnoremap <Leader>H <C-w>H
 
 " <Leader>i  linting info related to error on line
-" <Leader>I  show vim syntax highlighting groups for word under cursor
+" <Leader>I  TODO
 nnoremap <Leader>i :ALEDetail<CR>
-nnoremap <Leader>I :call <SID>SynStack()<CR>
 
 " <Leader>j  TODO
 " <Leader>J  swap window down
 nnoremap <Leader>J <C-w>J
 
-" <Leader>k  TODO
+" <Leader>k  show lsp hover info
 " <Leader>K  swap window up
+nnoremap <Leader>k :ALEHover<CR>
 nnoremap <Leader>K <C-w>K
 
 " <Leader>l  toggle location list, using ListToggle plugin
@@ -842,9 +930,15 @@ nnoremap <silent> <Leader>p :GFiles<CR>
 
 " <Leader>q  toggle the quickfix list, using ListToggle plugin
 
-" <Leader>r             TODO
+" <Leader>r  LSP rename symbol under cursor
+" <Leader>R  reference vim bindings, fzf search this vimrc
+nnoremap <Leader>r :ALERename<CR>
+nnoremap <Leader>R :RefConfig<CR>
 
-" <Leader>s  TODO
+" <Leader>s  search and replace exact matches for word under cursor
+" <Leader>S  search and replace substring matches for word under cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <Leader>S :%s/<C-r><C-w>/
 
 " <Leader>t{*}  test bindings
 "   <Leader>tt  test this (run test under cursor)
@@ -866,17 +960,45 @@ nnoremap <Leader>u :UndotreeToggle<CR>
 noremap <Leader>v :vsplit<CR>
 noremap <Leader>V :split<CR>
 
-" <Leader>w         wrap/reformat the current line TODO: don't use this
-" {Visual}<Leader>w wrap/reformat selection
-nnoremap <Leader>w gqq
-vnoremap <Leader>w gq
+" <Leader>w  TODO
 
-" <Leader>x  TODO
+" <Leader>x{*}          change case for word under the cursor
+" <Leader>X{*}          change case for WORD under the cursor
+" {Visual}<Leader>x{*}  change case for selection
+nmap <Leader>xc cxciw
+nmap <Leader>xC cxCiw
+nmap <Leader>xs cxsiw
+nmap <Leader>xS cxSiw
+nmap <Leader>xk cxkiw
+nmap <Leader>xK cxKiw
+nmap <Leader>xd cxdiw
+nmap <Leader>xD cxDiw
+nmap <Leader>xw cxwiw
+nmap <Leader>xW cxWiw
+nmap <Leader>xt cxtiw
+nmap <Leader>xl cxliw
+nmap <Leader>xU cxUiw
+nmap <Leader>Xc cxciW
+nmap <Leader>XC cxCiW
+nmap <Leader>Xs cxsiW
+nmap <Leader>XS cxSiW
+nmap <Leader>Xk cxkiW
+nmap <Leader>XK cxKiW
+nmap <Leader>Xd cxdiW
+nmap <Leader>XD cxDiW
+nmap <Leader>Xw cxwiW
+nmap <Leader>XW cxWiW
+nmap <Leader>Xt cxtiW
+nmap <Leader>Xl cxliW
+nmap <Leader>XU cxUiW
+xmap <Leader>x cx
 
-" <Leader>y{c}  surround a word with {c} (weak mnemonic is You surround word)
-" <Leader>Y{c}  surround a WORD with {c}
-nnoremap <Leader>y <ESC>:execute "normal \<Plug>Ysurround"<CR>g@iw
-nnoremap <Leader>Y <ESC>:execute "normal \<Plug>Ysurround"<CR>g@iW
+" <Leader>y{c}       surround a word with {c} ([y]ou surround word)
+" <Leader>Y{c}       surround a WORD with {c}
+" {Visual}<Leader>y  surround selection with {c}
+nnoremap <Leader>y :execute "normal \<Plug>Ysurround"<CR>g@iw
+nnoremap <Leader>Y :execute "normal \<Plug>Ysurround"<CR>g@iW
+xmap <Leader>y <Plug>VSurround
 
 " <Leader>z  fzf search ctags (ctag[z])
 " <Leader>Z  fzf search helptags (helptag[Z])
@@ -899,52 +1021,57 @@ nnoremap <Leader>* :BLines <C-r><C-w><CR>
 " <Leader><Leader>  switch between current and last buffer
 nnoremap <Leader><Leader> <c-^>
 
-" <Leader><TAB>        TODO
+" <Leader><TAB>           fzf search normal mode mappings
+" {Visual}<Leader><TAB>   fzf search visual mode mappings
+" {Pending}<Leader><TAB>  fzf search operator-pending mode mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
 
 " {Term}<Leader><ESC>  switch from terminal mode to reading terminal as buffer
 tnoremap <Leader><ESC> <C-\><C-n>
 
 
 "===============================================================================
-" Local Leader Bindings
-" Bindings for specific file types.
+" Filetype Settings
+" Mappings and options for specific file types.
 "===============================================================================
 
-let g:maplocalleader = ','
+" Use the local leader for filetype specific mappings
+let g:maplocalleader = "\\"
 
-" Elm
-" These commands require that the vim root directory is also the base
-" directory of the elm project. If vim is opened from 'src/' then elm-make and
-" elm-oracle will fail.
-" <LocalLeader>m  compile current buffer
-" <LocalLeader>M  compile project
-" <LocalLeader>t  run tests (TODO: how is this different from vim-test?)
-" <LocalLeader>f  format file
-" <LocalLeader>d  shows the docs for the word under the cursor
-" <LocalLeader>D  opens web browser to docs for the word under the cursor
-autocmd vimrc FileType elm nmap <LocalLeader>m <Plug>(elm-make)
-autocmd vimrc FileType elm nmap <LocalLeader>M <Plug>(elm-make-main)
-autocmd vimrc FileType elm nmap <LocalLeader>t <Plug>(elm-test)
-autocmd vimrc FileType elm nmap <LocalLeader>f :ElmFormat<CR>
-autocmd vimrc FileType elm nmap <LocalLeader>d <Plug>(elm-show-docs)
-autocmd vimrc FileType elm nmap <LocalLeader>D <Plug>(elm-browse-docs)
+" text: wrap at 80 characters
+autocmd vimrc FileType text setlocal textwidth=80
+autocmd vimrc FileType markdown setlocal textwidth=80
 
-" Clojure
-" <LocalLeader>r  require the current namespace so it's updated in the nREPL
-" <LocalLeader>R  require the current namespace with the :reload-all flag
-" <LocalLeader>e  evaluate the innermost form under cursor
-" <LocalLeader>E  evaluate the outermost form under cursor
-" <LocalLeader>f  format file
-" <LocalLeader>d  show docs for token under cursor
-" <LocalLeader>s  show source for token under cursor
-autocmd vimrc FileType clojure nmap <LocalLeader>r :Require<CR>
-autocmd vimrc FileType clojure nmap <LocalLeader>R :Require!<CR>
-autocmd vimrc FileType clojure nmap <LocalLeader>e cpp
-autocmd vimrc FileType clojure nmap <LocalLeader>E :Eval<CR>
-autocmd vimrc FileType clojure nmap <LocalLeader>f :Cljfmt<CR>
-autocmd vimrc FileType clojure nmap <LocalLeader>d :Doc <C-r><C-w><CR>
-autocmd vimrc FileType clojure nmap <LocalLeader>s :Source <C-r><C-w><CR>
+" vim: reload vimrc every time this buffer is saved
+autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC
 
+" elm: use 4 spaces to indent
+autocmd vimrc FileType elm setlocal tabstop=4
+autocmd vimrc FileType elm setlocal shiftwidth=4
+
+" python: tab nonsense
+autocmd vimrc FileType python setlocal noexpandtab
+autocmd vimrc FileType python setlocal tabstop=8
+autocmd vimrc FileType python setlocal softtabstop=8
+
+" git: wrap at 72 characters
+autocmd vimrc FileType gitcommit setlocal textwidth=72
+autocmd vimrc FileType magit setlocal textwidth=72
+
+" js and ts might use incomplete import paths
+autocmd vimrc FileType javascript setlocal path+=src/**,assets/**
+autocmd vimrc FileType typescript setlocal path+=src/**,assets/**
+autocmd vimrc FileType typescript.tsx setlocal path+=src/**,assets/**
+autocmd vimrc FileType typescriptreact setlocal path+=src/**,assets/**
+
+" dirvish: Use <leader>k for file info instead of K, K jumps 3 lines
+autocmd vimrc FileType dirvish map <silent><buffer> <leader>k <Plug>(dirvish_K)
+autocmd vimrc FileType dirvish noremap <silent><buffer> K kkk
+
+" vim help: K for zoomies not info
+autocmd vimrc FileType help noremap <silent><buffer> K kkk
 
 "===============================================================================
 " Text Objects
@@ -994,13 +1121,24 @@ command! NeoformatToggle call <SID>NeoformatToggle()
 " Run Neoformat as long as NeoformatToggle has not disabled it
 command! NeoformatIfEnabled call <SID>NeoformatIfEnabled()
 
-" When running Ag through fzf, don't include the file path when filtering.
-" Also show a preview window when doing a fullscreen Ag! search.
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%')
-  \                         : {'options': '--delimiter : --nth 4..'},
-  \                 <bang>0)
+" Use suda to replace ':SudoEdit' and ':SudoWrite'
+command! -nargs=1 SudoEdit  edit  sudo://<args>
+command! -nargs=1 SudoWrite write sudo://<args>
+
+function! s:buffer_line_handler(lines)
+  edit $MYVIMRC
+  execute 'normal ' . matchstr(a:lines[1], '\d\+') . 'gg0'
+endfunction
+
+command! -bang -nargs=* RefConfig
+      \ call fzf#vim#buffer_lines(<q-args>,
+      \     fzf#vim#with_preview({
+      \       'source': 'bat --style="${BAT_STYLE:-numbers}" --color=always --pager=never "$MYVIMRC"',
+      \       'placeholder': fzf#shellescape(expand($MYVIMRC)) . ':{1}',
+      \       'options': ['--prompt', 'Config> ', '--preview-window', '+{1}-/2'],
+      \       'sink*': function('s:buffer_line_handler')
+      \     }),
+      \ <bang>0)
 
 " Plug starts with ':Plug*', includes Install, Clean, Update, Upgrade.
 
@@ -1015,6 +1153,34 @@ command! -bang -nargs=* Ag
 
 " Linting starts with ':ALE*', includes Lint, Toggle, Detail, Info.
 
+" Search/Replace
+" ':Search' opens the prompt window to enter a search pattern, and ':Replace
+" newStr' replaces all instances of the pattern with the new value.
+
+" FZF
+" ':Files [PATH]'      Files
+" ':GFiles [OPTS]'     Git files
+" ':GFiles?'           Git files
+" ':Buffers'           Open buffers
+" ':Colors'            Color schemes
+" ':Ag [PATTERN]'      ag search result
+" ':Rg [PATTERN]'      rg search result
+" ':Lines [QUERY]'     Lines in loaded buffers
+" ':BLines [QUERY]'    Lines in the current buffer
+" ':Tags [QUERY]'      Tags in the project
+" ':BTags [QUERY]'     Tags in the current buffer
+" ':Marks'             Marks
+" ':Windows'           Windows
+" ':Locate PATTERN'    `locate` command output
+" ':History'           `v:oldfiles` and open buffers
+" ':History:'          Command history
+" ':History/'          Search history
+" ':Commits'           Git commits
+" ':BCommits'          Git commits for the current buffer
+" ':Commands'          Commands
+" ':Maps'              Normal mode mappings
+" ':Helptags'          Help tags
+" ':Filetypes'         File types
 
 "===============================================================================
 " All the Little Things
@@ -1031,7 +1197,7 @@ set shiftwidth=2             " indentation amount for < and > commands
 set noerrorbells             " no beeps
 set nomodeline               " disable modeline
 set nojoinspaces             " prevents inserting two spaces on a join (Y)
-set ignorecase               " make searching case insensitive...
+set ignorecase               " make searching case insensitive
 set smartcase                " ... unless the query has capital letters
 set nowrap                   " don't wrap text, use 'cow' to toggle line wrap
 set list                     " highlight tabs and trailing spaces
@@ -1046,8 +1212,7 @@ set autowrite                " auto write file when switching buffers
 set wildmode=longest:full    " bash-style command mode completion
 set fillchars=vert:\|        " use vertical bars to divide windows
 set completeopt=menuone      " show completion menu even if there's only one opt
-set completeopt+=noinsert    " ... and prevent automatic text injection
-set completeopt+=preview     " ... and prevent automatic text injection
+set completeopt+=preview     " ... and show additional completion information
 set matchpairs+=<:>          " highlight matching angle brackets
 
 
@@ -1077,32 +1242,6 @@ set undofile
 
 
 "===============================================================================
-" Filetype Settings
-" Most filetypes are dealt with by plugins, here's what's left.
-"===============================================================================
-
-" text: wrap at 80 characters
-autocmd vimrc FileType text setlocal textwidth=80
-autocmd vimrc FileType markdown setlocal textwidth=80
-
-" vim: reload vimrc every time this buffer is saved
-autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC
-
-" elm: use 4 spaces to indent
-autocmd vimrc FileType elm setlocal tabstop=4
-autocmd vimrc FileType elm setlocal shiftwidth=4
-
-" python: tab nonsense
-autocmd vimrc FileType python setlocal noexpandtab
-autocmd vimrc FileType python setlocal tabstop=8
-autocmd vimrc FileType python setlocal softtabstop=8
-
-" git: wrap at 72 characters
-autocmd FileType gitcommit set textwidth=72
-autocmd FileType magit set textwidth=72
-
-
-"===============================================================================
 " Helper Functions
 " Hide these at the bottom. :)
 "===============================================================================
@@ -1118,14 +1257,7 @@ function! <SID>DownloadPlug()
   endif
 endfunction
 
-" vim theme building helper
-function! <SID>SynStack()
-  if !exists('*synstack')
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), "synIDattr(v:val, 'name')")
-endfunc
-
+" Show/hide a vertical line at column 81 to judge code length
 function! <SID>ToggleColorColumn()
   if &colorcolumn !=? ''
     setlocal colorcolumn&
@@ -1134,6 +1266,8 @@ function! <SID>ToggleColorColumn()
   endif
 endfunc
 
+" Disable Neoformat in situations where a file should keep its current
+" formatting, such as auto-generated json.
 function! <SID>NeoformatToggle()
   if !exists('b:disable_neoformat_in_buffer')
     let b:disable_neoformat_in_buffer = 1
@@ -1144,13 +1278,13 @@ function! <SID>NeoformatToggle()
 
   return b:disable_neoformat_in_buffer
 endfunction
-
 function! <SID>NeoformatIfEnabled()
   if !exists('b:disable_neoformat_in_buffer') || !b:disable_neoformat_in_buffer
     Neoformat
   endif
 endfunction
 
+" Format information about the most serious ALE issues for the current file
 function! StatuslineALE()
   let l:issues = ale#statusline#Count(bufnr('%'))
   if l:issues.total > 0
@@ -1168,6 +1302,7 @@ function! StatuslineALE()
   return ''
 endfunction
 
+" Reformat the text shown in the tab line
 function! MyTabLine()
   let l:s = ''
   for l:i in range(tabpagenr('$'))
@@ -1187,7 +1322,6 @@ function! MyTabLine()
 
   return l:s
 endfunction
-
 function! MyTabLabel(n)
   let l:buflist = tabpagebuflist(a:n)
   let l:winnr = tabpagewinnr(a:n)
