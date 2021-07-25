@@ -63,11 +63,33 @@ Commands.config = {
   SudoWrite = { 'SudaWrite <args>', nargs = '?' },
 
   -- Manage plugins with packer, forcing a reload of plugins config
-  PackerCompile = { require('config.packages').reload().manage().compile },
-  PackerInstall = { require('config.packages').reload().manage().install },
-  PackerUpdate = { require('config.packages').reload().manage().update },
-  PackerClean = { require('config.packages').reload().manage().clean },
-  PackerSync = { require('config.packages').reload().manage().sync },
+  -- Node: outer function ensures the reload happens every time, instead on
+  -- once on command creation
+  PackerCompile = {
+    function()
+      require('config.packages').reload().manage().compile()
+    end,
+  },
+  PackerInstall = {
+    function()
+      require('config.packages').reload().manage().install()
+    end,
+  },
+  PackerUpdate = {
+    function()
+      require('config.packages').reload().manage().update()
+    end,
+  },
+  PackerClean = {
+    function()
+      require('config.packages').reload().manage().clean()
+    end,
+  },
+  PackerSync = {
+    function()
+      require('config.packages').reload().manage().sync()
+    end,
+  },
 }
 
 function Commands.setup()
