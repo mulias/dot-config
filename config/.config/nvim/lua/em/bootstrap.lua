@@ -106,7 +106,7 @@ function Bootstrap.hard_reset()
 end
 
 function Bootstrap.reload()
-  return require('em.lua').reload('config.bootstrap')
+  return require('em.lua').reload('em.bootstrap')
 end
 
 return Bootstrap
