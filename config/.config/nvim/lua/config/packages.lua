@@ -443,7 +443,7 @@ Packages.config = {
   -- ie/ae            text object for entire buffer, whitespace excluded/included
   -- ic/ac            text object for a comment's contents or the whole comment
   -- Text object: l for a whole line or text in a line
-  'kana/vim-textobj-user',
+  { 'kana/vim-textobj-user', event = 'VimEnter' },
   { 'kana/vim-textobj-line', after = { 'vim-textobj-user' } },
   { 'kana/vim-textobj-entire', after = { 'vim-textobj-user' } },
   { 'glts/vim-textobj-comment', after = { 'vim-textobj-user' } },
