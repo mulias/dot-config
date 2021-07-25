@@ -31,11 +31,22 @@ function Filetypes.config.help()
 end
 
 function Filetypes.config.magit()
-  vim.opt_local.spell = true
-  vim.opt_local.textwidth = 72
+  require('util.vim').augroup('vimagit', {
+    {
+      'User',
+      'VimagitEnterCommit',
+      'setlocal spell | setlocal textwidth=72 | setlocal colorcolumn=73 | startinsert',
+    },
+    {
+      'User',
+      'VimagitLeaveCommit',
+      'setlocal nospell | setlocal textwidth=0 | setlocal colorcolumn=',
+    },
+  })
 end
 
 function Filetypes.config.text()
+  vim.opt_local.spell = true
   vim.opt_local.textwidth = 80
 end
 
