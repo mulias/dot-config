@@ -1,5 +1,6 @@
 let
-  unstable = import <unstable> {};
+  unstable = import (fetchTarball https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz) { };
+  my-python-packages = python-packages: with python-packages; [ pynvim msgpack ];
 in {
   allowUnfree = true;
 
@@ -11,33 +12,50 @@ in {
         ag
         arc-icon-theme
         baobab
+        bat
+        calibre
         catdocx
         connman-gtk
-        fzf
+        diskus
+        fd
+        feh
+        ffmpeg
+        figlet
+        galculator
+        gimp
         gitAndTools.qgit
         gnome3.totem
-        google-chrome
         gparted
-        heroku
-        inkscape
+        # heroku
+        # inkscape
         keepassx-community
-        moka-icon-theme
         mplayer
         nox
-        pgadmin
+        pandoc
+        # pgadmin
         pinta
-        (polybar.override {i3Support = true; })
+        (polybar.override { i3Support = true; pulseSupport = true; })
+        # postman
         qpdfview
-        spotify
+        racket
+        ripgrep
+        # spotify
+        texlive.combined.scheme-full
+        texworks
         universal-ctags
+        discord
+        unstable.fzf
+        unstable.google-chrome
         unstable.kitty
-        unstable.neovim
+        # unstable.neovim
+        (unstable.python3.withPackages my-python-packages)
         unstable.slack
+        unstable.vlc
+        unstable.zoom-us
         unzip
-        vlc
-        vscode
-        youtube-dl
-        zoom-us
+        # vscode
+        # watchexec
+        # youtube-dl
       ];
     };
   };
