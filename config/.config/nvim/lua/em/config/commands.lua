@@ -50,13 +50,13 @@ local Commands = {}
 
 Commands.config = {
   -- Highlight the color column, defaults to col 81 if nothing else is set
-  TCC = { require('util.fn').toggle_color_columns },
+  TCC = { require('em.fn').toggle_color_columns },
 
   -- Toggle Neoformat so that it doesn't run on every save
-  NeoformatToggle = { require('util.fn').neoformat_toggle },
+  NeoformatToggle = { require('em.fn').neoformat_toggle },
 
   -- Run Neoformat as long as NeoformatToggle has not disabled it
-  NeoformatIfEnabled = { require('util.fn').neoformat_if_enabled },
+  NeoformatIfEnabled = { require('em.fn').neoformat_if_enabled },
 
   -- Use suda to replace ':SudoEdit' and ':SudoWrite'
   SudoEdit = { 'SudaRead <args>', nargs = '?' },
@@ -67,39 +67,39 @@ Commands.config = {
   -- once on command creation
   PackerCompile = {
     function()
-      require('config.packages').reload().manage().compile()
+      require('em.config.packages').reload().manage().compile()
     end,
   },
   PackerInstall = {
     function()
-      require('config.packages').reload().manage().install()
+      require('em.config.packages').reload().manage().install()
     end,
   },
   PackerUpdate = {
     function()
-      require('config.packages').reload().manage().update()
+      require('em.config.packages').reload().manage().update()
     end,
   },
   PackerClean = {
     function()
-      require('config.packages').reload().manage().clean()
+      require('em.config.packages').reload().manage().clean()
     end,
   },
   PackerSync = {
     function()
-      require('config.packages').reload().manage().sync()
+      require('em.config.packages').reload().manage().sync()
     end,
   },
 }
 
 function Commands.setup()
   for cmd_name, cmd in pairs(Commands.config) do
-    require('util.vim').cmd(cmd_name, cmd[1], cmd)
+    require('em.vim').cmd(cmd_name, cmd[1], cmd)
   end
 end
 
 function Commands.reload()
-  return require('util.lua').reload('config.commands')
+  return require('em.lua').reload('em.config.commands')
 end
 
 return Commands

@@ -1,1 +1,1 @@
-require('config.filetypes').setup('gitcommit')
+require('em.config.filetypes').setup('gitcommit')

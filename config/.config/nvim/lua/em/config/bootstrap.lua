@@ -9,18 +9,19 @@ setting up nvim in a new environment.
 
 local Bootstrap = {}
 
-local plugin_directory = require('util.lua').join_paths(
+local plugin_directory = require('em.lua').join_paths(
   vim.fn.stdpath('data'),
   'site/pack/packer'
 )
-local packer_directory = require('util.lua').join_paths(
+local packer_directory = require('em.lua').join_paths(
   plugin_directory,
   'start',
   'packer.nvim'
 )
-local compile_path = require('util.lua').join_paths(
+local compile_path = require('em.lua').join_paths(
   vim.fn.stdpath('config'),
   'lua',
+  'em',
   'packer_compiled_packages.lua'
 )
 
@@ -60,8 +61,8 @@ end
 local function install_packages_on_vim_enter()
   print('Install packages then restart to complete setup')
   vim.cmd('packadd packer.nvim')
-  require('util.vim').augroup('init_bootstrap', {
-    { 'VimEnter', '*', 'lua require("config.packages").manage().sync()' },
+  require('em.vim').augroup('init_bootstrap', {
+    { 'VimEnter', '*', 'lua require("em.config.packages").manage().sync()' },
   })
 end
 
@@ -105,7 +106,7 @@ function Bootstrap.hard_reset()
 end
 
 function Bootstrap.reload()
-  return require('util.lua').reload('config.bootstrap')
+  return require('em.lua').reload('config.bootstrap')
 end
 
 return Bootstrap

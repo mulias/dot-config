@@ -24,7 +24,7 @@ local statusline = {
   '%([%{fugitive#head()}]%)',  -- git branch
   '%<',                        -- truncate point
   '%3(%)',                     -- padding
-  -- [[%{luaeval('require("helpers").ale_status()')}]],        -- ALE errors/warnings, if any exist
+  -- [[%{luaeval('require("em.fn").ale_status()')}]],        -- ALE errors/warnings, if any exist
   '%=',                        -- right align
   '%12(%l,%c%)%5p%%'           -- line and col number, % through file
 }
@@ -45,7 +45,7 @@ function UI.setup()
   -- Some colorschemes use the 'undercurl' squiggly line, which can be
   -- distracting. This sets incorrect words and errors to use an underline
   -- instead.
-  require('util.vim').augroup('no_undercurl', {
+  require('em.vim').augroup('no_undercurl', {
     {
       'ColorScheme',
       '*',
@@ -74,7 +74,7 @@ function UI.setup()
 end
 
 function UI.reload()
-  return require('util.lua').reload('config.ui')
+  return require('em.lua').reload('em.config.ui')
 end
 
 return UI

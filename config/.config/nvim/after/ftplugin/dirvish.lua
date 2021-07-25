@@ -1,1 +1,1 @@
-require('config.filetypes').setup('dirvish')
+require('em.config.filetypes').setup('dirvish')

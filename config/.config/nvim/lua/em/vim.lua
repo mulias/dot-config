@@ -78,7 +78,7 @@ function apply_mode(m, mapping)
     end
     return namespace
   else
-    local mapping_copy = require('util.lua').shallow_copy(mapping)
+    local mapping_copy = require('em.lua').shallow_copy(mapping)
     mapping_copy['mode'] = m
     return mapping_copy
   end
@@ -86,7 +86,7 @@ end
 
 function register_key(m, k, mapping, opts)
   local register = require('which-key').register
-  local utils = require('util.lua')
+  local utils = require('em.lua')
 
   if m == 'n' then
     register({ [k] = mapping }, opts)
@@ -102,7 +102,7 @@ end
 -- via a table.
 function UtilVim.map(mappings, opts)
   local register = require('which-key').register
-  local utils = require('util.lua')
+  local utils = require('em.lua')
   local mappings_by_mode = {}
 
   for key, mapping in pairs(mappings) do

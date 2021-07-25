@@ -47,7 +47,7 @@ Packages.config = {
     'junegunn/fzf.vim',
     requires = { 'junegunn/fzf' },
     config = function()
-      vim.gfzf_action = {
+      vim.g.fzf_action = {
         ['ctrl-t'] = 'tab split',
         ['ctrl-s'] = 'split',
         ['ctrl-v'] = 'vsplit',
@@ -141,7 +141,7 @@ Packages.config = {
       }
       vim.g.neoformat_enabled_elm = { 'localelmformat', 'elmformat' }
 
-      require('util.vim').augroup('neoformat_on_write', {
+      require('em.vim').augroup('neoformat_on_write', {
         { 'BufWritePre', '*', 'NeoformatIfEnabled' },
       })
     end,
@@ -432,7 +432,7 @@ Packages.config = {
     'junegunn/vim-after-object',
     config = function()
       local chars = "'=', ':', '-', '_', ' ', '#', '?', '$', '!', '&'"
-      require('util.vim').augroup('after_object_enable', {
+      require('em.vim').augroup('after_object_enable', {
         { 'VimEnter', '*', 'call after_object#enable(' .. chars .. ')' },
       })
     end,
@@ -485,7 +485,7 @@ Packages.config = {
     'beauwilliams/focus.nvim',
     config = function()
       require('focus').width = 85
-      require('util.vim').augroup('focus_balance_windows', {
+      require('em.vim').augroup('focus_balance_windows', {
         { 'BufEnter,WinEnter', '*', 'wincmd=' },
       })
     end,
@@ -494,9 +494,10 @@ Packages.config = {
 
 function Packages.manage()
   local packer = require('packer')
-  local compile_path = require('util.lua').join_paths(
+  local compile_path = require('em.lua').join_paths(
     vim.fn.stdpath('config'),
     'lua',
+    'em',
     'packer_compiled_packages.lua'
   )
 
@@ -512,12 +513,12 @@ function Packages.manage()
 end
 
 function Packages.setup()
-  require('packer_compiled_packages')
+  require('em.packer_compiled_packages')
 end
 
 function Packages.reload()
-  package.loaded['packer_compiled_packages'] = nil
-  return require('util.lua').reload('config.packages')
+  package.loaded['em.packer_compiled_packages'] = nil
+  return require('em.lua').reload('em.config.packages')
 end
 
 return Packages

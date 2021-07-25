@@ -10,29 +10,29 @@ Installation notes:
 ------------------------------------------------------------------------------]]
 
 -- Install package manager, configure preliminaries
-if require('config.bootstrap').first_time_setup() then
+if require('em.config.bootstrap').first_time_setup() then
   return
 end
 
 -- Configure built-in vim features
-require('config.options').setup()
+require('em.config.options').setup()
 
 -- Enable packages and package-specific settings
-require('config.packages').setup()
+require('em.config.packages').setup()
 
 -- Global visual settings such as theme and statusline
-require('config.ui').setup()
+require('em.config.ui').setup()
 
 -- General purpose mappings
-require('config.mappings').setup()
+require('em.config.mappings').setup()
 
 -- Mappings under the leader key
-require('config.leader_mappings').setup()
+require('em.config.leader_mappings').setup()
 
 -- Custom text objects
-require('config.text_objects').setup()
+require('em.config.text_objects').setup()
 
 -- Custom commands
-require('config.commands').setup()
+require('em.config.commands').setup()
 
 -- finally, filetype specific settings may be sourced from `after/ftplugin`

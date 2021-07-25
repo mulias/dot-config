@@ -9,7 +9,7 @@ local Options = {}
 -- path for file backups, should be '~/.local/share/nvim/backup/'
 local backupdir = vim.fn.stdpath('data') .. '/backup/'
 
-local is_true_color = require('util.vim').is_true_color_term()
+local is_true_color = require('em.vim').is_true_color_term()
 
 -- stylua: ignore
 Options.config = {
@@ -59,7 +59,7 @@ function Options.setup()
 end
 
 function Options.reload()
-  return require('util.lua').reload('config.options')
+  return require('em.lua').reload('em.config.options')
 end
 
 return Options

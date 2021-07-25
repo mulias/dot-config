@@ -12,7 +12,7 @@ binding is applied to normal mode. See `:h map-modes` for mode abbreviations.
 local LeaderMappings = {}
 LeaderMappings.config = {}
 
-local tc = require('util.vim').tc -- escape termcodes
+local tc = require('em.vim').tc -- escape termcodes
 
 -- Use <Sapce> as the leader key
 LeaderMappings.config.leader = ' '
@@ -173,14 +173,11 @@ LeaderMappings.config.mappings = {
 function LeaderMappings.setup()
   vim.g.mapleader = LeaderMappings.config.leader
 
-  require('util.vim').map(
-    LeaderMappings.config.mappings,
-    { prefix = '<Leader>' }
-  )
+  require('em.vim').map(LeaderMappings.config.mappings, { prefix = '<Leader>' })
 end
 
 function LeaderMappings.reload()
-  return require('util.lua').reload('config.leader_mappings')
+  return require('em.lua').reload('em.config.leader_mappings')
 end
 
 return LeaderMappings

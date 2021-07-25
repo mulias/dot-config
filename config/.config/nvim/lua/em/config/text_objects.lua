@@ -35,11 +35,11 @@ function TextObjects.setup()
     mappings['xo ' .. k] = m
   end
 
-  require('util.vim').map(mappings)
+  require('em.vim').map(mappings)
 end
 
 function TextObjects.reload()
-  return require('util.lua').reload('config.text_objects')
+  return require('em.lua').reload('em.config.text_objects')
 end
 
 return TextObjects

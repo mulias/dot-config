@@ -1,1 +1,1 @@
-require('config.filetypes').setup('text')
+require('em.config.filetypes').setup('text')

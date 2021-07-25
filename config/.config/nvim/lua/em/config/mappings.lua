@@ -31,7 +31,7 @@ binding is applied to normal mode. See `:h map-modes` for mode abbreviations.
 
 local Mappings = {}
 
-local tc = require('util.vim').tc -- escape termcodes
+local tc = require('em.vim').tc -- escape termcodes
 
 Mappings.config = {
   -- a                insert after cursor
@@ -77,7 +77,7 @@ Mappings.config = {
     a = { ':ALEToggle<CR>', 'toggle ALE', silent = false },
     b = { 'yob', 'toggle background', noremap = false, silent = false },
     f = {
-      require('util.fn').neoformat_toggle,
+      require('em.fn').neoformat_toggle,
       'toggle Neoformat',
       silent = false,
     },
@@ -92,7 +92,7 @@ Mappings.config = {
     s = { 'yos', 'toggle spellcheck', noremap = false, silent = false },
     w = { 'yow', 'toggle line wrap', noremap = false, silent = false },
     ['|'] = {
-      require('util.fn').toggle_color_columns,
+      require('em.fn').toggle_color_columns,
       'toggle color columns',
     },
     ['-'] = { 'yo-', 'toggle cursorline', noremap = false, silent = false },
@@ -428,11 +428,11 @@ Mappings.config = {
 }
 
 function Mappings.setup()
-  require('util.vim').map(Mappings.config)
+  require('em.vim').map(Mappings.config)
 end
 
 function Mappings.reload()
-  return require('util.lua').reload('config.mappings')
+  return require('em.lua').reload('em.config.mappings')
 end
 
 return Mappings

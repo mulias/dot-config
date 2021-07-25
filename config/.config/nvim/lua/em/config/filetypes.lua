@@ -31,7 +31,7 @@ function Filetypes.config.help()
 end
 
 function Filetypes.config.magit()
-  require('util.vim').augroup('vimagit', {
+  require('em.vim').augroup('vimagit', {
     {
       'User',
       'VimagitEnterCommit',
@@ -61,7 +61,7 @@ function Filetypes.setup(ft)
 end
 
 function Filetypes.reload()
-  return require('util.lua').reload('config.filetypes')
+  return require('em.lua').reload('em.config.filetypes')
 end
 
 return Filetypes

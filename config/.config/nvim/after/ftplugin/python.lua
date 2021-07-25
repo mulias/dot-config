@@ -1,1 +1,1 @@
-require('config.filetypes').setup('python')
+require('em.config.filetypes').setup('python')
