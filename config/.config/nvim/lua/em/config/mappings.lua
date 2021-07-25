@@ -416,7 +416,7 @@ Mappings.config = {
   ['x <Tab>'] = { '>', 'indent selection' },
   ['x <S-Tab>'] = { '<', 'un-indent selection' },
   ['i <Tab>'] = {
-    tc('pumvisible() ? "<C-n>" : deoplete#manual_complete()'),
+    tc('pumvisible() ? "<C-n>" : compe#complete()'),
     'show/scroll completion menu',
     expr = true,
   },

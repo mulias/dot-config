@@ -205,25 +205,30 @@ Plugins.config.specs = {
   'Valloric/ListToggle',
 
   -- Completion
-  -- Manually activated completion suggestions. Deoplete uses many different
-  -- completion sources out of the box. Additionally add a source for completion
-  -- from ctags.
+  -- Manually activated completion suggestions.
   -- {Insert}<TAB>    open the popup menu with autocomplete suggestions
   -- {PUM}<TAB>       scroll down through the popup menu
   -- {PUM}<S-TAB>     scroll up through the popup menu
   -- {PUM}<CR>        insert current popup menu selection
   -- {PUM}<ESC>       cancel completion
   {
-    'Shougo/deoplete.nvim',
-    requires = {
-      'Shougo/neco-vim',
-      'Shougo/neoinclude.vim',
-      'Shougo/neco-syntax',
-      'deoplete-plugins/deoplete-tag',
-    },
+    'hrsh7th/nvim-compe',
     config = function()
-      vim.g['deoplete#enable_at_startup'] = 1
-      vim.g['deoplete#disable_auto_complete'] = 1
+      require('compe').setup({
+        enabled = true,
+        autocomplete = false,
+        source = {
+          path = true,
+          buffer = true,
+          tags = true,
+          spell = false,
+          calc = false,
+          omni = false,
+          emoji = false,
+          nvim_lsp = true,
+          nvim_lua = true,
+        },
+      })
     end,
   },
 
