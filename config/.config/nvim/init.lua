@@ -6,10 +6,10 @@ Installation notes:
   package manager and setup anything needed for the config as a whole.
 - Restart vim for the rest of the config to take effect.
 - Run ':checkhealth' and make sure all necessary checks are green.
-- See the `em.config.packages` module for notes on external dependencies.
+- See the `em.config.plugins` module for notes on external dependencies.
 ------------------------------------------------------------------------------]]
 
--- Install package manager, configure preliminaries
+-- Install plugin manager and plugins if needed
 if require('em.bootstrap').first_time_setup() then
   return
 end
@@ -17,8 +17,8 @@ end
 -- Configure built-in vim features
 require('em.config.options').setup()
 
--- Enable packages and package-specific settings
-require('em.config.packages').setup()
+-- Enable plugins and plugin-specific settings
+require('em.config.plugins').setup()
 
 -- Global visual settings such as theme and statusline
 require('em.config.ui').setup()

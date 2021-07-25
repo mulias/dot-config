@@ -67,27 +67,27 @@ Commands.config = {
   -- once on command creation
   PackerCompile = {
     function()
-      require('em.config.packages').reload().manage().compile()
+      require('em.config.plugins').reload().manage().compile()
     end,
   },
   PackerInstall = {
     function()
-      require('em.config.packages').reload().manage().install()
+      require('em.config.plugins').reload().manage().install()
     end,
   },
   PackerUpdate = {
     function()
-      require('em.config.packages').reload().manage().update()
+      require('em.config.plugins').reload().manage().update()
     end,
   },
   PackerClean = {
     function()
-      require('em.config.packages').reload().manage().clean()
+      require('em.config.plugins').reload().manage().clean()
     end,
   },
   PackerSync = {
     function()
-      require('em.config.packages').reload().manage().sync()
+      require('em.config.plugins').reload().manage().sync()
     end,
   },
 }

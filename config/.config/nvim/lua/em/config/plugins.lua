@@ -1,7 +1,7 @@
 --[[----------------------------------------------------------------------------
-Packages
+Plugins
 
-Load and configure packages/plugin.
+Load and configure plugin.
 
 External dependencies:
 - FZF, SearchReplace: Install Ripgrep.
@@ -11,22 +11,22 @@ External dependencies:
 - Gutentags: Install Universal Ctags.
 ------------------------------------------------------------------------------]]
 
-local Packages = {}
+local Plugins = {}
 
-Packages.config = {}
+Plugins.config = {}
 
-Packages.config.packer = {
+Plugins.config.packer = {
   compile_path = require('em.lua').join_paths(
     vim.fn.stdpath('config'),
     'lua',
     'em',
-    'packer_compiled_packages.lua'
+    'packer_compiled.lua'
   ),
   disable_commands = true,
 }
 
-Packages.config.specs = {
-  -- Manage packages
+Plugins.config.specs = {
+  -- Manage plugins
   'wbthomason/packer.nvim',
 
   -- Helpers for configuring vim using lua.
@@ -504,24 +504,24 @@ Packages.config.specs = {
   },
 }
 
-function Packages.manage()
+function Plugins.manage()
   local packer = require('packer')
 
   packer.startup({
-    Packages.config.specs,
-    config = Packages.config.packer,
+    Plugins.config.specs,
+    config = Plugins.config.packer,
   })
 
   return packer
 end
 
-function Packages.setup()
-  require('em.packer_compiled_packages')
+function Plugins.setup()
+  require('em.packer_compiled')
 end
 
-function Packages.reload()
-  package.loaded['em.packer_compiled_packages'] = nil
-  return require('em.lua').reload('em.config.packages')
+function Plugins.reload()
+  package.loaded['em.packer_compiled'] = nil
+  return require('em.lua').reload('em.config.plugins')
 end
 
-return Packages
+return Plugins

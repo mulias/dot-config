@@ -1,9 +1,9 @@
 --[[----------------------------------------------------------------------------
 Bootstrap
 
-Make sure we're all set to run the rest of `init.lua`. Check that the package
+Make sure we're all set to run the rest of `init.lua`. Check that the plugin
 manager module is available, and if it isn't start an interactive flow to
-download and setup packages. This should help with the initial awkward step of
+download and setup plugins. This should help with the initial awkward step of
 setting up nvim in a new environment.
 ------------------------------------------------------------------------------]]
 
@@ -26,12 +26,12 @@ end
 
 local function confirm_download_packer()
   local input = vim.fn.confirm(
-    'Download Packer and install packages?',
+    'Download Packer and install plugins?',
     '&Yes\n&No',
     2
   )
   if input ~= 1 then
-    error('Unable to install packages without package manager')
+    error('Unable to install plugins without Packer')
   end
 end
 
@@ -51,11 +51,11 @@ local function download_packer()
   end
 end
 
-local function install_packages_on_vim_enter()
-  print('Install packages then restart to complete setup')
+local function install_plugins_on_vim_enter()
+  print('Install plugins then restart to complete setup')
   vim.cmd('packadd packer.nvim')
   require('em.vim').augroup('init_bootstrap', {
-    { 'VimEnter', '*', 'lua require("em.config.packages").manage().sync()' },
+    { 'VimEnter', '*', 'lua require("em.config.plugins").manage().sync()' },
   })
 end
 
@@ -63,7 +63,7 @@ function Bootstrap.first_time_setup()
   if is_packer_missing() then
     confirm_download_packer()
     download_packer()
-    install_packages_on_vim_enter()
+    install_plugins_on_vim_enter()
     return true
   else
     return false
@@ -87,7 +87,7 @@ function Bootstrap.hard_reset()
     plugin_directory,
     '&',
     'rm',
-    require('em.config.packages').config.packer.compile_path,
+    require('em.config.plugins').config.packer.compile_path,
   })
   print(out)
   local reset_success = vim.v.shell_error == 0
