@@ -18,6 +18,10 @@ export LESSHISTFILE=/dev/null
 export EDITOR=nvim
 export PAGER='less -F'
 export BROWSER=firefox
+export TERMINAL=kitty
+
+# make sure cach dir exists to save tmp files
+mkdir -p "$XDG_CACHE_HOME"/zsh
 
 # set path
 typeset -U path
@@ -106,12 +110,12 @@ RPROMPT='${vcs_info_msg_0_}[%*]'
 
 
 ## aliases
-alias vim='nvim'
 alias g='git'
 alias ga='git add'
 alias gc='git commit'
 alias gco='git checkout'
 alias gcob='git checkout -b'
+alias gcos='git checkout $(git branch --list | fzf)'
 alias gl='git log'
 alias glg='git log --graph --oneline --decorate --all'
 alias gp='git pull'
@@ -124,7 +128,20 @@ alias gri='git rebase -i --autosquash --autostash'
 alias grim='git rebase -i --autosquash --autostash origin/master'
 alias grc='git rebase --continue'
 alias gra='git rebase --abort'
-alias gfo='git rebase -x "sleep 1; git commit --amend --no-edit"'
+
+if (( $+commands[nvim] )); then
+  alias vim='nvim'
+fi
+if (( $+commands[bat] )); then
+  alias cat='bat'
+fi
+if (( $+commands[fd] )); then
+  alias find='fd'
+fi
+if (( $+commands[htop] )); then
+  alias find='top'
+fi
+
 
 
 # if a program is currently backgrounded, ctrl-z will foreground that program
@@ -152,3 +169,8 @@ function set-title-preexec() {
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd set-title-precmd
 add-zsh-hook preexec set-title-preexec
+
+if [ -n "${commands[fzf-share]}" ]; then
+  source "$(fzf-share)/key-bindings.zsh"
+  source "$(fzf-share)/completion.zsh"
+fi
