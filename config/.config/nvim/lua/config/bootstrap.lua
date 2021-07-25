@@ -9,8 +9,21 @@ setting up nvim in a new environment.
 
 local Bootstrap = {}
 
-local packer_pkg = 'packer.nvim'
-local packer_path = '/site/pack/packer/start/'
+local plugin_directory = require('util.lua').join_paths(
+  vim.fn.stdpath('data'),
+  'site/pack/packer'
+)
+local packer_directory = require('util.lua').join_paths(
+  plugin_directory,
+  'start',
+  'packer.nvim'
+)
+local compile_path = require('util.lua').join_paths(
+  vim.fn.stdpath('config'),
+  'lua',
+  'packer_compiled_packages.lua'
+)
+
 local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 
 local function is_packer_missing()
@@ -29,9 +42,6 @@ local function confirm_download_packer()
 end
 
 local function download_packer()
-  local plugin_directory = vim.fn.stdpath('data') .. packer_path
-  local packer_directory = plugin_directory .. packer_pkg
-
   vim.fn.mkdir(plugin_directory, 'p')
 
   local out = vim.fn.system({ 'git', 'clone', packer_repo, packer_directory })
@@ -63,6 +73,34 @@ function Bootstrap.first_time_setup()
     return true
   else
     return false
+  end
+end
+
+function Bootstrap.hard_reset()
+  local input = vim.fn.confirm(
+    'Delete installed plugins and reset?',
+    '&Yes\n&No',
+    2
+  )
+  if input ~= 1 then
+    print('Reset aborted')
+    return
+  end
+
+  local out = vim.fn.system({
+    'rm',
+    '-rf',
+    plugin_directory,
+    '&',
+    'rm',
+    compile_path,
+  })
+  print(out)
+  local reset_success = vim.v.shell_error == 0
+  if reset_success then
+    print('Reset complete, restart to re-run setup')
+  else
+    error('Error completing reset')
   end
 end
 
