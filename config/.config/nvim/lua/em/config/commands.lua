@@ -94,7 +94,7 @@ Commands.config = {
 
 function Commands.setup()
   for cmd_name, cmd in pairs(Commands.config) do
-    require('em.vim').cmd(cmd_name, cmd[1], cmd)
+    require('em.vim').command(cmd_name, cmd[1], cmd)
   end
 end
 

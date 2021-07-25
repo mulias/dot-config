@@ -1,3 +1,7 @@
+--[[----------------------------------------------------------------------------
+Automate specific vim tasks
+------------------------------------------------------------------------------]]
+
 local Fn = {}
 
 -- Show/hide colored columns to eyeball code length If a buffer

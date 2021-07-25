@@ -1,9 +1,11 @@
 --[[----------------------------------------------------------------------------
-Wrappers for some vim features that do not yet have a lua interface, or could
-have a better interface.
+Lua-Vimscript bridging utilities
+
+Enhances the existing lua api for vimscript. Provides missing vim functionality
+and more concise interfaces for the existing lua api.
 ------------------------------------------------------------------------------]]
 
-local UtilVim = {}
+local V = {}
 
 __FnMapStore = __FnMapStore or {}
 
@@ -27,7 +29,8 @@ local make_cmd = function(rhs)
   end
 end
 
-function UtilVim.augroup(group_name, cmd_defs)
+-- Define an augroup with autocommands
+function V.augroup(group_name, cmd_defs)
   vim.cmd('augroup ' .. group_name)
   vim.cmd('autocmd!')
   for _, cmd_def in ipairs(cmd_defs) do
@@ -37,7 +40,8 @@ function UtilVim.augroup(group_name, cmd_defs)
   return group_name
 end
 
-function UtilVim.cmd(name, cmd_body, opts)
+-- Define a command
+function V.command(name, cmd_body, opts)
   local cmd = make_cmd(cmd_body)
 
   local nargs = opts.nargs or 0
@@ -53,15 +57,17 @@ function UtilVim.cmd(name, cmd_body, opts)
   )
 end
 
-function UtilVim.is_true_color_term()
+-- Check if the current terminal supports true color
+function V.is_true_color_term()
   local term = vim.env.TERM
-  local is_true_color_term = term == 'xterm-256color'
+  return term == 'xterm-256color'
     or term == 'screen-256color'
     or term == 'xterm-kitty'
-  return is_true_color_term
 end
 
-function UtilVim.tc(str)
+-- Replaces terminal codes and keycodes with the internal representation.
+-- Needed for expression mappings and terminal mode mappings.
+function V.tc(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
@@ -98,9 +104,19 @@ function register_key(m, k, mapping, opts)
   end
 end
 
--- Wrap and enhance the `which-keys` plugin for setting many mappings
--- via a table.
-function UtilVim.map(mappings, opts)
+-- Create keybindings defined by a nested table. Wraps and enhances the
+-- `which-keys` plugin. In addition to all of the features of `which-key`, a
+-- binding can be made for multiple modes at once by prepending the desired
+-- mode chars and a space to the table key. For example:
+--
+--   ['nx gp'] = { '"+p`]', 'paste from system clipboard' },
+--
+-- This sets `gp` to paste from the system clipboard in both normal and visual
+-- mode. Additionally, the `which-key` menu will show documentation for this
+-- key combination in both modes.
+-- This method of setting modes should always be used in place of the `mode`
+-- opt provided by `which-key`. See `:h map-table` for valid modes.
+function V.map(mappings, opts)
   local register = require('which-key').register
   local utils = require('em.lua')
   local mappings_by_mode = {}
@@ -122,4 +138,4 @@ function UtilVim.map(mappings, opts)
   end
 end
 
-return UtilVim
+return V
