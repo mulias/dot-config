@@ -13,7 +13,19 @@ External dependencies:
 
 local Packages = {}
 
-Packages.config = {
+Packages.config = {}
+
+Packages.config.packer = {
+  compile_path = require('em.lua').join_paths(
+    vim.fn.stdpath('config'),
+    'lua',
+    'em',
+    'packer_compiled_packages.lua'
+  ),
+  disable_commands = true,
+}
+
+Packages.config.specs = {
   -- Manage packages
   'wbthomason/packer.nvim',
 
@@ -494,19 +506,10 @@ Packages.config = {
 
 function Packages.manage()
   local packer = require('packer')
-  local compile_path = require('em.lua').join_paths(
-    vim.fn.stdpath('config'),
-    'lua',
-    'em',
-    'packer_compiled_packages.lua'
-  )
 
   packer.startup({
-    Packages.config,
-    config = {
-      compile_path = compile_path,
-      disable_commands = true,
-    },
+    Packages.config.specs,
+    config = Packages.config.packer,
   })
 
   return packer

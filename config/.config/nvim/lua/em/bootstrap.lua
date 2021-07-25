@@ -18,13 +18,6 @@ local packer_directory = require('em.lua').join_paths(
   'start',
   'packer.nvim'
 )
-local compile_path = require('em.lua').join_paths(
-  vim.fn.stdpath('config'),
-  'lua',
-  'em',
-  'packer_compiled_packages.lua'
-)
-
 local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 
 local function is_packer_missing()
@@ -94,7 +87,7 @@ function Bootstrap.hard_reset()
     plugin_directory,
     '&',
     'rm',
-    compile_path,
+    require('em.config.packages').config.packer.compile_path,
   })
   print(out)
   local reset_success = vim.v.shell_error == 0
