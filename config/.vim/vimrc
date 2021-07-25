@@ -1,113 +1,99 @@
-" use tpope's sensible.vim to configure basic options.
+" Basic vimrc, for when you just got to use vim
 
+" Plugins
+" Add plugins to `~/.vim/pack/*/start in order to have them auto-loaded by
+" vim. This config expects the packages:
+" - https://github.com/tpope/vim-sensible
+" - https://github.com/owickstrom/vim-colors-paramount
+
+" Allow multibyte characters in this config. This isn't really necessary but a
+" vimscript linter was complaining about it being missing.
+scriptencoding utf-8
+
+" Make an autocmd group to use in this file
+augroup vimrc
+  autocmd!
+augroup END
+
+" Fix incorrect background rendering when using a color theme with a
+" background color.
+let &t_ut=''
 
 " theme
-colorscheme my_theme_light
+set background=light
+colorscheme paramount
 
-
-" use ; for commands.
+" Use ; for commands. This replaces the ability to repeat f/t motions, but
+" it's what I'm used to.
 nnoremap ; :
+vnoremap ; :
 
-" use Q to execute default register, overrides ex mode.
+" use Q to execute default register, overrides ex mode
 nnoremap Q @q
-
-" w!! save a file with sudo even if it was opened without
-cnoremap  w!! w !sudo tee % > /dev/null
 
 " swap so that 0 goes to first character and ^ goes to start of line
 nnoremap 0 ^
 nnoremap ^ 0
 
-" make . work with visually selected lines
-vnoremap . :norm.<CR>
-
-" ctrl+a in insert mode calls the omnicomplete menu
-inoremap <C-a> <C-x><C-o>
-
-" ctrl+[hjkl] navigate between split windows with
+" ctrl+[hjkl] navigate between split windows
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+" Move three lines/characters at a time
+nnoremap H hhh
+nnoremap J jjj
+vnoremap J jjj
+nnoremap K kkk
+vnoremap K kkk
+nnoremap L lll
 
-" Leader
-let mapleader = "\<Space>"
+" Copy/Paste to clipboard
+noremap gp "+p
+noremap gP "+P
+nmap gy "+y
+vnoremap gy "+y
 
-" Local Leader (used for filetype specific bindings)
-let maplocalleader = "\\"
+" Redo edit
+nnoremap U <C-r>
 
-" Leader+b list buffers
-nmap <Leader>b :ls<CR>:buffer<Space>
+" Join two lines
+noremap Y J
 
-" Leader+c close focused window
-nmap <Leader>c <C-w><C-q>
-
-" Leader+[hl] go back/forward in buffer list
-nmap <Leader>h :bprevious<CR>
-
-" Leader+I show syntax highlighting groups for word under cursor
-nmap <Leader>I :call <SID>SynStack()<CR>
-
-" Leader+j format the current paragraph/selection, good for ragged text
-nmap <Leader>j gqip
-vmap <Leader>j gq
-
-" Leader+[hl] go back/forward in buffer list
-nmap <Leader>l :bnext<CR>
-
-" Leader+[py] paste/yank from/to system clipboard
-nnoremap <Leader>p "+p
-nnoremap <Leader>P "+P
-vnoremap <Leader>p "+p
-vnoremap <Leader>P "+P
-
-" Leader+s search and replace
-nmap <Leader>s :%s//g<Left><Left>
-
-" Leader+S clear highlight after search
-nnoremap <silent> <Leader>S :nohlsearch<cr>
-
-" Leader+v vertical split
-noremap <Leader>v :vsplit<CR>
-
-" Leader+[py] paste/yank from/to system clipboard
-vnoremap  <Leader>y  "+y
-nnoremap  <Leader>y  "+y
-
-" Leader+/ clear highlight after search
-nnoremap <silent> <Leader>/ :nohlsearch<cr>
-
-" Leader+Leader switch between current and last buffer
-nmap <Leader><Leader> <c-^>
-
+" repeat last command once for each highlighted line
+vnoremap . :norm.<CR>
 
 " all the little things
-set showcmd                  " show command in status line as it is composed.
-set showmatch                " highlight matching brackets.
-set showmode                 " show current mode.
-set ruler                    " the line and column numbers of the cursor.
-set number                   " line numbers on the left side.
-set relativenumber           " line numbers relative to cursor position
-set numberwidth=4            " left side number column is 4 characters wide.
-set expandtab                " insert spaces when TAB is pressed.
-set tabstop=2                " render TABs using this many spaces.
-set shiftwidth=2             " indentation amount for < and > commands.
-set noerrorbells             " no beeps.
-set nomodeline               " disable modeline.
-set nojoinspaces             " prevents inserting two spaces on a join (J)
+set showcmd                  " show command in status line as it is composed
+set showmatch                " highlight matching brackets
+set showmode                 " show current mode
+set number                   " line numbers on the left side
+set numberwidth=4            " left side number column is 4 characters wide
+set expandtab                " insert spaces when TAB is pressed
+set tabstop=2                " render TABs using this many spaces
+set shiftwidth=2             " indentation amount for < and > commands
+set noerrorbells             " no beeps
+set nomodeline               " disable modeline
+set nojoinspaces             " prevents inserting two spaces on a join (Y)
 set ignorecase               " make searching case insensitive...
-set smartcase                " ... unless the query has capital letters.
-set wrap                     " word wrap instead of map by character.
-set colorcolumn=81           " highlight column 81
+set smartcase                " ... unless the query has capital letters
+set nowrap                   " don't wrap text, use 'cow' to toggle line wrap
 set list                     " highlight tabs and trailing spaces
 set listchars=tab:>·,trail:· " symbols to display for tabs and trailing spaces
-set scrolloff=3              " show next 3 lines while scrolling.
-set sidescrolloff=5          " show next 5 columns while side-scrolling.
-set autochdir                " switch to current file's parent directory.
+set scrolloff=3              " show next 3 lines while scrolling
+set sidescrolloff=5          " show next 5 columns while side-scrolling
 set splitbelow               " horizontal split opens under active window
 set splitright               " vertical split opens to right of active window
-set omnifunc=syntaxcomplete#Complete " use omnicomplete
+set shortmess+=I             " Don't show the intro
+set bufhidden=hide           " allow switching from an unsaved buffer
+set autowrite                " auto write file when switching buffers
+set wildmode=longest:full    " bash-style command mode completion
+set fillchars=vert:\|        " use vertical bars to divide windows
+set completeopt=menuone      " show completion menu even if there's only one opt
+set completeopt+=noinsert    " ... and prevent automatic text injection
+set completeopt+=preview     " ... and prevent automatic text injection
+set matchpairs+=<:>          " highlight matching angle brackets
 
 
 " do not use any tmp files
@@ -116,11 +102,12 @@ set nobackup
 set noswapfile
 set viminfo="NONE"
 
-" text file config, text wraps at 80 characters
-autocmd FileType text setlocal textwidth=80
+" text: wrap at 80 characters
+autocmd vimrc FileType text setlocal textwidth=80
+autocmd vimrc FileType markdown setlocal textwidth=80
 
-" vim config config, reload vimrc every time buffer is saved
-augroup reload_vimrc " {
-    autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
-augroup END " }
+" vim: reload vimrc every time this buffer is saved
+autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC
+
+" git: wrap at 72 characters
+autocmd vimrc FileType gitcommit setlocal textwidth=72

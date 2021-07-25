@@ -1,11 +1,11 @@
 " sensible.vim - Defaults everyone can agree on
 " Maintainer:   Tim Pope <http://tpo.pe/>
-" Version:      1.1
+" Version:      1.2
 
 if exists('g:loaded_sensible') || &compatible
   finish
 else
-  let g:loaded_sensible = 1
+  let g:loaded_sensible = 'yes'
 endif
 
 if has('autocmd')
@@ -24,13 +24,20 @@ set smarttab
 
 set nrformats-=octal
 
-set ttimeout
-set ttimeoutlen=100
+if !has('nvim') && &ttimeoutlen == -1
+  set ttimeout
+  set ttimeoutlen=100
+endif
 
 set incsearch
 " Use <C-L> to clear the highlighting of :set hlsearch.
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+endif
+
+if &synmaxcol == 3000
+  " Lowering this improves performance in files with long lines.
+  set synmaxcol=500
 endif
 
 set laststatus=2
@@ -61,8 +68,8 @@ if has('path_extra')
   setglobal tags-=./tags tags-=./tags; tags^=./tags;
 endif
 
-if &shell =~# 'fish$'
-  set shell=/bin/bash
+if &shell =~# 'fish$' && (v:version < 704 || v:version == 704 && !has('patch276'))
+  set shell=/usr/bin/env\ bash
 endif
 
 set autoread
@@ -77,6 +84,7 @@ if !empty(&viminfo)
   set viminfo^=!
 endif
 set sessionoptions-=options
+set viewoptions-=options
 
 " Allow color schemes to do bright colors without forcing bold.
 if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
@@ -88,6 +96,11 @@ if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
   runtime! macros/matchit.vim
 endif
 
-inoremap <C-U> <C-G>u<C-U>
+if empty(mapcheck('<C-U>', 'i'))
+  inoremap <C-U> <C-G>u<C-U>
+endif
+if empty(mapcheck('<C-W>', 'i'))
+  inoremap <C-W> <C-G>u<C-W>
+endif
 
 " vim:set ft=vim et sw=2:
