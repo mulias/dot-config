@@ -113,7 +113,7 @@ Plugins.config.specs = {
           ['<esc>'] = 'ESC',
         },
         ignore_missing = false,
-        triggers = { '<leader>', "'", '"' },
+        triggers = { '<leader>', "'", '"', 'g', 'z' },
       })
     end,
   },
