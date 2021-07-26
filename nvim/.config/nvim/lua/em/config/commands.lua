@@ -49,6 +49,7 @@ FZF
 local Commands = {}
 
 local fn = require('em.fn')
+local plugins = require('em.config.plugins')
 
 Commands.config = {
   -- Highlight the color column, defaults to col 81 if nothing else is set
@@ -71,32 +72,22 @@ Commands.config = {
   SudoWrite = { 'SudaWrite <args>', nargs = '?' },
 
   -- Manage plugins with packer, forcing a reload of plugins config
-  -- Node: outer function ensures the reload happens every time, instead on
-  -- once on command creation
+  -- Note: thunk ensures the reload happens every time, instead on once on
+  -- command creation
   PackerCompile = {
-    function()
-      require('em.config.plugins').reload().manage().compile()
-    end,
+    function() plugins.reload().manage().compile() end,
   },
   PackerInstall = {
-    function()
-      require('em.config.plugins').reload().manage().install()
-    end,
+    function() plugins.reload().manage().install() end,
   },
   PackerUpdate = {
-    function()
-      require('em.config.plugins').reload().manage().update()
-    end,
+    function() plugins.reload().manage().update() end,
   },
   PackerClean = {
-    function()
-      require('em.config.plugins').reload().manage().clean()
-    end,
+    function() plugins.reload().manage().clean() end,
   },
   PackerSync = {
-    function()
-      require('em.config.plugins').reload().manage().sync()
-    end,
+    function() plugins.reload().manage().sync() end,
   },
 }
 
