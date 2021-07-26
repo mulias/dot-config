@@ -63,7 +63,7 @@ LeaderMappings.config.mappings = {
     name = 'toggle options',
     a = { 'coa', 'toggle ALE', noremap = false, silent = false },
     b = { 'cob', 'toggle background', noremap = false, silent = false },
-    f = { 'cof', 'toggle Neoformat', noremap = false, silent = false },
+    f = { 'cof', 'toggle format on write', noremap = false, silent = false },
     h = { 'coh', 'toggle search highlight', noremap = false, silent = false },
     n = { 'con', 'toggle line numbers', noremap = false, silent = false },
     r = {
@@ -74,6 +74,7 @@ LeaderMappings.config.mappings = {
     },
     s = { 'cos', 'toggle spellcheck', noremap = false, silent = false },
     w = { 'cow', 'toggle line wrap', noremap = false, silent = false },
+    y = { 'coy', 'toggle highlight on yank', noremap = false, silent = false },
     ['|'] = {
       'co|',
       'toggle 80 character line',
@@ -81,6 +82,12 @@ LeaderMappings.config.mappings = {
       silent = false,
     },
     ['-'] = { 'co-', 'toggle cursorline', noremap = false, silent = false },
+    ['='] = {
+      'co=',
+      'toggle window auto-resize',
+      noremap = false,
+      silent = false,
+    },
   },
   p = { ':GFiles<CR>', 'search project' },
   q = { 'toggle quickfix list' },

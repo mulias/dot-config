@@ -77,8 +77,8 @@ Mappings.config = {
     a = { ':ALEToggle<CR>', 'toggle ALE', silent = false },
     b = { 'yob', 'toggle background', noremap = false, silent = false },
     f = {
-      require('em.fn').neoformat_toggle,
-      'toggle Neoformat',
+      require('em.fn').toggle_format_on_write,
+      'toggle format on write',
       silent = false,
     },
     h = { 'yoh', 'toggle search highlight', noremap = false, silent = false },
@@ -91,11 +91,21 @@ Mappings.config = {
     },
     s = { 'yos', 'toggle spellcheck', noremap = false, silent = false },
     w = { 'yow', 'toggle line wrap', noremap = false, silent = false },
+    y = {
+      require('em.fn').toggle_highlight_yank,
+      'toggle highlight on yank',
+      silent = false,
+    },
     ['|'] = {
       require('em.fn').toggle_color_columns,
       'toggle color columns',
     },
     ['-'] = { 'yo-', 'toggle cursorline', noremap = false, silent = false },
+    ['='] = {
+      require('em.fn').toggle_window_resize,
+      'toggle window auto-resize',
+      silent = false,
+    },
   },
   ['nx cx'] = {
     name = 'change case',

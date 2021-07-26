@@ -20,26 +20,124 @@ function Fn.toggle_color_columns(default_columns)
   end
 end
 
--- Set a buffer var to indicate if neoformat should run. Since
-function Fn.neoformat_toggle()
-  local neoformat_enabled = vim.b.neoformat_enabled == true
-    or (vim.g.neoformat_start_enabled == 1 and vim.b.neoformat_enabled == nil)
-
-  if neoformat_enabled then
-    vim.b.neoformat_enabled = false
-    print('Neoformat disabled')
-  else
-    vim.b.neoformat_enabled = true
-    print('Neoformat enabled')
-  end
-  return vim.b.neoformat_enabled
+-- Check if format is enabled on the global or buffer level
+function is_format_on_write_enabled()
+  return vim.b.format_on_write == true
+    or (
+      vim.g.format_on_write_start_enabled == true
+      and vim.b.format_on_write == nil
+    )
 end
 
--- Run neoformat unless it has explicitly been disabled
-function Fn.neoformat_if_enabled()
-  if not vim.b.neoformat_disabled then
-    vim.cmd('Neoformat')
+-- Enable/disable the formatting performed by `format_buffer_if_enabled`.
+function Fn.toggle_format_on_write()
+  if is_format_on_write_enabled() then
+    vim.b.format_on_write = false
+    print('Formatting disabled')
+  else
+    vim.b.format_on_write = true
+    print('Formatting enabled')
   end
+  return vim.b.format_on_write
+end
+
+-- Remove trailing whitespace and convert tabs to spaces in the current buffer.
+-- Does not write changes.
+function Fn.basic_format_buffer()
+  -- http://stackoverflow.com/q/356126
+  local search = vim.fn.getreg('/')
+  local view = vim.fn.winsaveview()
+  vim.cmd('retab')
+  vim.cmd([[silent! %s/\s\+$//e]])
+  vim.fn.setreg('/', search)
+  vim.fn.winrestview(view)
+end
+
+-- Apply both the basic formatter and the formatting provided by Neoformat.
+-- Write changes.
+function Fn.format_buffer()
+  Fn.basic_format_buffer()
+  vim.cmd('Neoformat')
+end
+
+-- Format buffer unless format_on_write is disabled for the buffer.
+function Fn.format_buffer_if_enabled()
+  if is_format_on_write_enabled() then
+    Fn.format_buffer()
+  end
+end
+
+-- Check if window resizing is enabled globally
+function is_window_resize_enabled()
+  return vim.g.window_resize_enabled == true
+    or (
+      vim.g.window_resize_start_enabled == true
+      and vim.g.window_resize_enabled == nil
+    )
+end
+
+-- Resize windows unless window_resize is disabled. Does not run the Focus
+-- plugin, since the effects of Focus are passive.
+function Fn.window_resize_if_enabled()
+  if is_window_resize_enabled() then
+    vim.cmd('wincmd=')
+  end
+end
+
+-- Enable/disable window resize behavior
+function Fn.toggle_window_resize()
+  if is_window_resize_enabled() then
+    vim.g.window_resize_enabled = false
+    Fn.sync_window_resize_settings()
+    print('Window auto-resize disabled')
+  else
+    vim.g.window_resize_enabled = true
+    Fn.sync_window_resize_settings()
+    Fn.window_resize_if_enabled()
+    print('Window auto-resize enabled')
+  end
+
+  return vim.g.window_resize_enabled
+end
+
+-- Ensure that the Focus plugin is enabled/disabled to match the
+-- window_resize_enabled flag.
+function Fn.sync_window_resize_settings()
+  if is_window_resize_enabled() then
+    vim.cmd('EnableFocus')
+  else
+    vim.cmd('DisableFocus')
+  end
+end
+
+-- Check if highlighting on yank is enabled on the global or buffer level
+function is_highlight_on_yank_enabled()
+  return vim.b.highlight_on_yank == true
+    or (
+      vim.g.highlight_on_yank_start_enabled == true
+      and vim.b.highlight_on_yank == nil
+    )
+end
+
+-- Highlight text that was just yanked unless highlight_on_yank is disabled for
+-- the buffer.
+function Fn.highlight_yank_if_enabled()
+  if is_highlight_on_yank_enabled() then
+    vim.highlight.on_yank({ higroup = 'IncSearch', timeout = 1000 })
+  end
+end
+
+-- Enable/disable highlighting yanked text
+function Fn.toggle_highlight_yank()
+  if is_highlight_on_yank_enabled() then
+    vim.b.highlight_on_yank = false
+    print('Highligh on yank disabled')
+  else
+    vim.b.highlight_on_yank = true
+    print('Highlight on yank enabled')
+  end
+
+  return vim.b.highlight_on_yank
 end
 
 -- Format information about the most serious ALE issues for the current file

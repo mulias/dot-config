@@ -35,4 +35,7 @@ require('em.config.text_objects').setup()
 -- Custom commands
 require('em.config.commands').setup()
 
+-- Custom callback functions bound to vim events
+require('em.config.autocommands').setup()
+
 -- finally, filetype specific settings may be sourced from `after/ftplugin`

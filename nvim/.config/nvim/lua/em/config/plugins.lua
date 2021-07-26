@@ -126,38 +126,7 @@ Plugins.config.specs = {
   -- cof                                enable/disable formatting on save
   -- :Neoformat [formatter]             run formatting on the current buffer
   -- {Visual}:Neoformat [formatter]     run formatting on selection
-  {
-    'sbdchd/neoformat',
-    config = function()
-      local localprettier = {
-        exe = './node_modules/.bin/prettier',
-        args = { '--stdin', '--stdin-filepath', '"%:p"' },
-        stdin = 1,
-      }
-
-      vim.g.neoformat_start_enabled = 1
-      vim.g.neoformat_basic_format_retab = 1
-      vim.g.neoformat_basic_format_trim = 1
-      vim.g.neoformat_javascript_localprettier = localprettier
-      vim.g.neoformat_enabled_javascript = { 'localprettier', 'prettier' }
-      vim.g.neoformat_typescript_localprettier = localprettier
-      vim.g.neoformat_enabled_typescript = { 'localprettier', 'prettier' }
-      vim.g.neoformat_typescriptreact_localprettier = localprettier
-      vim.g.neoformat_enabled_typescriptreact = { 'localprettier', 'prettier' }
-      vim.g.neoformat_scss_localprettier = localprettier
-      vim.g.neoformat_enabled_scss = { 'localprettier', 'prettier' }
-      vim.g.neoformat_elm_localelmformat = {
-        exe = './node_modules/.bin/elm-format',
-        args = { '--stdin', '--elm-version=0.19' },
-        stdin = 1,
-      }
-      vim.g.neoformat_enabled_elm = { 'localelmformat', 'elmformat' }
-
-      require('em.vim').augroup('neoformat_on_write', {
-        { 'BufWritePre', '*', 'NeoformatIfEnabled' },
-      })
-    end,
-  },
+  'sbdchd/neoformat',
 
   -- Linting
   -- Find and run code linters on buffer write. Populates the location list with
@@ -419,9 +388,6 @@ Plugins.config.specs = {
   -- {Visual}#        search for selection backward
   'junegunn/vim-slash',
 
-  -- Briefly highlight yanked text
-  'machakann/vim-highlightedyank',
-
   -- View and navigate the undo tree
   -- <Leader>u        toggle undo tree
   -- {Undotree}?      show hotkeys and quick help
@@ -502,9 +468,6 @@ Plugins.config.specs = {
     'beauwilliams/focus.nvim',
     config = function()
       require('focus').width = 85
-      require('em.vim').augroup('focus_balance_windows', {
-        { 'BufEnter,WinEnter', '*', 'wincmd=' },
-      })
     end,
   },
 }

@@ -48,15 +48,23 @@ FZF
 
 local Commands = {}
 
+local fn = require('em.fn')
+
 Commands.config = {
   -- Highlight the color column, defaults to col 81 if nothing else is set
-  TCC = { require('em.fn').toggle_color_columns },
+  ToggleColorColumn = { fn.toggle_color_columns },
 
-  -- Toggle Neoformat so that it doesn't run on every save
-  NeoformatToggle = { require('em.fn').neoformat_toggle },
+  -- Use basic formatting and Neofromat to format and write buffer changes
+  Format = { fn.format_buffer },
 
-  -- Run Neoformat as long as NeoformatToggle has not disabled it
-  NeoformatIfEnabled = { require('em.fn').neoformat_if_enabled },
+  -- Toggle formatting on save
+  ToggleFormat = { fn.toggle_format_on_write },
+
+  -- Toggle windows auto-adjusting position and width
+  ToggleWindowResize = { fn.toggle_window_resize },
+
+  -- Toggle temporary highlighting when yanking text
+  ToggleHighlightYank = { fn.toggle_highlight_yank },
 
   -- Use suda to replace ':SudoEdit' and ':SudoWrite'
   SudoEdit = { 'SudaRead <args>', nargs = '?' },
