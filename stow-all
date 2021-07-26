@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Run stow for all sub-directories.
+
+for i in $(ls -d */); do stow "$*" ${i%%/}; done
