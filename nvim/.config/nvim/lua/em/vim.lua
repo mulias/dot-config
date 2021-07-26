@@ -138,4 +138,8 @@ function V.map(mappings, opts)
   end
 end
 
+function V.disable_built_in_plugin(plugin_name)
+  vim.g['loaded_' .. plugin_name] = 1
+end
+
 return V

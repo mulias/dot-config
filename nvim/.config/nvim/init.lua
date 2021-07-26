@@ -14,8 +14,11 @@ if require('em.bootstrap').first_time_setup() then
   return
 end
 
--- Configure built-in vim features
+-- Configure built in vim features
 require('em.config.options').setup()
+
+-- Set which vim built in plugins should be allowed or disabled
+require('em.config.built_in_plugins').setup()
 
 -- Enable plugins and plugin-specific settings
 require('em.config.plugins').setup()
