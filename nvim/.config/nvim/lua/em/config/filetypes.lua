@@ -35,7 +35,7 @@ function Filetypes.config.magit()
     {
       'User',
       'VimagitEnterCommit',
-      'setlocal spell | setlocal textwidth=72 | setlocal colorcolumn=73 | startinsert',
+      'setlocal spell | setlocal textwidth=72 | setlocal colorcolumn=73',
     },
     {
       'User',
