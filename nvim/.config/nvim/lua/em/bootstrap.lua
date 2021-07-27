@@ -55,7 +55,7 @@ local function install_plugins_on_vim_enter()
   print('Install plugins then restart to complete setup')
   vim.cmd('packadd packer.nvim')
   require('em.vim').augroup('init_bootstrap', {
-    { 'VimEnter', '*', 'lua require("em.config.plugins").manage().sync()' },
+    'VimEnter * ++once lua require("em.config.plugins").manage().sync()',
   })
 end
 

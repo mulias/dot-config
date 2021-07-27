@@ -10,7 +10,7 @@ Autocommands.config = {
   -- whitespace. Toggle per-buffer with `cof`, `<Leader>of`, or
   -- `:ToggleFormat`. Run manually with `:Format`.
   format_on_write = {
-    { 'BufWritePre', '*', 'lua require("em.fn").format_buffer_if_enabled()' },
+    'BufWritePre * lua require("em.fn").format_buffer_if_enabled()',
     start_enabled = true,
   },
   -- Window resize
@@ -18,23 +18,15 @@ Autocommands.config = {
   -- wide, and then balances all other windows to be equal widths. Toggle
   -- per-session with `co=`, `<Leader>o=`, or `:ToggleWindowResize`.
   window_resize = {
-    { 'VimEnter', '*', 'lua require("em.fn").sync_window_resize_settings()' },
-    {
-      'VimResized,WinEnter',
-      '*',
-      'lua require("em.fn").window_resize_if_enabled()',
-    },
+    'VimEnter * lua require("em.fn").sync_window_resize_settings()',
+    'VimResized,WinEnter * lua require("em.fn").window_resize_if_enabled()',
     start_enabled = true,
   },
   -- Highlight On Yank
   -- Briefly highlight text that was just yanked. Toggle per-buffer with `coy`,
   -- `<Leader>oy`, or `:ToggleHighlightYank`.
   highlight_on_yank = {
-    {
-      'TextYankPost',
-      '*',
-      'silent! lua require("em.fn").highlight_yank_if_enabled()',
-    },
+    'TextYankPost * silent! lua require("em.fn").highlight_yank_if_enabled()',
     start_enabled = true,
   },
 }

@@ -47,8 +47,7 @@ function UI.setup()
   -- instead.
   require('em.vim').augroup('no_undercurl', {
     {
-      'ColorScheme',
-      '*',
+      'ColorScheme *',
       table.concat({
         'highlight clear SpellBad',
         'highlight clear SpellCap',

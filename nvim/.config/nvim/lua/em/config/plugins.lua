@@ -417,7 +417,7 @@ Plugins.config.specs = {
     config = function()
       local chars = "'=', ':', '-', '_', ' ', '#', '?', '$', '!', '&'"
       require('em.vim').augroup('after_object_enable', {
-        { 'VimEnter', '*', 'call after_object#enable(' .. chars .. ')' },
+        'VimEnter * call after_object#enable(' .. chars .. ')',
       })
     end,
   },

@@ -34,7 +34,10 @@ function V.augroup(group_name, cmd_defs)
   vim.cmd('augroup ' .. group_name)
   vim.cmd('autocmd!')
   for _, cmd_def in ipairs(cmd_defs) do
-    vim.cmd('autocmd ' .. table.concat(cmd_def, ' '))
+    if type(cmd_def) == 'table' then
+      cmd_def = table.concat(cmd_def, ' ')
+    end
+    vim.cmd('autocmd ' .. cmd_def)
   end
   vim.cmd('augroup END')
   return group_name

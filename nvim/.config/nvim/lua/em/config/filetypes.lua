@@ -33,13 +33,11 @@ end
 function Filetypes.config.magit()
   require('em.vim').augroup('vimagit', {
     {
-      'User',
-      'VimagitEnterCommit',
+      'User VimagitEnterCommit',
       'setlocal spell | setlocal textwidth=72 | setlocal colorcolumn=73',
     },
     {
-      'User',
-      'VimagitLeaveCommit',
+      'User VimagitLeaveCommit',
       'setlocal nospell | setlocal textwidth=0 | setlocal colorcolumn=',
     },
   })
