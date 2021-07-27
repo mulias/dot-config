@@ -63,10 +63,10 @@ function UI.setup()
 
   if vim.opt.termguicolors then
     vim.opt.background = UI.config.true_color_theme.background
-    vim.cmd('silent! colorscheme ' .. UI.config.true_color_theme.colorscheme)
+    vim.cmd('colorscheme ' .. UI.config.true_color_theme.colorscheme)
   else
     vim.opt.background = UI.config.fallback.background
-    vim.cmd('silent! colorscheme ' .. UI.config.fallback_theme.colorscheme)
+    vim.cmd('colorscheme ' .. UI.config.fallback_theme.colorscheme)
   end
 
   vim.opt.statusline = table.concat(UI.config.statusline)
