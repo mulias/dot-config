@@ -20,11 +20,10 @@ Autocommands.config = {
   window_resize = {
     { 'VimEnter', '*', 'lua require("em.fn").sync_window_resize_settings()' },
     {
-      'BufEnter,WinEnter',
+      'VimResized,WinEnter',
       '*',
       'lua require("em.fn").window_resize_if_enabled()',
     },
-    { 'VimResized', '*', 'wincmd=' },
     start_enabled = true,
   },
   -- Highlight On Yank

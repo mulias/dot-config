@@ -186,6 +186,7 @@ Plugins.config.specs = {
       require('compe').setup({
         enabled = true,
         autocomplete = false,
+        documentation = false,
         source = {
           path = true,
           buffer = true,
