@@ -1,5 +1,10 @@
 --[[----------------------------------------------------------------------------
 Autocommands
+
+Execute commands tied to vim events. Organized into "features" where each
+feature can be toggled on and off through key bindings or a command. Each
+feature is always available, but the `start_enabled` flag determines if it
+defaults to being on or off per buffer or session.
 ------------------------------------------------------------------------------]]
 
 local Autocommands = {}
