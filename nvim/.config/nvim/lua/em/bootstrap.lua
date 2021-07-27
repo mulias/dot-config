@@ -81,14 +81,13 @@ function Bootstrap.hard_reset()
     return
   end
 
-  local out = vim.fn.system({
-    'rm',
-    '-rf',
-    plugin_directory,
-    '&',
-    'rm',
-    require('em.config.plugins').config.packer.compile_path,
-  })
+  local out = vim.fn.system(
+    string.format(
+      'rm -rf %s & rm %s',
+      plugin_directory,
+      require('em.config.plugins').config.packer.compile_path
+    )
+  )
   print(out)
   local reset_success = vim.v.shell_error == 0
   if reset_success then
