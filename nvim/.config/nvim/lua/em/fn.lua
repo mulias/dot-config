@@ -42,7 +42,6 @@ function Fn.toggle_format_on_write()
 end
 
 -- Remove trailing whitespace and convert tabs to spaces in the current buffer.
--- Does not write changes.
 function Fn.basic_format_buffer()
   -- http://stackoverflow.com/q/356126
   local search = vim.fn.getreg('/')
@@ -54,7 +53,6 @@ function Fn.basic_format_buffer()
 end
 
 -- Apply both the basic formatter and the formatting provided by Neoformat.
--- Write changes.
 function Fn.format_buffer()
   Fn.basic_format_buffer()
   vim.cmd('Neoformat')
