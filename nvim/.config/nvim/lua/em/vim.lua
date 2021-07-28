@@ -61,11 +61,15 @@ function V.command(name, cmd_body, opts)
 end
 
 -- Check if the current terminal supports true color
-function V.is_true_color_term()
+function V.can_support_true_color()
   local term = vim.env.TERM
-  return term == 'xterm-256color'
+  local is_gvim = vim.fn.has('gui_running') == 1
+  local has_truecolor_flag = vim.env.COLORTERM == 'truecolor'
+  local is_supported_term = term == 'xterm-256color'
     or term == 'screen-256color'
     or term == 'xterm-kitty'
+
+  return is_gvim or has_truecolor_flag or is_supported_term
 end
 
 -- Replaces terminal codes and keycodes with the internal representation.

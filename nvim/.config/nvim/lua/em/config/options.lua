@@ -9,7 +9,7 @@ local Options = {}
 -- path for file backups, should be '~/.local/share/nvim/backup/'
 local backupdir = vim.fn.stdpath('data') .. '/backup/'
 
-local is_true_color = require('em.vim').is_true_color_term()
+local use_true_color = require('em.vim').can_support_true_color()
 
 -- stylua: ignore
 Options.config = {
@@ -23,7 +23,7 @@ Options.config = {
   shiftwidth = 2,                   -- indentation amount for < and > commands
   errorbells = false,               -- no beeps
   modeline = false,                 -- disable modeline
-  termguicolors = is_true_color,    -- full colors for supported terminals
+  termguicolors = use_true_color,   -- full colors for supported terminals
   joinspaces = false,               -- prevents extra spaces on a join (Y)
   ignorecase = true,                -- make searching case insensitive
   smartcase = true,                 -- ... unless the query has capital letters
