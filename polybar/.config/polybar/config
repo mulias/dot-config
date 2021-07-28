@@ -1,0 +1,160 @@
+[colors]
+white = #cccccc
+grey = #333333
+black = #222222
+red = #900000
+blue = #285577
+
+
+[bar/laptop]
+monitor = eDP-1
+bottom = true
+width = 100%
+height = 30
+padding-right = 1
+line-size = 3
+
+background = ${colors.black}
+border-color = ${colors.black}
+foreground = ${colors.white}
+
+font-0 = Inconsolata:pixelsize=13;3
+font-1 = Font Awesome 5 Free Solid:size=12;3
+font-2 = Font Awesome 5 Brands:size=12;3
+
+module-margin = 1
+modules-left = i3
+modules-right = volume backlight battery0 wired-network wireless-network date
+
+
+[bar/display-port-secondary]
+monitor = DP-2
+bottom = true
+width = 100%
+height = 30
+padding-right = 1
+line-size = 3
+
+background = ${colors.black}
+border-color = ${colors.black}
+foreground = ${colors.white}
+
+font-0 = Inconsolata:pixelsize=13;3
+font-1 = Font Awesome 5 Free Solid:size=12;3
+font-2 = Font Awesome 5 Brands:size=12;3
+
+module-margin = 1
+modules-left = i3
+modules-right = date
+
+
+[bar/display-port-only]
+monitor = DP-2
+bottom = true
+width = 100%
+height = 30
+padding-right = 1
+line-size = 3
+
+background = ${colors.black}
+border-color = ${colors.black}
+foreground = ${colors.white}
+
+font-0 = Inconsolata:pixelsize=13;3
+font-1 = Font Awesome 5 Free Solid:size=12;3
+font-2 = Font Awesome 5 Brands:size=12;3
+
+module-margin = 1
+modules-left = i3
+modules-right = volume battery0 wired-network wireless-network date
+
+
+
+
+
+
+[module/i3]
+type = internal/i3
+
+pin-workspaces = true
+enable-scroll = true
+wrapping-scroll = false
+
+label-focused = %index%
+label-focused-foreground = ${colors.white}
+label-focused-background = ${colors.grey}
+label-focused-underline = ${colors.blue}
+label-focused-padding = 1
+
+label-unfocused = %index%
+label-unfocused-foreground = ${colors.white}
+label-unfocused-background = ${colors.black}
+label-unfocused-padding = 1
+
+label-urgent = %index%
+label-urgent-foreground = ${colors.white}
+label-urgent-background = ${colors.black}
+label-urgent-underline = ${colors.red}
+label-urgent-padding = 1
+
+
+[module/date]
+type = internal/date
+interval = 5
+date = %b %d
+time = %I:%M %p
+label = " %date%, %time%"
+
+
+[module/battery]
+type = internal/battery
+poll-interval = 5
+full-at = 99
+time-format = %H:%M
+
+label-discharging = %time%
+label-charging = %time%
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-charging =  <label-charging>
+format-full =  00:00
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+
+
+[module/battery0]
+inherit = module/battery
+battery = BAT0
+
+
+[module/volume]
+type = internal/pulseaudio
+format-volume = <ramp-volume> <label-volume>
+format-muted = %{A4:xdotool key XF86AudioRaiseVolume:}%{A5:xdotool key XF86AudioLowerVolume:} <label-muted>%{A}%{A}
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+
+[module/backlight]
+type = internal/backlight
+label =  %percentage%%
+format = %{A4:xdotool key XF86MonBrightnessUp:}%{A5:xdotool key XF86MonBrightnessDown:}<label>%{A}%{A}
+card = intel_backlight
+
+
+[module/wireless-network]
+type = internal/network
+interface = wlp0s20f3
+interval = 5
+label-connected = %{A1:connman-gtk:} %signal%%%{A}
+label-disconnected = %{A1:connman-gtk:} --%{A}
+
+
+[module/wired-network]
+type = internal/network
+interface = eth0
+label-connected = %{A1:connman-gtk:} %{A}

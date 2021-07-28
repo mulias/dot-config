@@ -1,0 +1,113 @@
+" Basic vimrc, for when you just got to use vim
+
+" Plugins
+" Add plugins to `~/.vim/pack/*/start in order to have them auto-loaded by
+" vim. This config expects the packages:
+" - https://github.com/tpope/vim-sensible
+" - https://github.com/owickstrom/vim-colors-paramount
+
+" Allow multibyte characters in this config. This isn't really necessary but a
+" vimscript linter was complaining about it being missing.
+scriptencoding utf-8
+
+" Make an autocmd group to use in this file
+augroup vimrc
+  autocmd!
+augroup END
+
+" Fix incorrect background rendering when using a color theme with a
+" background color.
+let &t_ut=''
+
+" theme
+set background=light
+colorscheme paramount
+
+" Use ; for commands. This replaces the ability to repeat f/t motions, but
+" it's what I'm used to.
+nnoremap ; :
+vnoremap ; :
+
+" use Q to execute default register, overrides ex mode
+nnoremap Q @q
+
+" swap so that 0 goes to first character and ^ goes to start of line
+nnoremap 0 ^
+nnoremap ^ 0
+
+" ctrl+[hjkl] navigate between split windows
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+" Move three lines/characters at a time
+nnoremap H hhh
+nnoremap J jjj
+vnoremap J jjj
+nnoremap K kkk
+vnoremap K kkk
+nnoremap L lll
+
+" Copy/Paste to clipboard
+noremap gp "+p
+noremap gP "+P
+nmap gy "+y
+vnoremap gy "+y
+
+" Redo edit
+nnoremap U <C-r>
+
+" Join two lines
+noremap Y J
+
+" repeat last command once for each highlighted line
+vnoremap . :norm.<CR>
+
+" all the little things
+set showcmd                  " show command in status line as it is composed
+set showmatch                " highlight matching brackets
+set showmode                 " show current mode
+set number                   " line numbers on the left side
+set numberwidth=4            " left side number column is 4 characters wide
+set expandtab                " insert spaces when TAB is pressed
+set tabstop=2                " render TABs using this many spaces
+set shiftwidth=2             " indentation amount for < and > commands
+set noerrorbells             " no beeps
+set nomodeline               " disable modeline
+set nojoinspaces             " prevents inserting two spaces on a join (Y)
+set ignorecase               " make searching case insensitive...
+set smartcase                " ... unless the query has capital letters
+set nowrap                   " don't wrap text, use 'cow' to toggle line wrap
+set list                     " highlight tabs and trailing spaces
+set listchars=tab:>·,trail:· " symbols to display for tabs and trailing spaces
+set scrolloff=3              " show next 3 lines while scrolling
+set sidescrolloff=5          " show next 5 columns while side-scrolling
+set splitbelow               " horizontal split opens under active window
+set splitright               " vertical split opens to right of active window
+set shortmess+=I             " Don't show the intro
+set bufhidden=hide           " allow switching from an unsaved buffer
+set autowrite                " auto write file when switching buffers
+set wildmode=longest:full    " bash-style command mode completion
+set fillchars=vert:\|        " use vertical bars to divide windows
+set completeopt=menuone      " show completion menu even if there's only one opt
+set completeopt+=noinsert    " ... and prevent automatic text injection
+set completeopt+=preview     " ... and prevent automatic text injection
+set matchpairs+=<:>          " highlight matching angle brackets
+
+
+" do not use any tmp files
+set noundofile
+set nobackup
+set noswapfile
+set viminfo="NONE"
+
+" text: wrap at 80 characters
+autocmd vimrc FileType text setlocal textwidth=80
+autocmd vimrc FileType markdown setlocal textwidth=80
+
+" vim: reload vimrc every time this buffer is saved
+autocmd vimrc BufWritePost $MYVIMRC source $MYVIMRC
+
+" git: wrap at 72 characters
+autocmd vimrc FileType gitcommit setlocal textwidth=72

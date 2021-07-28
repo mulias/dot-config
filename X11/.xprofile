@@ -1,0 +1,3 @@
+~/.fehbg &                                     # restore background image
+xcape -e '#66=Escape' &                        # tapping capslock=escape
+xmodmap ~/.config/X11/Xmodmap                  # holding capslock=meta
