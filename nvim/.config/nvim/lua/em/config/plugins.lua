@@ -38,6 +38,7 @@ Plugins.config.specs = {
   -- Open fzf in a terminal buffer, with values loaded in from different sources.
   -- <Leader>a        search all text in project
   -- <Leader>A        search all text in project, full screen
+  -- <Leader>b        search buffer list
   -- <Leader>e        search everything on disk (like ':e /foo/bar')
   -- <Leader>f        search file paths, insert selected file path into buffer
   -- <Leader>gc       search git commits
@@ -64,12 +65,18 @@ Plugins.config.specs = {
         ['ctrl-s'] = 'split',
         ['ctrl-v'] = 'vsplit',
       }
-      vim.g.fzf_layout = { down = '40%' }
+      vim.g.fzf_layout = {
+        window = {
+          width = 1.0,
+          height = 0.4,
+          yoffset = 0.99,
+          border = 'top',
+        },
+      }
     end,
   },
 
   -- Search and navigate with fuzzy find
-  -- <Leader>b        search buffer list
   {
     'nvim-telescope/telescope.nvim',
     config = function()

@@ -31,9 +31,9 @@ LeaderMappings.config.mappings = {
     end,
     'search all in project with preview',
   },
-  b = { ':Telescope buffers<CR>', 'search buffer list' },
+  b = { ':Buffers<CR>', 'search buffer list' },
   c = { '<C-w><C-q>', 'close focused window' },
-  C = { ':Telescope colorscheme<CR>', 'change colorscheme' },
+  C = { ':Colors<CR>', 'change colorscheme' },
   d = { ':bp|sp|bn|bd<CR>', 'delete buffer from buffer list' },
   e = { ':Files /<CR>', 'search everything in filesystem' },
   f = {
