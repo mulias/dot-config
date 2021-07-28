@@ -65,7 +65,7 @@ function UI.setup()
     vim.opt.background = UI.config.true_color_theme.background
     vim.cmd('colorscheme ' .. UI.config.true_color_theme.colorscheme)
   else
-    vim.opt.background = UI.config.fallback.background
+    vim.opt.background = UI.config.fallback_theme.background
     vim.cmd('colorscheme ' .. UI.config.fallback_theme.colorscheme)
   end
 
