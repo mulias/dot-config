@@ -79,6 +79,7 @@ Plugins.config.specs = {
   -- Search and navigate with fuzzy find
   {
     'nvim-telescope/telescope.nvim',
+    cmd = { 'Telescope' },
     config = function()
       require('telescope').setup({
         defaults = {
@@ -189,6 +190,7 @@ Plugins.config.specs = {
   -- {PUM}<ESC>       cancel completion
   {
     'hrsh7th/nvim-compe',
+    event = 'InsertEnter',
     config = function()
       require('compe').setup({
         enabled = true,
@@ -401,6 +403,7 @@ Plugins.config.specs = {
   -- {Undotree}?      show hotkeys and quick help
   {
     'mbbill/undotree',
+    cmd = { 'UndotreeToggle', 'UndotreeShow' },
     config = function()
       vim.g.undotree_SetFocusWhenToggle = 1
     end,
@@ -421,11 +424,10 @@ Plugins.config.specs = {
   -- aa{c}            text object for part of line after previous {c}
   {
     'junegunn/vim-after-object',
+    event = 'VimEnter',
     config = function()
-      local chars = "'=', ':', '-', '_', ' ', '#', '?', '$', '!', '&'"
-      require('em.vim').augroup('after_object_enable', {
-        'VimEnter * call after_object#enable(' .. chars .. ')',
-      })
+      local chars = { '=', ':', '-', '_', ' ', '#', '?', '$', '!', '&' }
+      vim.fn['after_object#enable'](unpack(chars))
     end,
   },
 
