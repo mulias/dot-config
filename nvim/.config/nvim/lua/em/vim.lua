@@ -149,4 +149,28 @@ function V.disable_built_in_plugin(plugin_name)
   vim.g['loaded_' .. plugin_name] = 1
 end
 
+-- See `:h synIDattr`
+-- example: get_highlight_group_attr('StatusLine', 'fg#')
+function V.get_highlight_group_attr(hl_group, attr)
+  return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(hl_group)), attr)
+end
+
+function V.get_highlight_group_fg(hl_group)
+  local is_reversed = V.get_highlight_group_attr(hl_group, 'reverse') == '1'
+  if is_reversed then
+    return V.get_highlight_group_attr(hl_group, 'bg#')
+  else
+    return V.get_highlight_group_attr(hl_group, 'fg#')
+  end
+end
+
+function V.get_highlight_group_bg(hl_group)
+  local is_reversed = V.get_highlight_group_attr(hl_group, 'reverse') == '1'
+  if is_reversed then
+    return V.get_highlight_group_attr(hl_group, 'fg#')
+  else
+    return V.get_highlight_group_attr(hl_group, 'bg#')
+  end
+end
+
 return V
