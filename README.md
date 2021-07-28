@@ -1,5 +1,5 @@
 ﻿dot-config
 ==========
 
-I usually place this repo in `~/config`, `cd` into `~/config/config`, and then use
-`stow` to move config files and directories to the correct locations.
+Use `stow` to apply configs to system. The `stow-all` script runs `stow` on each
+sub-director, or `stow nvim`, `stow zsh`, etc applies specific config sets.
