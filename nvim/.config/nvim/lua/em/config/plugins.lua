@@ -480,6 +480,15 @@ Plugins.config.specs = {
       require('focus').width = 85
     end,
   },
+
+  -- Filetype defaults
+  -- Set highlighting and defaults for rarely used languages.
+  {
+    'sheerun/vim-polyglot',
+    setup = function()
+      vim.g.polyglot_disabled = { 'lua' }
+    end,
+  },
 }
 
 function Plugins.manage()
