@@ -441,7 +441,7 @@ Plugins.config.specs = {
   { 'kana/vim-textobj-entire', after = { 'vim-textobj-user' } },
   { 'glts/vim-textobj-comment', after = { 'vim-textobj-user' } },
 
-  -- TODO
+  -- Show colored backgrounds for hex values and css color functions
   {
     'norcalli/nvim-colorizer.lua',
     config = function()
@@ -452,8 +452,8 @@ Plugins.config.specs = {
             RRGGBB = true,
             RRGGBBAA = true,
             names = false,
-            rgb_fn = false,
-            hsl_fn = false,
+            rgb_fn = true,
+            hsl_fn = true,
             mode = 'background',
           },
         })
