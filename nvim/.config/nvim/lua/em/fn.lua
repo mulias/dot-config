@@ -8,8 +8,8 @@ local Fn = {}
 -- already has one or more color colomns then show/hide those
 -- columns. If the buffer does not have any color columns then create
 -- `default_columns`, which itself defaults to `{ '81' }`.
-function Fn.toggle_color_columns(default_columns)
-  local default_columns = default_columns or { '81' }
+function Fn.toggle_color_columns(columns)
+  local default_columns = columns or { '81' }
   local has_cc = #vim.opt_local.colorcolumn:get() > 0
   if has_cc then
     vim.b.prev_colorcolumn = vim.opt_local.colorcolumn:get()
@@ -21,7 +21,7 @@ function Fn.toggle_color_columns(default_columns)
 end
 
 -- Check if format is enabled on the global or buffer level
-function is_format_on_write_enabled()
+local function is_format_on_write_enabled()
   return vim.b.format_on_write == true
     or (
       vim.g.format_on_write_start_enabled == true
@@ -66,7 +66,7 @@ function Fn.format_buffer_if_enabled()
 end
 
 -- Check if window resizing is enabled globally
-function is_window_resize_enabled()
+local function is_window_resize_enabled()
   return vim.g.window_resize_enabled == true
     or (
       vim.g.window_resize_start_enabled == true
@@ -109,7 +109,7 @@ function Fn.sync_window_resize_settings()
 end
 
 -- Check if highlighting on yank is enabled on the global or buffer level
-function is_highlight_on_yank_enabled()
+local function is_highlight_on_yank_enabled()
   return vim.b.highlight_on_yank == true
     or (
       vim.g.highlight_on_yank_start_enabled == true
@@ -156,7 +156,7 @@ function Fn.ale_status()
   return ''
 end
 
-function Fn.underline_spell_groups(group_name)
+function Fn.underline_spell_groups()
   for _, group in ipairs({ 'SpellBad', 'SpellCap', 'SpellRare', 'SpellLocal' }) do
     vim.cmd('highlight clear ' .. group)
     vim.cmd('highlight ' .. group .. ' gui=underline')

@@ -9,7 +9,7 @@ local V = {}
 
 __FnMapStore = __FnMapStore or {}
 
-__execute_fn_map = function(id)
+__Execute_fn_map = function(id)
   __FnMapStore[id]()
 end
 
@@ -23,7 +23,7 @@ local make_cmd = function(rhs)
     return rhs
   elseif type(rhs) == 'function' then
     local func_id = create_fn_map(rhs)
-    return string.format('lua __execute_fn_map(%s)<CR>', func_id)
+    return string.format('lua __Execute_fn_map(%s)<CR>', func_id)
   else
     error('Unexpected type for rhs: ' .. tostring(rhs))
   end
@@ -60,6 +60,10 @@ function V.command(name, cmd_body, opts)
   )
 end
 
+function V.cmd_fmt(cmd_str, ...)
+  return vim.cmd(string.format(cmd_str, ...))
+end
+
 -- Check if the current terminal supports true color
 function V.can_support_true_color()
   local term = vim.env.TERM
@@ -78,7 +82,7 @@ function V.tc(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-function apply_mode(m, mapping)
+local function apply_mode(m, mapping)
   if type(mapping) ~= 'table' then
     return mapping
   end
@@ -97,7 +101,7 @@ function apply_mode(m, mapping)
   end
 end
 
-function register_key(m, k, mapping, opts)
+local function register_key(m, k, mapping, opts)
   local register = require('which-key').register
   local utils = require('em.lua')
 
@@ -124,9 +128,7 @@ end
 -- This method of setting modes should always be used in place of the `mode`
 -- opt provided by `which-key`. See `:h map-table` for valid modes.
 function V.map(mappings, opts)
-  local register = require('which-key').register
   local utils = require('em.lua')
-  local mappings_by_mode = {}
 
   for key, mapping in pairs(mappings) do
     local modes_and_code = utils.split_str(key)
