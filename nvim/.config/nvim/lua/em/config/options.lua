@@ -16,6 +16,7 @@ Options.config = {
   showcmd = true,                   -- show command so far in status line
   showmatch = true,                 -- highlight matching brackets
   showmode = true,                  -- show current mode in command area
+  showtabline = 2,                  -- always show the tabline
   number = true,                    -- line numbers on the left side
   numberwidth = 4,                  -- number column is always 4 characters wide
   expandtab = true,                 -- insert spaces when TAB is pressed

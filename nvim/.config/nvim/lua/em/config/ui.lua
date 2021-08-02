@@ -21,10 +21,8 @@ local statusline = {
   '%1(%)',                     -- padding
   '%h%q%w',                    -- tags: help, quickfix, preview
   '%m%r',                      -- tags: modified, read only
-  '%([%{fugitive#head()}]%)',  -- git branch
   '%<',                        -- truncate point
   '%3(%)',                     -- padding
-  -- [[%{luaeval('require("em.fn").ale_status()')}]],        -- ALE errors/warnings, if any exist
   '%=',                        -- right align
   '%12(%l,%c%)%5p%%'           -- line and col number, % through file
 }
@@ -39,6 +37,7 @@ UI.config = {
     colorscheme = 'paramount',
   },
   statusline = statusline,
+  tabline = "%!v:lua.require'em.tabline'()",
 }
 
 function UI.setup()
@@ -71,6 +70,7 @@ function UI.setup()
   end
 
   vim.opt.statusline = table.concat(UI.config.statusline)
+  vim.opt.tabline = UI.config.tabline
 end
 
 function UI.reload()
