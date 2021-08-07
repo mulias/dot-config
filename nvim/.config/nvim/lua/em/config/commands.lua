@@ -75,19 +75,29 @@ Commands.config = {
   -- Note: thunk ensures the reload happens every time, instead on once on
   -- command creation
   PackerCompile = {
-    function() plugins.reload().manage().compile() end,
+    function()
+      plugins.reload().manage().compile()
+    end,
   },
   PackerInstall = {
-    function() plugins.reload().manage().install() end,
+    function()
+      plugins.reload().manage().install()
+    end,
   },
   PackerUpdate = {
-    function() plugins.reload().manage().update() end,
+    function()
+      plugins.reload().manage().update()
+    end,
   },
   PackerClean = {
-    function() plugins.reload().manage().clean() end,
+    function()
+      plugins.reload().manage().clean()
+    end,
   },
   PackerSync = {
-    function() plugins.reload().manage().sync() end,
+    function()
+      plugins.reload().manage().sync()
+    end,
   },
 }
 
