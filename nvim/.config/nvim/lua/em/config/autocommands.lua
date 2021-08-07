@@ -12,9 +12,8 @@ local Autocommands = {}
 
 Autocommands.config = {
   -- Format on write
-  -- Uses the Neoformat plugin and a custom format function to strip trailing
-  -- whitespace. Toggle per-buffer with `cof`, `<Leader>of`, or
-  -- `:ToggleFormat`. Run manually with `:Format`.
+  -- Format current buffer via LSP. Toggle per-buffer with `cof`, `<Leader>of`,
+  -- or `:ToggleFormat`. Run manually with `:Format`.
   format_on_write = {
     'BufWritePre * lua require("em.fn").format_buffer_if_enabled()',
     start_enabled = true,

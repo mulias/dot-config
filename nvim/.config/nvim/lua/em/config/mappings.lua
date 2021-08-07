@@ -46,8 +46,7 @@ Mappings.config = {
   -- C{motion}        change text, do not save to register
   -- CC               change line, do not save to register
   -- co{*}            toggle options
-  --   coa            toggle ALE
-  --   cof            toggle Neoformat formatting on save
+  --   cof            toggle formatting on save
   --   coh            toggle hlsearch
   --   con            toggle line numbers
   --   cor            toggle relative line numbers
@@ -74,7 +73,6 @@ Mappings.config = {
   ['nx CC'] = { '"_cc', 'change line, do not save to register' },
   co = {
     name = 'toggle options',
-    a = { ':ALEToggle<CR>', 'toggle ALE', silent = false },
     b = { 'yob', 'toggle background', noremap = false, silent = false },
     f = {
       require('em.fn').toggle_format_on_write,
@@ -169,8 +167,6 @@ Mappings.config = {
   --   g?             rot13 selection/motion
   --   g<C-]>         LSP goto definition
   -- G                jump to end of file
-  -- <C-g>{*}         misc/variant CTRL actions
-  --   <C-g><C-]>     LSP goto definition, alias for g<C-]>
   g = {
     name = 'misc/variant',
     b = { ':Gblame<CR>', 'view fugitive git blame annotations' },
@@ -183,8 +179,6 @@ Mappings.config = {
   ['nx gP'] = { '"+P', 'paste from system clipboard' },
   ['n gy'] = { '"+y', 'yank to system clipboard' },
   ['x gy'] = { '"+y`]', 'yank to system clipboard' },
-  ['g<C-]>'] = { ':ALEGoToDefinition<CR>', 'LSP goto definition' },
-  ['<C-g><C-]>'] = { ':ALEGoToDefinition<CR>', 'LSP goto definition' },
 
   -- h                left
   -- H                left 3 columns

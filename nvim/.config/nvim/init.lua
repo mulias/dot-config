@@ -41,4 +41,7 @@ require('em.config.autocommands').setup()
 -- Global visual settings such as theme and statusline
 require('em.config.ui').setup()
 
+-- Language servers for diagnostics, linting, and formatting
+require('em.config.lsp').setup()
+
 -- finally, filetype specific settings may be sourced from `after/ftplugin`

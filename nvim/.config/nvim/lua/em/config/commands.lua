@@ -55,8 +55,8 @@ Commands.config = {
   -- Highlight the color column, defaults to col 81 if nothing else is set
   ToggleColorColumn = { fn.toggle_color_columns },
 
-  -- Use basic formatting and Neofromat to format and write buffer changes
-  Format = { fn.format_buffer },
+  -- Use LSP to apply formatting to the current buffer
+  Format = { vim.lsp.buf.formatting },
 
   -- Toggle formatting on save
   ToggleFormat = { fn.toggle_format_on_write },

@@ -5,7 +5,9 @@ Load and configure plugin.
 
 External dependencies:
 - FZF, SearchReplace: Install Ripgrep.
-- Neoformat: Install formatters for regularly used languages.
+- lspconfig and null-ls: Make sure desired servers, formatters and linters are
+  available as global executables. This can be done through per-project
+  nix-shells.
 - ALE: Install linters for regularly used languages. Use ':ALEInfo' on a file to
   find out about linting that file type.
 - Gutentags: Install Universal Ctags.
@@ -126,60 +128,38 @@ Plugins.config.specs = {
     end,
   },
 
-  -- Formatting
-  -- Find and run code formatters on buffer write. Neoformat automatically
-  -- searches for global executables, but not project-local ones. I've added a
-  -- prettier config for JS and TS that checks node_modules first, then falls back
-  -- on a global prettier install.
-  -- cof                                enable/disable formatting on save
-  -- :Neoformat [formatter]             run formatting on the current buffer
-  -- {Visual}:Neoformat [formatter]     run formatting on selection
-  'sbdchd/neoformat',
+  -- TODO
+  'neovim/nvim-lspconfig',
 
-  -- Linting
-  -- Find and run code linters on buffer write. Populates the location list with
-  -- errors and warning for the current buffer. ALE will automatically find and
-  -- use linters installed on your system, unless 'g:ale_linters' is set
-  -- otherwise. ALE can be set to lint as you type, but I find that distracting.
-  -- coa                shortcut for :ALEToggle
-  -- [l, [L, ]l, ]L     jump to previous, first, next, last location list entry
-  -- <Leader>l          toggle location list, where errors are populated
-  -- <Leader>i          call :ALEDetail
-  -- <Leader>k          call :ALEHover
-  -- <Leader>r          call :ALERename
-  -- <C-g><C-]>         call :ALEGoToDefinition
-  -- :ALELint           manually run linters
-  -- :ALEToggle         turn ALE on/off for current buffer
-  -- :ALEDetail         show expanded message for error on line
-  -- :ALEInfo           report available liners, settings, and linter log
-  -- :ALEHover          LSP hover, eg shows type signature in typescript
-  -- :ALEGoToDefinition LSP jump to symbol definition
-  -- :ALERename         LSP refactor symbol
+  -- LSP tool integration
+  -- Run code formatters, linters, and other tools via LSP.
+  -- cof                                enable/disable formatting on save
+  -- :Format                            run formatting on the current buffer
+  -- {Visual}:Format                    run formatting on selection
   {
-    'w0rp/ale',
-    config = function()
-      vim.g.ale_open_list = 0
-      vim.g.ale_list_window_size = 5
-      vim.g.ale_set_highlights = 1
-      vim.g.ale_set_signs = 0
-      vim.g.ale_lint_on_text_changed = 'never'
-      vim.g.ale_lint_on_insert_leave = 0
-      vim.g.ale_lint_on_enter = 1
-      vim.g.ale_lint_on_save = 1
-      vim.g.ale_fix_on_save = 1
-      vim.g.ale_linters = {
-        elixir = { 'credo', 'elixir-ls' },
-      }
-    end,
+    'jose-elias-alvarez/null-ls.nvim',
+    requires = { 'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim' },
   },
 
-  -- Toggle location and quickfix lists
-  -- These lists may be used in a number of situations. Of note, ALE populates
-  -- the location list with linting errors, and selecting multiple fzf entries
-  -- with <TAB> adds the entries to the quickfix list.
-  -- <Leader>l        toggle location list
-  -- <Leader>q        toggle quickfix list
-  'Valloric/ListToggle',
+  -- TODO
+  {
+    'folke/trouble.nvim',
+    config = function()
+      require('trouble').setup({
+        fold_open = 'v',
+        fold_closed = '>',
+        indent_lines = false,
+        icons = false,
+        signs = {
+          error = 'error',
+          warning = 'warn',
+          hint = 'hint',
+          information = 'info',
+        },
+        use_lsp_diagnostic_signs = false,
+      })
+    end,
+  },
 
   -- Completion
   -- Manually activated completion suggestions.

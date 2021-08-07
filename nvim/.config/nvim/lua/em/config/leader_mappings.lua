@@ -52,16 +52,15 @@ LeaderMappings.config.mappings = {
     s = { ':GFiles?<CR>', 'search git unstaged files' },
   },
   h = { ':History<CR>', 'search recent file history' },
-  i = { ':ALEDetail<CR>', 'linting error info on line' },
+  -- i
   -- j
   k = { 'K', 'keyword info' },
-  K = { ':ALEHover<CR>', 'lsp hover info' },
-  l = { 'toggle location list' },
+  -- K
+  l = { ':Trouble loclist<CR>', 'toggle location list' },
   m = { "'M", 'jump to mark M' },
   n = { "'N", 'jump to mark N' },
   o = {
     name = 'toggle options',
-    a = { 'coa', 'toggle ALE', noremap = false, silent = false },
     b = { 'cob', 'toggle background', noremap = false, silent = false },
     f = { 'cof', 'toggle format on write', noremap = false, silent = false },
     h = { 'coh', 'toggle search highlight', noremap = false, silent = false },
@@ -90,8 +89,8 @@ LeaderMappings.config.mappings = {
     },
   },
   p = { ':GFiles<CR>', 'search project' },
-  q = { 'toggle quickfix list' },
-  r = { ':ALERename<CR>', 'lsp rename symbol under cursor' },
+  q = { ':Trouble quickfix<CR>', 'toggle quickfix list' },
+  -- r
   R = { ':RefConfig<CR>', 'rerence vimrc config' },
   s = { ':%s/\\<<C-r><C-w>\\>/', 'search/replace word', silent = false },
   S = { ':%s/<C-r><C-w>/', 'search/replace word as substring', silent = false },

@@ -41,27 +41,10 @@ function Fn.toggle_format_on_write()
   return vim.b.format_on_write
 end
 
--- Remove trailing whitespace and convert tabs to spaces in the current buffer.
-function Fn.basic_format_buffer()
-  -- http://stackoverflow.com/q/356126
-  local search = vim.fn.getreg('/')
-  local view = vim.fn.winsaveview()
-  vim.cmd('retab')
-  vim.cmd([[silent! %s/\s\+$//e]])
-  vim.fn.setreg('/', search)
-  vim.fn.winrestview(view)
-end
-
--- Apply both the basic formatter and the formatting provided by Neoformat.
-function Fn.format_buffer()
-  Fn.basic_format_buffer()
-  vim.cmd('Neoformat')
-end
-
 -- Format buffer unless format_on_write is disabled for the buffer.
 function Fn.format_buffer_if_enabled()
   if is_format_on_write_enabled() then
-    Fn.format_buffer()
+    vim.lsp.buf.formatting()
   end
 end
 
@@ -136,24 +119,6 @@ function Fn.toggle_highlight_yank()
   end
 
   return vim.b.highlight_on_yank
-end
-
--- Format information about the most serious ALE issues for the current file
-function Fn.ale_status()
-  local issues = vim.api.nvim_eval('ale#statusline#Count(bufnr("%"))')
-  if issues.total > 0 then
-    if issues.error > 0 then
-      return 'ERRORS: ' .. issues.error
-    elseif issues.warning > 0 then
-      return 'WARNINGS: ' .. issues.warning
-    elseif (issues.style_error + issues.style_warning) > 0 then
-      return 'STYLE: ' .. (issues.style_error + issues.style_warning)
-    elseif issues.info > 0 then
-      return 'INFO: ' .. issues.info
-    end
-  end
-
-  return ''
 end
 
 -- Change Spelling related groups to use an underline, overriding the undercurl
