@@ -21,7 +21,7 @@ function Filetypes.config.elm()
 end
 
 function Filetypes.config.gitcommit()
-  vim.opt_local.spell = true
+  vim.cmd('setlocal spell')
   vim.opt_local.textwidth = 72
   vim.opt_local.colorcolumn = { 73 }
 end
@@ -44,7 +44,7 @@ function Filetypes.config.magit()
 end
 
 function Filetypes.config.text()
-  vim.opt_local.spell = true
+  vim.cmd('setlocal spell')
   vim.opt_local.textwidth = 80
 end
 
