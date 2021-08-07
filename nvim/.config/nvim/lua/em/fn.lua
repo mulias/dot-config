@@ -156,6 +156,8 @@ function Fn.ale_status()
   return ''
 end
 
+-- Change Spelling related groups to use an underline, overriding the undercurl
+-- sometimes used by colorschemes.
 function Fn.underline_spell_groups()
   for _, group in ipairs({ 'SpellBad', 'SpellCap', 'SpellRare', 'SpellLocal' }) do
     vim.cmd('highlight clear ' .. group)
@@ -163,6 +165,22 @@ function Fn.underline_spell_groups()
   end
 end
 
+-- Change LSP related groups to use an underline, overriding the undercurl
+-- sometimes used by colorschemes.
+function Fn.underline_lsp_groups()
+  for _, group in ipairs({
+    'LspDiagnosticsUnderlineError',
+    'LspDiagnosticsUnderlineWarning',
+    'LspDiagnosticsUnderlineInformation',
+    'LspDiagnosticsUnderlineHint',
+  }) do
+    vim.cmd('highlight clear ' .. group)
+    vim.cmd('highlight ' .. group .. ' gui=underline')
+  end
+end
+
+-- Try to make the bar between vertical window splits visible by setting it to
+-- the same color as non-active statuslines.
 function Fn.always_show_vert_split()
   local em_vim = require('em.vim')
   local normal_bg = em_vim.get_highlight_group_bg('Normal')
@@ -182,6 +200,8 @@ function Fn.always_show_vert_split()
   end
 end
 
+-- Try to hide the `~` lines after the end of the buffer by setting them to the
+-- same color as the editor background.
 function Fn.hide_end_of_buffer_symbols()
   local em_vim = require('em.vim')
   local background_color = em_vim.get_highlight_group_bg('Normal')
@@ -192,6 +212,8 @@ function Fn.hide_end_of_buffer_symbols()
   end
 end
 
+-- Don't style the cursorline when the `cursorline` opt is on, but do highlight
+-- the line number.
 function Fn.subtle_highlight_cursorline()
   vim.cmd('highlight clear CursorLine')
 end

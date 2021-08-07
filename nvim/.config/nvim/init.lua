@@ -23,9 +23,6 @@ require('em.config.built_in_plugins').setup()
 -- Enable plugins and plugin-specific settings
 require('em.config.plugins').setup()
 
--- Global visual settings such as theme and statusline
-require('em.config.ui').setup()
-
 -- General purpose mappings
 require('em.config.mappings').setup()
 
@@ -40,5 +37,8 @@ require('em.config.commands').setup()
 
 -- Custom callback functions bound to vim events
 require('em.config.autocommands').setup()
+
+-- Global visual settings such as theme and statusline
+require('em.config.ui').setup()
 
 -- finally, filetype specific settings may be sourced from `after/ftplugin`

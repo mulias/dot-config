@@ -38,30 +38,20 @@ UI.config = {
   },
   statusline = statusline,
   tabline = "%!v:lua.require'em.tabline'()",
+  highlight_overrides = function()
+    if vim.opt.termguicolors:get() then
+      local fn = require('em.fn')
+      fn.underline_spell_groups()
+      fn.underline_lsp_groups()
+      fn.always_show_vert_split()
+      fn.hide_end_of_buffer_symbols()
+      fn.subtle_highlight_cursorline()
+    end
+  end,
 }
 
 function UI.setup()
   if vim.opt.termguicolors:get() then
-    -- Set some general preferences after the colorscheme is applied. Only
-    -- works for gui colors.
-    -- * Use underlines instead of undercurls
-    -- * Always show the vertical split line between buffers
-    -- * Don't show tildas in empty space after the buffer
-    -- * Don't highlight line background for cursorline, just the line number
-    -- * When cursorline is enabled highlight the line number but not the
-    --   content.
-    require('em.vim').augroup('colorscheme_preferences', {
-      {
-        'ColorScheme *',
-        table.concat({
-          'lua local fn = require("em.fn")',
-          'fn.underline_spell_groups()',
-          'fn.always_show_vert_split()',
-          'fn.hide_end_of_buffer_symbols()',
-          'fn.subtle_highlight_cursorline()',
-        }, '; '),
-      },
-    })
     vim.opt.background = UI.config.true_color_theme.background
     vim.cmd('colorscheme ' .. UI.config.true_color_theme.colorscheme)
   else

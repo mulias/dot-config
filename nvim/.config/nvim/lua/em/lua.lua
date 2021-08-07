@@ -45,4 +45,26 @@ function L.join_paths(...)
   return table.concat({ ... }, separator)
 end
 
+local function knext(t, index)
+  local value
+  repeat
+    index, value = next(t, index)
+  until type(index) ~= 'number'
+  return index, value
+end
+
+-- Iterate key/value pairs from a table, vs ipairs
+function L.kpairs(t)
+  return knext, t, nil
+end
+
+-- Shallow-copy a new table with only the integer indexed values
+function L.itable(t)
+  local it = {}
+  for i, v in ipairs(t) do
+    it[i] = v
+  end
+  return it
+end
+
 return L

@@ -2,9 +2,10 @@
 Autocommands
 
 Execute commands tied to vim events. Organized into "features" where each
-feature can be toggled on and off through key bindings or a command. Each
-feature is always available, but the `start_enabled` flag determines if it
-defaults to being on or off per buffer or session.
+feature can have namespaced `vim.g` flags. We use this to toggle some features
+on and off through key bindings or a command. Each such feature is always
+available, but the `start_enabled` flag determines if it defaults to being on
+or off per buffer or session.
 ------------------------------------------------------------------------------]]
 
 local Autocommands = {}
@@ -34,13 +35,21 @@ Autocommands.config = {
     'TextYankPost * silent! lua require("em.fn").highlight_yank_if_enabled()',
     start_enabled = true,
   },
+  -- Override Colorscheme
+  -- Set some general highlightling rules after a colorscheme is applied to
+  -- enforce preferences that an otherwise good colorscheme might not follow.
+  override_colorscheme = {
+    'ColorScheme * lua require("em.config.ui").config.highlight_overrides()',
+  },
 }
 
 function Autocommands.setup()
   for auto_name, auto_config in pairs(Autocommands.config) do
-    vim.g[auto_name .. '_start_enabled'] = auto_config.start_enabled
+    for setting_name, setting_val in require('em.lua').kpairs(auto_config) do
+      vim.g[auto_name .. '_' .. setting_name] = setting_val
+    end
 
-    require('em.vim').augroup(auto_name, auto_config)
+    require('em.vim').augroup(auto_name, require('em.lua').itable(auto_config))
   end
 end
 
