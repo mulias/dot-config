@@ -131,7 +131,7 @@ function V.map(mappings, opts)
   local utils = require('em.lua')
 
   for key, mapping in pairs(mappings) do
-    local modes_and_code = utils.split_str(key)
+    local modes_and_code = vim.split(key, '%s')
     local has_modes_prefix = modes_and_code[2] ~= nil
 
     if has_modes_prefix then

@@ -1,19 +1,10 @@
 --[[----------------------------------------------------------------------------
 Lua utilities
+
+See `:h lua-vim` for lua utils already implemented and bundled with neovim.
 ------------------------------------------------------------------------------]]
 
 local L = {}
-
--- split string into a table for each `sep`, defaults to whitespace
-function L.split_str(inputstr, sep)
-  sep = sep or '%s'
-
-  local t = {}
-  for str in string.gmatch(inputstr, '([^' .. sep .. ']+)') do
-    table.insert(t, str)
-  end
-  return t
-end
 
 -- Iterator for the chars in a string
 function L.chars(str)
