@@ -6,6 +6,13 @@ See `:h lua-vim` for lua utils already implemented and bundled with neovim.
 
 local L = {}
 
+-- Inspect lua data
+function L.dump(...)
+  local objects = vim.tbl_map(vim.inspect, { ... })
+  print(unpack(objects))
+  return ...
+end
+
 -- Iterator for the chars in a string
 function L.chars(str)
   return string.gmatch(str, '.')
