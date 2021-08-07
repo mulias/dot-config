@@ -17,14 +17,23 @@ local UI = {}
 
 -- stylua: ignore
 local statusline = {
-  '%f',                        -- full filepath
-  '%1(%)',                     -- padding
-  '%h%q%w',                    -- tags: help, quickfix, preview
-  '%m%r',                      -- tags: modified, read only
-  '%<',                        -- truncate point
-  '%3(%)',                     -- padding
-  '%=',                        -- right align
-  '%12(%l,%c%)%5p%%'           -- line and col number, % through file
+  '%f',                   -- filepath relative to cwd
+  '%(%1(%)%h%q%w%m%r%)',  -- tags: help, quickfix, preview, modified, read only
+  '%<',                   -- truncate point
+  '%=',                   -- right align
+  '%1(%l,%c%)%5p%%',      -- line and col number, % through file
+}
+
+-- stylua: ignore
+local tabline = {
+  '%#TabLine#',                         -- highlight for content
+  '%{%v:lua.em.tabline.tab_list()%}',   -- tab page list
+  '%#TabLineFill#',                     -- highlight for empty space
+  '%=',                                 -- right align
+  '%#TabLine#',                         -- highlight for content
+  '%{v:lua.em.tabline.lsp_servers()}',  -- running language servers
+  '%(%5(%)%{getcwd()}%)',               -- current working directory
+  '%(%1(%)[%{fugitive#head()}]%)',      -- git info for cwd
 }
 
 UI.config = {
@@ -37,7 +46,7 @@ UI.config = {
     colorscheme = 'paramount',
   },
   statusline = statusline,
-  tabline = "%!v:lua.require'em.tabline'()",
+  tabline = tabline,
   highlight_overrides = function()
     if vim.opt.termguicolors:get() then
       local fn = require('em.fn')
@@ -60,7 +69,7 @@ function UI.setup()
   end
 
   vim.opt.statusline = table.concat(UI.config.statusline)
-  vim.opt.tabline = UI.config.tabline
+  vim.opt.tabline = table.concat(UI.config.tabline)
 end
 
 function UI.reload()

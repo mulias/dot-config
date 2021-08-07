@@ -14,6 +14,9 @@ if require('em.bootstrap').first_time_setup() then
   return
 end
 
+-- Extend lua global namespace
+require('em.config.lua_globals').setup()
+
 -- Configure built in vim features
 require('em.config.options').setup()
 

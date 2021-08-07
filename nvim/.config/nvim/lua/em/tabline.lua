@@ -1,3 +1,5 @@
+local Tabline = {}
+
 local function tabSeparator(current)
   return (current < vim.fn.tabpagenr('$') and '%#TabLine#|' or '')
 end
@@ -19,7 +21,9 @@ local function formatTab(current)
   })
 end
 
-local function tab_list()
+-- List tab pages by number. The result of this function must be re-evaluated
+-- if called in the tabline, see the `{%` value in `:h statusline`.
+function Tabline.tab_list()
   local tabs_count = vim.fn.tabpagenr('$')
 
   if tabs_count == 1 then
@@ -35,21 +39,19 @@ local function tab_list()
   end
 end
 
-local function tabline()
-  local tabs = tab_list()
-  local git = vim.fn['fugitive#head']()
-
-  if tabs == '' and git == '' then
-    vim.opt.showtabline = 1
+-- List language servers currently active for the vim session
+function Tabline.lsp_servers()
+  local servers = vim.lsp.get_active_clients()
+  local server_names = {}
+  for _, server in ipairs(servers) do
+    table.insert(server_names, server.name)
   end
 
-  return table.concat({
-    tabs,
-    '%#TabLineFill#',
-    '%=',
-    '%#TabLine#',
-    '%(%5(%)[%{fugitive#head()}]%)',
-  })
+  if #server_names > 0 then
+    return 'LSP: ' .. table.concat(server_names, ', ')
+  else
+    return ''
+  end
 end
 
-return tabline
+return Tabline
