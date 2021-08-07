@@ -5,8 +5,8 @@ Picking a theme requires knowing the color pallet limits of your terminal
 emulator. Some terminals are limited to 16 or 256 colors, while 'true color'
 terminals have the full hex color range. Counterintuitive, true color terminals
 tend to set $TERM to 'xterm-256color', even though more than 256 colors are
-available. The `can_spport_true_color` test might need to be updated to include or
-exclude regularly used terminals.
+available. The `can_support_true_color` test might need to be updated to
+include or exclude regularly used terminals.
 
 Use something close to the default statusline, with the addition of indicating
 the current git branch (requires fugitive) and showing linting results
