@@ -40,8 +40,11 @@ LSP.config.servers = {
     },
   },
   tsserver = {
-    -- use defaults. Note this actually uses the node package
-    -- `typescript-language-server`, which wraps the `tsserver` binary.
+    -- Note this actually uses the node package `typescript-language-server`,
+    -- which wraps the `tsserver` binary.
+    on_attach = function(client)
+      require('em.lsp').disable_formatting(client)
+    end,
   },
   elmls = {
     -- use defaults
