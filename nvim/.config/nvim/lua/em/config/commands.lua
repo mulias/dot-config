@@ -49,7 +49,7 @@ Commands.config = {
   ToggleColorColumn = { fn.toggle_color_columns },
 
   -- Use LSP to apply formatting to the current buffer
-  Format = { vim.lsp.buf.formatting },
+  Format = { fn.format_buffer },
 
   -- Toggle formatting on save
   ToggleFormat = { fn.toggle_format_on_write },

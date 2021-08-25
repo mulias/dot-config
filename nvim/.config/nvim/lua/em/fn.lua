@@ -41,10 +41,27 @@ function Fn.toggle_format_on_write()
   return vim.b.format_on_write
 end
 
+-- Remove trailing whitespace and convert tabs to spaces in the current buffer.
+function Fn.basic_format_buffer()
+  -- http://stackoverflow.com/q/356126
+  local search = vim.fn.getreg('/')
+  local view = vim.fn.winsaveview()
+  vim.cmd('retab')
+  vim.cmd([[silent! %s/\s\+$//e]])
+  vim.fn.setreg('/', search)
+  vim.fn.winrestview(view)
+end
+
+-- Apply both the basic formatter and the formatting provided by lsp.
+function Fn.format_buffer()
+  Fn.basic_format_buffer()
+  vim.lsp.buf.formatting_sync()
+end
+
 -- Format buffer unless format_on_write is disabled for the buffer.
 function Fn.format_buffer_if_enabled()
   if is_format_on_write_enabled() then
-    vim.lsp.buf.formatting()
+    Fn.format_buffer()
   end
 end
 

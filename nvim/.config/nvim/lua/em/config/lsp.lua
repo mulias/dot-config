@@ -57,8 +57,6 @@ LSP.config.servers = {
 -- Tools/utilities wired to LSP via null-ls
 LSP.config.tools = {
   sources = {
-    -- all files
-    null_ls.builtins.formatting.trim_whitespace.with({ filetypes = { '*' } }),
     -- lua
     null_ls.builtins.formatting.stylua,
     -- js/ts
@@ -82,12 +80,12 @@ LSP.config.handlers = {
 }
 
 function LSP.setup()
+  null_ls.config(LSP.config.tools)
+  require('lspconfig')['null-ls'].setup({})
+
   for server_name, config in pairs(LSP.config.servers) do
     require('lspconfig')[server_name].setup(config)
   end
-
-  null_ls.config(LSP.config.tools)
-  require('lspconfig')['null-ls'].setup({})
 
   if LSP.config.handlers['textDocument/publishDiagnostics'] then
     vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
