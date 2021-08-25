@@ -3,18 +3,11 @@ Commands
 
 Notes on useful builtin and plugin commands:
 
-Paq starts with ':Paq*', includes Install, Clean, Update, Upgrade.
-
 Git starts with ':G*', includes blame, diff. Use ':GV' to view git history.
 
 Unix utilities include ':Move', ':Rename', ':Delete', ':Mkdir'. Note that
-':SudoEdit' and ':SudoWrite' are broken in nvim.
-
-Rails
-':Rpreview' open webpage, ':A' edit 'alternate' file (usually test)
-':R' edit 'related' file (depends), editing specific files starts with ':E*'
-
-Linting starts with ':ALE*', includes Lint, Toggle, Detail, Info.
+':SudoEdit' and ':SudoWrite' are broken in nvim and have been redefined with a
+different plugin.
 
 Search/Replace
 ':Search' opens the prompt window to enter a search pattern, and ':Replace
