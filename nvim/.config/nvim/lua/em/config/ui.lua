@@ -17,7 +17,7 @@ local UI = {}
 
 -- stylua: ignore
 local statusline = {
-  '%f',                   -- filepath relative to cwd
+  '%{expand("%:~:.")}',   -- filepath relative to cwd
   '%(%1(%)%h%q%w%m%r%)',  -- tags: help, quickfix, preview, modified, read only
   '%<',                   -- truncate point
   '%=',                   -- right align
