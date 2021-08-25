@@ -174,6 +174,11 @@ LeaderMappings.config.mappings = {
   ['*'] = { ':BLines <C-r><C-w><CR>', 'search current buffer for word' },
   ['<Leader>'] = { '<c-^>', 'switch between current and last buffer' },
   ['t <Esc>'] = { tc('<C-\\><C-n>'), 'leave terminal mode' },
+  ['<tab>'] = {
+    name = 'LSP actions',
+    d = { ':Trouble lsp_document_diagnostics<CR>', 'file diagnostics' },
+    D = { ':Trouble lsp_workspace_diagnostics<CR>', 'project diagnostics' },
+  },
 }
 
 function LeaderMappings.setup()
