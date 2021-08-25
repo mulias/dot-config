@@ -42,13 +42,13 @@ end
 -- List language servers currently active for the vim session
 function Tabline.lsp_servers()
   local servers = vim.lsp.get_active_clients()
-  local server_names = {}
+  local server_ids = {}
   for _, server in ipairs(servers) do
-    table.insert(server_names, server.name)
+    table.insert(server_ids, table.concat({ server.name, '~', server.id }))
   end
 
-  if #server_names > 0 then
-    return 'LSP: ' .. table.concat(server_names, ', ')
+  if #server_ids > 0 then
+    return 'LSP: ' .. table.concat(server_ids, ', ')
   else
     return ''
   end
