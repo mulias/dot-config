@@ -16,6 +16,7 @@ in {
         calibre
         catdocx
         connman-gtk
+        direnv
         diskus
         fd
         feh

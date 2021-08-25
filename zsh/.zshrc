@@ -58,6 +58,7 @@ bindkey "^[[3~" delete-char
 # ctrl-w removed word backwards
 bindkey '^w' backward-kill-word
 
+eval "$(direnv hook zsh)"
 
 ## history
 # append every comand to history file, share history in real time
