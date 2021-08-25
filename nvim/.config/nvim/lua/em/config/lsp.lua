@@ -47,7 +47,7 @@ LSP.config.servers = {
     -- use defaults
   },
   elixirls = {
-    cmd = { vim.env.ELIXIR_LS_EXECUTABLE },
+    cmd = { vim.env.ELIXIR_LS_EXECUTABLE or 'elixir-ls' },
   },
 }
 
@@ -64,7 +64,7 @@ LSP.config.tools = {
     -- elm
     null_ls.builtins.formatting.elm_format,
     -- elixir
-    null_ls.builtins.formatting.mix,
+    require('em.lsp').diagnostics.credo,
   },
 }
 
