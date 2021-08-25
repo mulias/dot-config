@@ -146,8 +146,8 @@ Plugins.config.specs = {
     'folke/trouble.nvim',
     config = function()
       require('trouble').setup({
-        fold_open = 'v',
-        fold_closed = '>',
+        fold_open = ' ',
+        fold_closed = '-',
         indent_lines = false,
         icons = false,
         signs = {
