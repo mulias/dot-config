@@ -465,6 +465,7 @@ Plugins.config.specs = {
   -- Set highlighting and defaults for rarely used languages.
   {
     'sheerun/vim-polyglot',
+    event = 'VimEnter',
     setup = function()
       vim.g.polyglot_disabled = { 'lua' }
     end,
