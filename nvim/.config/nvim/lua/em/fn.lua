@@ -85,9 +85,9 @@ end
 -- window_resize_enabled flag.
 function Fn.sync_window_resize_settings()
   if is_window_resize_enabled() then
-    vim.cmd('EnableFocus')
+    vim.cmd('FocusEnable')
   else
-    vim.cmd('DisableFocus')
+    vim.cmd('FocusDisable')
   end
 end
 
