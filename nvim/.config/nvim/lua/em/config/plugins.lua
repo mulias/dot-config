@@ -470,6 +470,12 @@ Plugins.config.specs = {
       vim.g.polyglot_disabled = { 'lua' }
     end,
   },
+
+  -- TODO
+  {
+    'tweekmonster/startuptime.vim',
+    cmd = { 'StartupTime' },
+  },
 }
 
 function Plugins.manage()
