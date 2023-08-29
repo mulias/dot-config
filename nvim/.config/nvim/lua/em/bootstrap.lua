@@ -31,7 +31,7 @@ local function confirm_download_packer()
     2
   )
   if input ~= 1 then
-    error('Unable to install plugins without Packer')
+    vim.notify('Unable to install plugins without Packer', vim.log.levels.WARN)
   end
 end
 
@@ -40,22 +40,43 @@ local function download_packer()
 
   local out = vim.fn.system({ 'git', 'clone', packer_repo, packer_directory })
 
-  print(out)
+  vim.notify(out, vim.log.levels.INFO)
 
   local clone_success = vim.v.shell_error == 0
 
   if clone_success then
-    print('Downloaded Packer to ' .. packer_directory)
+    vim.notify('Downloaded Packer to ' .. packer_directory, vim.log.levels.INFO)
   else
-    error('Error downloading Packer')
+    vim.notify('Error downloading Packer', vim.log.levels.ERROR)
+  end
+end
+
+function Bootstrap.confirm_restart()
+  local input = vim.fn.confirm('Restart to complete setup?', '&Yes\n&No', 1)
+  if input == 1 then
+    vim.cmd('qa!')
   end
 end
 
 local function install_plugins_on_vim_enter()
-  print('Install plugins then restart to complete setup')
   vim.cmd('packadd packer.nvim')
-  require('em.vim').augroup('init_bootstrap', {
-    'VimEnter * ++once lua require("em.config.plugins").manage().sync()',
+
+  local bootstrap_group = vim.api.nvim_create_augroup('bootstrap', {})
+
+  vim.api.nvim_create_autocmd('VimEnter', {
+    pattern = '*',
+    once = true,
+    callback = function()
+      require('em.config.plugins').manage().sync()
+    end,
+    group = bootstrap_group,
+  })
+
+  vim.api.nvim_create_augroup('User', {
+    pattern = 'PackerComplete',
+    once = true,
+    callback = require('em.bootstrap').confirm_restart,
+    group = bootstrap_group,
   })
 end
 
@@ -77,7 +98,7 @@ function Bootstrap.hard_reset()
     2
   )
   if input ~= 1 then
-    print('Reset aborted')
+    vim.notify('Reset aborted', vim.log.levels.INFO)
     return
   end
 
@@ -88,12 +109,12 @@ function Bootstrap.hard_reset()
       require('em.config.plugins').config.packer.compile_path
     )
   )
-  print(out)
+  vim.notify(out, vim.log.levels.INFO)
   local reset_success = vim.v.shell_error == 0
   if reset_success then
-    print('Reset complete, restart to re-run setup')
+    vim.notify('Reset complete, restart to re-run setup', vim.log.levels.INFO)
   else
-    error('Error completing reset')
+    vim.notify('Error completing reset', vim.log.levels.ERROR)
   end
 end
 

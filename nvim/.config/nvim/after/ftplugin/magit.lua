@@ -1,1 +1,1 @@
-require('em.config.filetypes').setup('magit')
+require('em.config.filetypes').setup()

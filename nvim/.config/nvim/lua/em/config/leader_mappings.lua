@@ -10,6 +10,7 @@ binding is applied to normal mode. See `:h map-modes` for mode abbreviations.
 ------------------------------------------------------------------------------]]
 
 local LeaderMappings = {}
+
 LeaderMappings.config = {}
 
 local tc = require('em.vim').tc -- escape termcodes
@@ -29,34 +30,28 @@ LeaderMappings.config.mappings = {
     function()
       vim.fn.execute('Rg! ' .. vim.fn.input('Search project for: '))
     end,
-    'search all in project with preview',
+    'search all in project, full screen',
   },
-  b = { ':Buffers<CR>', 'search buffer list' },
+  b = { '<Cmd>Buffers<CR>', 'search buffer list' },
   c = { '<C-w><C-q>', 'close focused window' },
-  C = { ':Colors<CR>', 'change colorscheme' },
-  d = { ':bp|sp|bn|bd<CR>', 'delete buffer from buffer list' },
-  e = { ':Files /<CR>', 'search everything in filesystem' },
-  f = {
-    'i<Plug>(fzf-complete-file-ag)',
-    'search and insert file path',
-    noremap = false,
-  },
+  C = { '<Cmd>Colors<CR>', 'change colorscheme' },
+  d = { vim.diagnostic.setloclist, 'file diagnostics' },
+  D = { vim.diagnostic.setqflist, 'project diagnostics' },
+  -- e
+  -- f = { name = 'finders' },
   g = {
     name = 'git',
-    b = { ':Gblame<CR>', 'fugitive git blame' },
-    c = { ':Commits<CR>', 'search git commits' },
-    d = { ':Gdiff<CR>', 'fugitive git diff' },
-    f = { ':GFiles<CR>', 'search all files in current git repo' },
-    h = { ':BCommits<CR>', 'search git history for buffer' },
-    m = { ':MagitOnly<CR>', 'open magit in current buffer' },
-    s = { ':GFiles?<CR>', 'search git unstaged files' },
+    b = { '<Cmd>Git blame<CR>', 'git blame' },
+    h = { '<Cmd>BCommits<CR>', 'search git history for buffer' },
+    m = { '<Cmd>MagitOnly<CR>', 'open magit in current buffer' },
+    s = { '<Cmd>GFiles?<CR>', 'search git unstaged files' },
   },
-  h = { ':History<CR>', 'search recent file history' },
-  -- i
+  h = { '<Cmd>History<CR>', 'search recent file history' },
+  i = { vim.diagnostic.open_float, 'diagnostics info for line' },
   -- j
-  k = { 'K', 'keyword info' },
-  -- K
-  l = { ':Trouble loclist<CR>', 'toggle location list' },
+  k = { vim.lsp.buf.hover, 'keyword info, using lsp hover' },
+  ['nx K'] = { 'K', 'keyword info, using keywordprg' },
+  l = { vim.fn.ToggleLocationList, 'toggle location list' },
   m = { "'M", 'jump to mark M' },
   n = { "'N", 'jump to mark N' },
   o = {
@@ -64,6 +59,7 @@ LeaderMappings.config.mappings = {
     b = { 'cob', 'toggle background', noremap = false, silent = false },
     f = { 'cof', 'toggle format on write', noremap = false, silent = false },
     h = { 'coh', 'toggle search highlight', noremap = false, silent = false },
+    i = { 'coi', 'toggle indent guides', silent = false },
     n = { 'con', 'toggle line numbers', noremap = false, silent = false },
     r = {
       'cor',
@@ -88,23 +84,25 @@ LeaderMappings.config.mappings = {
       silent = false,
     },
   },
-  p = { ':GFiles<CR>', 'search project' },
-  q = { ':Trouble quickfix<CR>', 'toggle quickfix list' },
-  -- r
-  R = { ':RefConfig<CR>', 'rerence vimrc config' },
-  s = { ':%s/\\<<C-r><C-w>\\>/', 'search/replace word', silent = false },
-  S = { ':%s/<C-r><C-w>/', 'search/replace word as substring', silent = false },
-  t = {
-    name = 'test',
-    t = { ':TestNearest<CR>', 'run this test' },
-    f = { ':TestFile<CR>', 'run tests in file' },
-    s = { ':TestSuite<CR>', 'run tests in suite' },
-    l = { ':TestLast<CR>', 'rerun last test' },
-    g = { ':TestVisit<CR>', 'go to last test' },
+  p = { '<Cmd>GFiles<CR>', 'search project' },
+  q = { vim.fn.ToggleQuickfixList, 'toggle quickfix list' },
+  r = { vim.lsp.buf.references, 'populate quickfix with references' },
+  R = { vim.lsp.buf.rename, 'rename variable' },
+  ['n s'] = {
+    ':%s/<C-r><C-w>/',
+    'search/replace word in buffer',
+    silent = false,
   },
-  u = { ':UndotreeToggle<CR>', 'toggle undotree' },
-  v = { ':vsplit<CR>', 'vertical split' },
-  V = { ':split<CR>', 'horizontal split' },
+  ['x s'] = {
+    '"sy:%s/<C-r>s/',
+    'search/replace visual selection in buffer',
+    silent = false,
+  },
+  S = { ':Search ', 'search/replace in project', silent = false },
+  -- t
+  u = { '<Cmd>UndotreeToggle<CR>', 'toggle undotree' },
+  v = { '<Cmd>vsplit<CR>', 'vertical split' },
+  V = { '<Cmd>split<CR>', 'horizontal split' },
   w = {
     name = 'window',
     c = { '<C-w><C-q>', 'close window' },
@@ -165,19 +163,26 @@ LeaderMappings.config.mappings = {
   ['n y'] = { 'ysiw', 'surround word', noremap = false },
   ['x y'] = { '<Plug>VSurround', 'surround selection' },
   Y = { 'ysiW', 'surround WORD', noremap = false },
-  z = { ':Tags<CR>', 'search ctags' },
-  Z = { ':Helptags<CR>', 'search helptags' },
+  z = { '<Cmd>Tags<CR>', 'search ctags' },
+  Z = { '<Cmd>Helptags<CR>', 'search helptags' },
   ['='] = { '<C-w>=', 'size windows evenly' },
-  ['|'] = { ':vsplit<CR>', 'vertical split' },
-  ['-'] = { ':split<CR>', 'horizontal split' },
-  ['/'] = { ':BLines<CR>', 'search current buffer' },
-  ['*'] = { ':BLines <C-r><C-w><CR>', 'search current buffer for word' },
+  ['|'] = { '<Cmd>vsplit<CR>', 'vertical split' },
+  ['-'] = { '<Cmd>split<CR>', 'horizontal split' },
+  ['/'] = { '<Cmd>BLines<CR>', 'search current buffer' },
+  ['*'] = { '<Cmd>BLines <C-r><C-w><CR>', 'search current buffer for word' },
+  [']'] = { vim.lsp.buf.definition, 'goto definition' },
   ['<Leader>'] = { '<c-^>', 'switch between current and last buffer' },
   ['t <Esc>'] = { tc('<C-\\><C-n>'), 'leave terminal mode' },
   ['<tab>'] = {
     name = 'LSP actions',
-    d = { ':Trouble lsp_document_diagnostics<CR>', 'file diagnostics' },
-    D = { ':Trouble lsp_workspace_diagnostics<CR>', 'project diagnostics' },
+    d = { vim.diagnostic.setloclist, 'file diagnostics' },
+    D = { vim.diagnostic.setqflist, 'project diagnostics' },
+    r = { vim.lsp.buf.references, 'populate quickfix with references' },
+    R = { vim.lsp.buf.rename, 'rename variable' },
+    i = { vim.diagnostic.open_float, 'line diagnostics' },
+    k = { vim.lsp.buf.hover, 'show hover help' },
+    g = { vim.lsp.buf.definition, 'goto definition' },
+    [']'] = { vim.lsp.buf.definition, 'goto definition' },
   },
 }
 

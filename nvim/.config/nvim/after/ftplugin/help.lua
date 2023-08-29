@@ -1,1 +1,1 @@
-require('em.config.filetypes').setup('help')
+require('em.config.filetypes').setup()

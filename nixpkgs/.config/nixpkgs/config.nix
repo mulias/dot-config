@@ -9,7 +9,6 @@ in {
       name = "elias-all";
       paths = [
         adapta-gtk-theme
-        ag
         arc-icon-theme
         baobab
         bat
@@ -27,36 +26,34 @@ in {
         gitAndTools.qgit
         gnome3.totem
         gparted
-        # heroku
-        # inkscape
-        keepassx-community
+        keepassxc
+        libreoffice
+        links2
         mplayer
         nox
         pandoc
-        # pgadmin
+        pdfslicer
         pinta
         (polybar.override { i3Support = true; pulseSupport = true; })
-        # postman
         qpdfview
         racket
         ripgrep
-        # spotify
+        silver-searcher
+        unstable.signal-desktop
         texlive.combined.scheme-full
         texworks
         universal-ctags
-        discord
+        unstable.discord
         unstable.fzf
         unstable.google-chrome
         unstable.kitty
-        # unstable.neovim
+        unstable.neovim
         (unstable.python3.withPackages my-python-packages)
-        unstable.slack
         unstable.vlc
         unstable.zoom-us
+        unstable.firefox
         unzip
-        # vscode
-        # watchexec
-        # youtube-dl
+        youtube-dl
       ];
     };
   };

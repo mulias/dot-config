@@ -3,12 +3,21 @@
 
 with pkgs;
 
+let
+  unstable = import <unstable> {};
+in
+
 mkShell {
-  buildInputs = [ stylua sumneko-lua-language-server ];
+  buildInputs = [
+    unstable.stylua
+    unstable.sumneko-lua-language-server
+  ];
 
   shellHook = ''
-    export SUMNEKO_ROOT_PATH=$(nix eval nixos.sumneko-lua-language-server.outPath)
-    export SUMNEKO_MAIN_FILE="$SUMNEKO_ROOT_PATH/extras/main.lua"
-    export SUMNEKO_EXECUTABLE=lua-language-server
+    export NVIM_NVIM_LUA_LSP=true
+    export NVIM_STYLUA_LSP=true
+    export LUA_LS_ROOT_PATH=$(nix eval nixos.sumneko-lua-language-server.outPath)
+    export LUA_LS_MAIN_FILE="$LUA_LS_ROOT_PATH/extras/main.lua"
+    export LUA_LS_EXECUTABLE=lua-language-server
   '';
 }

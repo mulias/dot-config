@@ -28,7 +28,7 @@ modules-right = volume backlight battery0 wired-network wireless-network date
 
 
 [bar/display-port-secondary]
-monitor = DP-2
+monitor = DP-1
 bottom = true
 width = 100%
 height = 30
@@ -49,7 +49,7 @@ modules-right = date
 
 
 [bar/display-port-only]
-monitor = DP-2
+monitor = HDMI-1
 bottom = true
 width = 100%
 height = 30
@@ -142,7 +142,7 @@ ramp-volume-2 = 
 [module/backlight]
 type = internal/backlight
 label =  %percentage%%
-format = %{A4:xdotool key XF86MonBrightnessUp:}%{A5:xdotool key XF86MonBrightnessDown:}<label>%{A}%{A}
+format = %{A4:brightnessctl s +5%:}%{A5:brightnessctl s 5%-:}<label>%{A}%{A}
 card = intel_backlight
 
 

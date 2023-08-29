@@ -92,11 +92,25 @@ Commands.config = {
       plugins.reload().manage().sync()
     end,
   },
+
+  -- Serch online for args. When the bang is used prepended with the search
+  -- string with the filetype of the current buffer
+  WebSearch = {
+    function(opts)
+      require('em.fn').web_search(opts.args, { ft = opts.bang })
+    end,
+    nargs = 1,
+    bang = true,
+  },
 }
 
 function Commands.setup()
   for cmd_name, cmd in pairs(Commands.config) do
-    require('em.vim').command(cmd_name, cmd[1], cmd)
+    vim.api.nvim_create_user_command(
+      cmd_name,
+      cmd[1],
+      require('em.lua').ktable(cmd)
+    )
   end
 end
 

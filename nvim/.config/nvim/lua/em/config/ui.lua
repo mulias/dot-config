@@ -33,7 +33,7 @@ local tabline = {
   '%#TabLine#',                         -- highlight for content
   '%{v:lua.em.tabline.lsp_servers()}',  -- running language servers
   '%(%5(%)%{getcwd()}%)',               -- current working directory
-  '%(%1(%)[%{fugitive#head()}]%)',      -- git info for cwd
+  '%(%1(%)[%{fugitive#Head()}]%)',      -- git info for cwd
 }
 
 UI.config = {
@@ -53,7 +53,6 @@ UI.config = {
       fn.underline_spell_groups()
       fn.underline_lsp_groups()
       fn.always_show_vert_split()
-      fn.hide_end_of_buffer_symbols()
       fn.subtle_highlight_cursorline()
     end
   end,
@@ -63,6 +62,8 @@ function UI.setup()
   if vim.opt.termguicolors:get() then
     vim.opt.background = UI.config.true_color_theme.background
     vim.cmd('colorscheme ' .. UI.config.true_color_theme.colorscheme)
+    vim.cmd([[highlight IndentBlanklineIndent1 guibg=#222436 gui=nocombine]])
+    vim.cmd([[highlight IndentBlanklineIndent2 guibg=#1e202f gui=nocombine]])
   else
     vim.opt.background = UI.config.fallback_theme.background
     vim.cmd('colorscheme ' .. UI.config.fallback_theme.colorscheme)

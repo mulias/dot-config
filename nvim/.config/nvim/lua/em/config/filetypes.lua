@@ -7,54 +7,58 @@ they are sourced via `after/ftplugin/` when an appropriate buffer is opened.
 
 local Filetypes = {}
 
-Filetypes.config = {}
+Filetypes.config = {
+  dirvish = function()
+    -- Use K for zoomies not file info
+    vim.api.nvim_buf_set_keymap(0, '', '<Leader>k', '<Plug>(dirvish_K)', {})
+    vim.api.nvim_buf_set_keymap(0, '', 'K', 'kkk', { noremap = true })
+  end,
 
-function Filetypes.config.dirvish()
-  -- Use K for zoomies not file info
-  vim.api.nvim_buf_set_keymap(0, '', '<Leader>k', '<Plug>(dirvish_K)', {})
-  vim.api.nvim_buf_set_keymap(0, '', 'K', 'kkk', { noremap = true })
-end
+  elm = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+  end,
 
-function Filetypes.config.elm()
-  vim.opt_local.tabstop = 4
-  vim.opt_local.shiftwidth = 4
-end
+  gitcommit = function()
+    vim.cmd('setlocal spell')
+    vim.opt_local.textwidth = 72
+    vim.opt_local.colorcolumn = { 73 }
+  end,
 
-function Filetypes.config.gitcommit()
-  vim.cmd('setlocal spell')
-  vim.opt_local.textwidth = 72
-  vim.opt_local.colorcolumn = { 73 }
-end
+  help = function()
+    vim.api.nvim_buf_set_keymap(0, '', 'K', 'kkk', { noremap = true })
+  end,
 
-function Filetypes.config.help()
-  vim.api.nvim_buf_set_keymap(0, '', 'K', 'kkk', { noremap = true })
-end
+  magit = function()
+    local vimagit_group = vim.api.nvim_create_augroup('vimagit', {})
 
-function Filetypes.config.magit()
-  require('em.vim').augroup('vimagit', {
-    {
-      'User VimagitEnterCommit',
-      'setlocal spell | setlocal textwidth=72 | setlocal colorcolumn=73',
-    },
-    {
-      'User VimagitLeaveCommit',
-      'setlocal nospell | setlocal textwidth=0 | setlocal colorcolumn=',
-    },
-  })
-end
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'VimagitEnterCommit',
+      command = 'setlocal spell | setlocal textwidth=72 | setlocal colorcolumn=73',
+      group = vimagit_group,
+    })
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'VimagitLeaveCommit',
+      command = 'setlocal nospell | setlocal textwidth=0 | setlocal colorcolumn=',
+      group = vimagit_group,
+    })
+  end,
 
-function Filetypes.config.text()
-  vim.cmd('setlocal spell')
-  vim.opt_local.textwidth = 80
-end
+  text = function()
+    vim.cmd('setlocal spell')
+    vim.opt_local.textwidth = 80
+  end,
 
-function Filetypes.config.python()
-  vim.opt_local.expandtab = false
-  vim.opt_local.tabstop = 8
-  vim.opt_local.softtabstop = 8
-end
+  python = function()
+    vim.opt_local.expandtab = false
+    vim.opt_local.tabstop = 8
+    vim.opt_local.softtabstop = 8
+  end,
+}
 
-function Filetypes.setup(ft)
+function Filetypes.setup(filetype)
+  local ft = filetype or vim.bo.ft
+
   Filetypes.config[ft]()
 end
 

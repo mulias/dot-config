@@ -67,12 +67,16 @@ bindsym $mod+Shift+Return exec firefox
 # start file manager
 bindsym $mod+Control+Return exec thunar
 
+# search online for last selected text
+bindsym $mod+g exec xdg-open "https://www.google.com/search?q=$(xclip -o | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g')"
+
 #search google
 # bindsym $mod+slash exec google_selection
 
 # configure external monitor
-bindsym $mod+F1 exec $HOME/bin/layout-display-port-secondary.sh
+bindsym $mod+F1 exec $HOME/bin/layout-laptop-only.sh
 bindsym $mod+F2 exec $HOME/bin/layout-display-port-only.sh
+bindsym $mod+F3 exec $HOME/bin/layout-display-port-secondary.sh
 
 # kill focused window
 bindsym $mod+Shift+c kill

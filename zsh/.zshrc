@@ -34,22 +34,27 @@ source "$XDG_CONFIG_HOME"/zsh/zkeys
 
 ## vim mode
 bindkey -v
-# change cursor color for insert and normal modes
-# zle-keymap-select () {
-#         if [ $KEYMAP = vicmd ]; then
-#             echo -ne "\033]12;Black\007"
-#         else
-#             echo -ne "\033]12;Grey\007"
-#         fi
-# }
-# zle -N zle-keymap-select
-# zle-line-init () {
-#     zle -K viins
-#     if [ $TERM = "rxvt-unicode-256color" ]; then
-#         echo -ne "\033]12;Grey\007"
-#     fi
-# }
-# zle -N zle-line-init
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
 # normal/insert lag time
 export KEYTIMEOUT=1
 # backspace and delete
@@ -68,14 +73,21 @@ SAVEHIST=10000
 setopt inc_append_history
 setopt hist_ignore_dups
 setopt share_history
+autoload -Uz history-search-end
 # search related history
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
 [[ -n "${key[Up]}"   ]]  && bindkey  "${key[Up]}"    history-beginning-search-backward
 [[ -n "${key[Down]}" ]]  && bindkey  "${key[Down]}"  history-beginning-search-forward
-bindkey '^k' up-history
-bindkey '^j' down-history
-bindkey -M vicmd 'k' history-beginning-search-backward
-bindkey -M vicmd 'j' history-beginning-search-forward
-
+bindkey -M vicmd '^[[A' history-beginning-search-backward-end \
+                 '^[OA' history-beginning-search-backward-end \
+                 '^[[B' history-beginning-search-forward-end \
+                 '^[OB' history-beginning-search-forward-end
+bindkey -M viins '^[[A' history-beginning-search-backward-end \
+                 '^[OA' history-beginning-search-backward-end \
+                 '^[[B' history-beginning-search-forward-end \
+                 '^[OB' history-beginning-search-forward-end
 
 ## command input
 # no beep

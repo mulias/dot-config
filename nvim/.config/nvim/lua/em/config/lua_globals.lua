@@ -10,10 +10,11 @@ technique in places where lua is not yet fully supported, such as the tabline.
 local LuaGlobals = {}
 
 LuaGlobals.config = {
-  lua = require('em.lua'),
-  vim = require('em.vim'),
   fn = require('em.fn'),
+  lsp = require('em.lsp'),
+  lua = require('em.lua'),
   tabline = require('em.tabline'),
+  vim = require('em.vim'),
 }
 
 function LuaGlobals.setup()

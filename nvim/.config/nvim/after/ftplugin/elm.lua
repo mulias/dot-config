@@ -1,1 +1,1 @@
-require('em.config.filetypes').setup('elm')
+require('em.config.filetypes').setup()

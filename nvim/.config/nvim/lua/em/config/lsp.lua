@@ -17,82 +17,141 @@ local LSP = {}
 
 LSP.config = {}
 
--- Traditional LSP servers
 LSP.config.servers = {
-  sumneko_lua = {
-    cmd = { vim.env.SUMNEKO_EXECUTABLE, '-E', vim.env.SUMNEKO_MAIN_FILE },
+  {
+    name = 'lua_ls',
+    enabled = vim.env.NVIM_NVIM_LUA_LSP == 'true',
     settings = {
-      Lua = {
-        runtime = {
-          version = 'LuaJIT',
-          path = vim.split(package.path, ';'),
-        },
-        diagnostics = {
-          globals = { 'vim' },
-        },
-        workspace = {
-          library = {
-            [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-            [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+      cmd = { vim.env.LUA_LS_EXECUTABLE, '-E', vim.env.LUA_LS_MAIN_FILE },
+      settings = {
+        Lua = {
+          runtime = {
+            version = 'LuaJIT',
+            path = vim.split(package.path, ';'),
+          },
+          diagnostics = {
+            globals = { 'vim' },
+          },
+          workspace = {
+            library = vim.api.nvim_get_runtime_file('', true),
+          },
+          telemetry = {
+            enable = false,
           },
         },
+        on_attach = function(client)
+          require('em.lsp').disable_formatting(client)
+        end,
       },
     },
   },
-  tsserver = {
-    -- Note this actually uses the node package `typescript-language-server`,
-    -- which wraps the `tsserver` binary.
-    on_attach = function(client)
-      require('em.lsp').disable_formatting(client)
-    end,
+  {
+    name = 'tsserver',
+    enabled = vim.env.NVIM_TYPESCRIPT_LSP == 'true',
+    settings = {
+      -- Note this actually uses the node package `typescript-language-server`,
+      -- which wraps the `tsserver` binary.
+      on_attach = function(client)
+        require('em.lsp').disable_formatting(client)
+      end,
+    },
   },
-  elmls = {
-    -- use defaults
+  {
+    name = 'elmls',
+    enabled = vim.env.NVIM_ELM_LSP == 'true',
+    settings = {},
   },
-  elixirls = {
-    cmd = { vim.env.ELIXIR_LS_EXECUTABLE or 'elixir-ls' },
+  {
+    name = 'elixirls',
+    enabled = vim.env.NVIM_ELIXIR_LSP == 'true',
+    settings = {
+      cmd = { vim.env.ELIXIR_LS_EXECUTABLE or 'elixir-ls' },
+      settings = {
+        dialyzerEnabled = false,
+      },
+    },
   },
-}
-
--- Tools/utilities wired to LSP via null-ls
-LSP.config.tools = {
-  sources = {
-    -- lua
-    null_ls.builtins.formatting.stylua,
-    -- js/ts
-    null_ls.builtins.formatting.prettier,
-    null_ls.builtins.diagnostics.eslint,
-    -- elm
-    null_ls.builtins.formatting.elm_format,
-    -- elixir
-    require('em.lsp').diagnostics.credo,
+  {
+    name = 'tailwindcss',
+    enabled = vim.env.NVIM_TAILWINDCSS_LSP == 'true',
+    settings = {},
   },
-}
-
--- Adjustments to global LSP behavior
-LSP.config.handlers = {
-  ['textDocument/publishDiagnostics'] = {
-    underline = true,
-    virtual_text = false,
-    signs = false,
-    update_in_insert = false,
+  {
+    name = 'ocamllsp',
+    enabled = vim.env.NVIM_OCAML_LSP == 'true',
+    settings = {},
+  },
+  {
+    name = 'zls',
+    enabled = vim.env.NVIM_ZIG_LSP == 'true',
+    settings = {},
+  },
+  {
+    name = 'null-ls',
+    enabled = vim.env.NVIM_STYLUA_LSP == 'true',
+    settings = null_ls.builtins.formatting.stylua,
+  },
+  {
+    name = 'null-ls',
+    enabled = vim.env.NVIM_PRETTIER_LSP == 'true',
+    settings = null_ls.builtins.formatting.prettier,
+  },
+  {
+    name = 'null-ls',
+    enabled = vim.env.NVIM_ESLINT_LSP == 'true',
+    settings = null_ls.builtins.diagnostics.eslint,
+  },
+  {
+    name = 'null-ls',
+    enabled = vim.env.NVIM_ELM_FORMAT_LSP == 'true',
+    settings = null_ls.builtins.formatting.elm_format,
+  },
+  {
+    name = 'null-ls',
+    enabled = vim.env.NVIM_CREDO_LSP == 'true',
+    settings = null_ls.builtins.diagnostics.credo.with({
+      args = {
+        'credo',
+        '--strict',
+        '--format',
+        'json',
+        '--read-from-stdin',
+        '$FILENAME',
+      },
+    }),
+  },
+  {
+    name = 'null-ls',
+    enabled = vim.env.NVIM_RUFO_LSP == 'true',
+    settings = null_ls.builtins.formatting.rufo,
   },
 }
 
 function LSP.setup()
-  null_ls.config(LSP.config.tools)
-  require('lspconfig')['null-ls'].setup({})
+  local null_ls_sources = {}
 
-  for server_name, config in pairs(LSP.config.servers) do
-    require('lspconfig')[server_name].setup(config)
+  for _, server_config in pairs(LSP.config.servers) do
+    if server_config.enabled then
+      if server_config.name == 'null-ls' then
+        table.insert(null_ls_sources, server_config.settings)
+      else
+        require('lspconfig')[server_config.name].setup(server_config.settings)
+      end
+    end
   end
 
-  if LSP.config.handlers['textDocument/publishDiagnostics'] then
-    vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics,
-      LSP.config.handlers['textDocument/publishDiagnostics']
-    )
-  end
+  null_ls.setup({ sources = null_ls_sources })
+
+  vim.diagnostic.config({
+    underline = true,
+    virtual_text = false,
+    signs = false,
+    update_in_insert = false,
+  })
+end
+
+function LSP.reload()
+  return require('em.lua').reload('em.config.lsp')
 end
 
 return LSP

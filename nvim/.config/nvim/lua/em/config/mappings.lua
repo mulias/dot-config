@@ -80,6 +80,11 @@ Mappings.config = {
       silent = false,
     },
     h = { 'yoh', 'toggle search highlight', noremap = false, silent = false },
+    i = {
+      require('indent_blankline.commands').toggle,
+      'toggle indent guides',
+      silent = false,
+    },
     n = { 'yon', 'toggle line numbers', noremap = false, silent = false },
     r = {
       'yor',
@@ -169,10 +174,10 @@ Mappings.config = {
   -- G                jump to end of file
   g = {
     name = 'misc/variant',
-    b = { ':Gblame<CR>', 'view fugitive git blame annotations' },
+    b = { '<Cmd>Git blame<CR>', 'view fugitive git blame annotations' },
     l = { 'V]e', 'swap current line with below', noremap = false },
     L = { 'V[e', 'swap current line with above', noremap = false },
-    m = { ':MagitOnly<CR>', 'open magit in current window' },
+    m = { '<Cmd>MagitOnly<CR>', 'open magit in current window' },
     s = { 'z=', 'show spelling suggestions' },
   },
   ['nx gp'] = { '"+p`]', 'paste from system clipboard' },
@@ -187,7 +192,7 @@ Mappings.config = {
   -- <C-h>            focus window left
   -- {Term}<C-h>      focus window left
   ['nxo H'] = { 'hhh', 'left 3 columns' },
-  ['n <A-h>'] = { ':bprevious<CR>', 'previous buffer' },
+  ['n <A-h>'] = { '<Cmd>bprevious<CR>', 'previous buffer' },
   ['t <A-h>'] = { tc('<C-\\><C-n>:bprevious<CR>'), 'previous buffer' },
   ['n <C-h>'] = { '<C-w>h', 'focus window left' },
   ['i <C-h>'] = { '<ESC><C-w>h', 'focus window left, leave insert mode' },
@@ -228,7 +233,7 @@ Mappings.config = {
   -- {Insert}<C-l>    focus window right, leave insert mode
   -- {Term}<C-l>      focus window right
   ['nxo L'] = { 'lll', 'right 3 columns' },
-  ['<A-l>'] = { ':bnext<CR>', 'next buffer' },
+  ['<A-l>'] = { '<Cmd>bnext<CR>', 'next buffer' },
   ['n <C-l>'] = { '<C-w>l', 'focus window right' },
   ['i <C-l>'] = { '<ESC><C-w>l', 'focus window right, leave insert mode' },
   ['t <A-l>'] = { tc('<C-\\><C-n>:bnext<CR>'), 'next buffer' },
@@ -328,6 +333,7 @@ Mappings.config = {
 
   -- [{*}             back list entry actions
   --   [b, [B         previous, first buffer
+  --   [d             previous lsp diagnostic entry
   --   [l, [L         previous, first location list entry
   --   [q, [Q         previous, first quickfix list entry
   --   [t, [T         previous, first tag stack entry
@@ -336,6 +342,7 @@ Mappings.config = {
   --   [j             previous jump list location
   -- ]{*}             forward list entry actions
   --   ]b, ]B         next, last buffer
+  --   ]d             next lsp diagnostic entry
   --   ]l, ]L         next, last location list entry
   --   ]q, ]Q         next, last quickfix list entry
   --   ]t, ]T         next, last tag stack entry
@@ -404,7 +411,7 @@ Mappings.config = {
 
   -- .                repeat last command
   -- {Visual}.        repeat last command once on each line
-  ['x .'] = { ':norm.<CR>', 'repeat last command' },
+  ['x .'] = { '<Cmd>norm.<CR>', 'repeat last command' },
 
   -- -                open Dirvish in file's directory
   -- {Dirvish}-       move up to the parent directory
@@ -428,6 +435,10 @@ Mappings.config = {
     tc('pumvisible() ? "<C-p>" : "<Tab>"'),
     'scroll up through completion menu',
     expr = true,
+  },
+  ['<Esc>'] = {
+    '<Esc>hl',
+    'Return to normal mode, clear highlights and close floating windows',
   },
 }
 

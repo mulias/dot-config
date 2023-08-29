@@ -13,6 +13,17 @@ function LSP.disable_formatting(client)
   client.resolved_capabilities.document_range_formatting = false
 end
 
+function LSP.add_filetypes(server_name, filetypes)
+  local defaults =
+    require('lspconfig')[server_name].document_config.default_config.filetypes
+
+  for _, filetype in ipairs(filetypes) do
+    table.insert(defaults, filetype)
+  end
+
+  return defaults
+end
+
 LSP.diagnostics = {
   credo = require('null-ls.helpers').make_builtin({
     method = require('null-ls.methods').internal.DIAGNOSTICS,

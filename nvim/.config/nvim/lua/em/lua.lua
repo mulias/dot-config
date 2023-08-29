@@ -6,13 +6,6 @@ See `:h lua-vim` for lua utils already implemented and bundled with neovim.
 
 local L = {}
 
--- Inspect lua data
-function L.dump(...)
-  local objects = vim.tbl_map(vim.inspect, { ... })
-  print(unpack(objects))
-  return ...
-end
-
 -- Iterator for the chars in a string
 function L.chars(str)
   return string.gmatch(str, '.')
@@ -63,6 +56,15 @@ function L.itable(t)
     it[i] = v
   end
   return it
+end
+
+-- Shallow-copy a new table with only the key/value values
+function L.ktable(t)
+  local kt = {}
+  for k, v in L.kpairs(t) do
+    kt[k] = v
+  end
+  return kt
 end
 
 return L

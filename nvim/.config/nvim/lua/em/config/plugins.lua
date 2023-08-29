@@ -5,11 +5,7 @@ Load and configure plugin.
 
 External dependencies:
 - FZF, SearchReplace: Install Ripgrep.
-- lspconfig and null-ls: Make sure desired servers, formatters and linters are
-  available as global executables. This can be done through per-project
-  nix-shells.
-- ALE: Install linters for regularly used languages. Use ':ALEInfo' on a file to
-  find out about linting that file type.
+- lspconfig and null-ls: Install desired servers, see 'em.config.lsp'.
 - Gutentags: Install Universal Ctags.
 ------------------------------------------------------------------------------]]
 
@@ -25,6 +21,11 @@ Plugins.config.packer = {
     'packer_compiled.lua'
   ),
   disable_commands = true,
+  display = {
+    open_fn = function()
+      return require('packer.util').float({ border = 'single' })
+    end,
+  },
 }
 
 Plugins.config.specs = {
@@ -32,9 +33,9 @@ Plugins.config.specs = {
   'wbthomason/packer.nvim',
 
   -- Helpers for configuring vim using lua.
-  'nvim-lua/popup.nvim',
-  'nvim-lua/plenary.nvim',
-  'tjdevries/astronauta.nvim',
+  -- 'nvim-lua/popup.nvim',
+  -- 'nvim-lua/plenary.nvim',
+  -- 'tjdevries/astronauta.nvim',
 
   -- Search and navigate with fuzzy find
   -- Open fzf in a terminal buffer, with values loaded in from different sources.
@@ -90,7 +91,7 @@ Plugins.config.specs = {
 
           layout_strategy = 'bottom_pane',
           layout_config = {
-            height = 0.35,
+            height = 0.4,
           },
 
           border = true,
@@ -98,12 +99,29 @@ Plugins.config.specs = {
             '',
             prompt = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
             results = { ' ' },
-            preview = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+            preview = {
+              '─',
+              '│',
+              '─',
+              '│',
+              '╭',
+              '╮',
+              '╯',
+              '╰',
+            },
           },
         },
       })
     end,
   },
+
+  -- TODO requires nvim 0.7.0
+  -- {
+  --   'mrjones2014/legendary.nvim',
+  --   config = function()
+  --     require('legendary').setup()
+  --   end,
+  -- },
 
   -- TODO
   {
@@ -128,7 +146,11 @@ Plugins.config.specs = {
     end,
   },
 
-  -- TODO
+  -- Simple Lanauge Server Integration
+  -- d = { vim.diagnostic.setloclist, 'file diagnostics' },
+  -- D = { vim.diagnostic.setqflist, 'project diagnostics' },
+  -- i = { vim.diagnostic.open_float, 'line diagnostics' },
+  -- k = { vim.lsp.buf.hover, 'keyword info, using lsp hover' },
   'neovim/nvim-lspconfig',
 
   -- LSP tool integration
@@ -143,21 +165,10 @@ Plugins.config.specs = {
 
   -- TODO
   {
-    'folke/trouble.nvim',
+    'milkypostman/vim-togglelist',
     config = function()
-      require('trouble').setup({
-        fold_open = ' ',
-        fold_closed = '-',
-        indent_lines = false,
-        icons = false,
-        signs = {
-          error = 'error',
-          warning = 'warn',
-          hint = 'hint',
-          information = 'info',
-        },
-        use_lsp_diagnostic_signs = false,
-      })
+      vim.g.toggle_list_no_mappings = 1
+      vim.g.toggle_list_copen_command = 'botright copen'
     end,
   },
 
@@ -376,7 +387,18 @@ Plugins.config.specs = {
   -- Remove highlight after moving cursor, allow * search for selection.
   -- {Visual}*        search for selection forward
   -- {Visual}#        search for selection backward
-  'junegunn/vim-slash',
+  {
+    'junegunn/vim-slash',
+    config = function()
+      -- center cursor after jumping to a match
+      vim.api.nvim_set_keymap(
+        '',
+        '<plug>(slash-after)',
+        'zz',
+        { noremap = true }
+      )
+    end,
+  },
 
   -- View and navigate the undo tree
   -- <Leader>u        toggle undo tree
@@ -386,6 +408,37 @@ Plugins.config.specs = {
     cmd = { 'UndotreeToggle', 'UndotreeShow' },
     config = function()
       vim.g.undotree_SetFocusWhenToggle = 1
+      vim.g.undotree_CustomUndotreeCmd = 'aboveleft vertical 30 new'
+      vim.g.undotree_CustomDiffpanelCmd = 'belowright 12 new'
+    end,
+  },
+
+  -- TODO
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    config = function()
+      if vim.opt.termguicolors:get() then
+        require('indent_blankline').setup({
+          char = '',
+          char_highlight_list = {
+            'IndentBlanklineIndent1',
+            'IndentBlanklineIndent2',
+          },
+          space_char_highlight_list = {
+            'IndentBlanklineIndent1',
+            'IndentBlanklineIndent2',
+          },
+          show_trailing_blankline_indent = false,
+          filetype_exclude = {
+            'magit',
+            'lspinfo',
+            'packer',
+            'checkhealth',
+            'help',
+            '',
+          },
+        })
+      end
     end,
   },
 
@@ -415,7 +468,6 @@ Plugins.config.specs = {
   -- il/al            text object for text in a line or the whole line
   -- ie/ae            text object for entire buffer, whitespace excluded/included
   -- ic/ac            text object for a comment's contents or the whole comment
-  -- Text object: l for a whole line or text in a line
   { 'kana/vim-textobj-user', event = 'VimEnter' },
   { 'kana/vim-textobj-line', after = { 'vim-textobj-user' } },
   { 'kana/vim-textobj-entire', after = { 'vim-textobj-user' } },
@@ -425,7 +477,7 @@ Plugins.config.specs = {
   {
     'norcalli/nvim-colorizer.lua',
     config = function()
-      if vim.o.termguicolors then
+      if vim.opt.termguicolors:get() then
         require('colorizer').setup({
           ['*'] = {
             RGB = true,
@@ -451,15 +503,8 @@ Plugins.config.specs = {
   'owickstrom/vim-colors-paramount',
   'shaunsingh/moonlight.nvim',
 
-  -- Auto-resize windows
-  -- Make sure the focused window is at least 85 cols wide, while equalizing
-  -- the width of all other windows.
-  {
-    'beauwilliams/focus.nvim',
-    config = function()
-      require('focus').width = 85
-    end,
-  },
+  -- TODO
+  'elixir-editors/vim-elixir',
 
   -- Filetype defaults
   -- Set highlighting and defaults for rarely used languages.
@@ -475,6 +520,14 @@ Plugins.config.specs = {
   {
     'tweekmonster/startuptime.vim',
     cmd = { 'StartupTime' },
+  },
+
+  -- TODO
+  {
+    'TimUntersberger/neogit',
+    config = function()
+      require('neogit').setup({})
+    end,
   },
 }
 

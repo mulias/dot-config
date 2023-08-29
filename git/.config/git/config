@@ -10,3 +10,5 @@
 [user]
   email = eli.mulhall@gmail.com
   name = Elias Mulhall
+[init]
+	defaultBranch = main
