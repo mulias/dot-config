@@ -414,33 +414,34 @@ Plugins.config.specs = {
   },
 
   -- TODO
-  {
-    'lukas-reineke/indent-blankline.nvim',
-    config = function()
-      if vim.opt.termguicolors:get() then
-        require('indent_blankline').setup({
-          char = '',
-          char_highlight_list = {
-            'IndentBlanklineIndent1',
-            'IndentBlanklineIndent2',
-          },
-          space_char_highlight_list = {
-            'IndentBlanklineIndent1',
-            'IndentBlanklineIndent2',
-          },
-          show_trailing_blankline_indent = false,
-          filetype_exclude = {
-            'magit',
-            'lspinfo',
-            'packer',
-            'checkhealth',
-            'help',
-            '',
-          },
-        })
-      end
-    end,
-  },
+  -- https://github.com/lukas-reineke/indent-blankline.nvim/wiki/Migrate-to-version-3
+  -- {
+  --   'lukas-reineke/indent-blankline.nvim',
+  --   config = function()
+  --     if vim.opt.termguicolors:get() then
+  --       require('indent_blankline').setup({
+  --         char = '',
+  --         char_highlight_list = {
+  --           'IndentBlanklineIndent1',
+  --           'IndentBlanklineIndent2',
+  --         },
+  --         space_char_highlight_list = {
+  --           'IndentBlanklineIndent1',
+  --           'IndentBlanklineIndent2',
+  --         },
+  --         show_trailing_blankline_indent = false,
+  --         filetype_exclude = {
+  --           'magit',
+  --           'lspinfo',
+  --           'packer',
+  --           'checkhealth',
+  --           'help',
+  --           '',
+  --         },
+  --       })
+  --     end
+  --   end,
+  -- },
 
   -- Navigate by variable segments/sections
   -- Move and manipulate sections of camelCase or snake_case variables.
@@ -515,6 +516,8 @@ Plugins.config.specs = {
       vim.g.polyglot_disabled = { 'lua' }
     end,
   },
+
+  'ChrisWellsWood/roc.vim',
 
   -- TODO
   {

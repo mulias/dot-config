@@ -80,11 +80,11 @@ Mappings.config = {
       silent = false,
     },
     h = { 'yoh', 'toggle search highlight', noremap = false, silent = false },
-    i = {
-      require('indent_blankline.commands').toggle,
-      'toggle indent guides',
-      silent = false,
-    },
+    -- i = {
+    --   require('indent_blankline.commands').toggle,
+    --   'toggle indent guides',
+    --   silent = false,
+    -- },
     n = { 'yon', 'toggle line numbers', noremap = false, silent = false },
     r = {
       'yor',
@@ -440,6 +440,10 @@ Mappings.config = {
     '<Esc>hl',
     'Return to normal mode, clear highlights and close floating windows',
   },
+  ['nx <Down>'] = { 'gj', 'down through wrapped lines' },
+  ['i <Down>'] = { '<C-o>gj', 'down through wrapped lines' },
+  ['nx <Up>'] = { 'gk', 'up through wrapped lines' },
+  ['i <Up>'] = { '<C-o>gk', 'up through wrapped lines' },
 }
 
 function Mappings.setup()

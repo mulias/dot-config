@@ -1,0 +1,15 @@
+- Add lsp keybindings
+- Use which-key for buffer-specific bindings
+- https://github.com/folke/todo-comments.nvim
+- Investigate how https://github.com/ChristianChiarulli/LunarVim loads lsp
+- https://github.com/windwp/nvim-spectre
+- https://github.com/andymass/vim-matchup
+- https://github.com/wellle/targets.vim
+- Only use colorizer for specific file types
+- Leave messages when formatters are run
+- https://github.com/TimUntersberger/neogit
+- https://github.com/Jorengarenar/vim-MvVis
+- https://github.com/folke/lua-dev.nvim
+- https://github.com/folke/dot
+- https://github.com/tjdevries/config_manager
+- re-write focus plugin

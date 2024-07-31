@@ -72,6 +72,16 @@ LSP.config.servers = {
     },
   },
   {
+    name = 'roc_ls',
+    enabled = vim.env.NVIM_ROC_LS == 'true',
+    settings = {},
+  },
+  {
+    name = 'rust_analyzer',
+    enabled = vim.env.NVIM_RUST_LSP == 'true',
+    settings = {},
+  },
+  {
     name = 'tailwindcss',
     enabled = vim.env.NVIM_TAILWINDCSS_LSP == 'true',
     settings = {},
@@ -126,6 +136,21 @@ LSP.config.servers = {
     settings = null_ls.builtins.formatting.rufo,
   },
 }
+
+local configs = require('lspconfig.configs')
+
+if not configs.roc_ls then
+ configs.roc_ls = {
+   default_config = {
+     cmd = {'roc_ls'},
+     filetypes = {'roc'},
+     root_dir = function(fname)
+       return require('lspconfig').util.find_git_ancestor(fname)
+     end,
+     settings = {},
+   },
+ }
+end
 
 function LSP.setup()
   local null_ls_sources = {}

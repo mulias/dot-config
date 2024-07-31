@@ -59,6 +59,14 @@ Autocommands.config = {
       vim.diagnostic.setloclist({ open = false })
     end,
   },
+  -- Roc filetype detection
+  roc_filetype = {
+    event = {'BufRead', 'BufNewFile'},
+    pattern = '*.roc',
+    callback = function()
+      vim.opt_local.filetype = 'roc'
+    end,
+  },
 }
 
 function Autocommands.setup()
