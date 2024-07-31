@@ -10,5 +10,8 @@
 [user]
   email = eli.mulhall@gmail.com
   name = Elias Mulhall
+  signingkey = 8D1F3C219EAB45F2
 [init]
-	defaultBranch = main
+  defaultBranch = main
+[commit]
+  gpgsign = false
