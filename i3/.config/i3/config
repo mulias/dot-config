@@ -10,7 +10,6 @@
 # mod+shift+enter       firefox
 # mod+control+enter     pcmanfm
 # mod+shift+c           close window
-# mod+b                 dmenu listing all binaries
 # mod+p                 dmenu listing all .desktop programs
 # mod+h/j/k/l           move focus
 # mod+arrows            move focus
