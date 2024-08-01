@@ -103,11 +103,8 @@ autoload -U +X bashcompinit && bashcompinit
 DIRSTACKFILE="$XDG_CACHE_HOME"/zsh/dirs
 if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
-  [[ -d $dirstack[1] ]] && cd $dirstack[1]
+  # [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
-chpwd() {
-  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
-}
 DIRSTACKSIZE=10
 setopt autopushd pushdsilent pushdtohome pushdignoredups pushdminus
 
@@ -152,9 +149,8 @@ if (( $+commands[fd] )); then
   alias find='fd'
 fi
 if (( $+commands[htop] )); then
-  alias find='top'
+  alias top='htop'
 fi
-
 
 
 # if a program is currently backgrounded, ctrl-z will foreground that program
