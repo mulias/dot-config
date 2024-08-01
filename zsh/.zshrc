@@ -105,6 +105,10 @@ if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
   dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
   # [[ -d $dirstack[1] ]] && cd $dirstack[1]
 fi
+# called by zsh whenever the current directory changes
+chpwd() {
+  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
+}
 DIRSTACKSIZE=10
 setopt autopushd pushdsilent pushdtohome pushdignoredups pushdminus
 
