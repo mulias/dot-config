@@ -322,26 +322,43 @@ Plugins.config.specs = {
   --   cxw            to word case
   --   cxW            to WORD CASE
   --   cxt            to Title Case
+  --   cxn            to numeronym (n7m)
+  --   cx/            to path/case
   -- <Leader>x{*}     change case for word under the cursor, as with cx{*}iw
   -- <Leader>X{*}     change case for WORD under the cursor, as with cx{*}iW
   {
-    'mulias/vim-caser',
+    'gregorias/coerce.nvim',
     config = function()
-      vim.g.caser_prefix = 'cx'
-      vim.g.caser_custom_mappings = {
-        CamelCase = { 'c' },
-        MixedCase = { 'C' },
-        SnakeCase = { 's' },
-        UpperCase = { 'S' },
-        KebabCase = { 'k' },
-        KebabCapsCase = { 'K' },
-        DotCase = { 'd' },
-        DotCapsCase = { 'D' },
-        SpaceCase = { 'w' },
-        SpaceCapsCase = { 'W' },
-        TitleCase = { 't' },
-        SentenceCase = {},
-      }
+      local case_m = require('coerce.case')
+      local em_str = require('em.str')
+
+      require('coerce').setup({
+        keymap_registry = require('coerce.keymap').plain_keymap_registry,
+        -- The notification function used during error conditions.
+        notify = function(...)
+          return vim.notify(...)
+        end,
+        default_mode_keymap_prefixes = {
+          normal_mode = 'cx',
+          motion_mode = 'cx',
+          visual_mode = 'cx',
+        },
+        cases = {
+          { keymap = 'c', case = case_m.to_camel_case, description = 'camelCase' },
+          { keymap = 'C', case = case_m.to_pascal_case, description = 'CamelCase' },
+          { keymap = 's', case = case_m.to_snake_case, description = 'snake_case' },
+          { keymap = 'S', case = case_m.to_upper_case, description = 'SNAKE_CASE' },
+          { keymap = 'k', case = case_m.to_kebab_case, description = 'kebab-case' },
+          { keymap = 'K', case = em_str.to_kebab_upper_case, description = 'KEBAB-CASE' },
+          { keymap = 'd', case = case_m.to_dot_case, description = 'dot.case' },
+          { keymap = 'D', case = em_str.to_dot_upper_case, description = 'DOT.CASE' },
+          { keymap = 'w', case = em_str.to_word_case, description = 'word case' },
+          { keymap = 'W', case = em_str.to_word_upper_case, description = 'WORD CASE' },
+          { keymap = 't', case = em_str.to_title_case, description = 'Title Case' },
+          { keymap = 'n', case = case_m.to_numerical_contraction, description = 'numeronym (n7m)' },
+          { keymap = '/', case = case_m.to_path_case, description = 'path/case' },
+        },
+      })
     end,
   },
 
