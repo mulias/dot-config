@@ -9,8 +9,8 @@ setting up nvim in a new environment.
 
 local Bootstrap = {}
 
-local packer_directory = require('em.lua').join_paths(plugin_directory, 'start', 'packer.nvim')
 local plugin_directory = require('em.lua').join_paths(vim.fn.stdpath('data'), 'site/pack/packer')
+local packer_directory = require('em.lua').join_paths(plugin_directory, 'start', 'packer.nvim')
 local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 
 local function is_packer_missing()
