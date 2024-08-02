@@ -14,8 +14,7 @@ function LSP.disable_formatting(client)
 end
 
 function LSP.add_filetypes(server_name, filetypes)
-  local defaults =
-    require('lspconfig')[server_name].document_config.default_config.filetypes
+  local defaults = require('lspconfig')[server_name].document_config.default_config.filetypes
 
   for _, filetype in ipairs(filetypes) do
     table.insert(defaults, filetype)

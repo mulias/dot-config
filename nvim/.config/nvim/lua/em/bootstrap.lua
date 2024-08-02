@@ -9,15 +9,8 @@ setting up nvim in a new environment.
 
 local Bootstrap = {}
 
-local plugin_directory = require('em.lua').join_paths(
-  vim.fn.stdpath('data'),
-  'site/pack/packer'
-)
-local packer_directory = require('em.lua').join_paths(
-  plugin_directory,
-  'start',
-  'packer.nvim'
-)
+local packer_directory = require('em.lua').join_paths(plugin_directory, 'start', 'packer.nvim')
+local plugin_directory = require('em.lua').join_paths(vim.fn.stdpath('data'), 'site/pack/packer')
 local packer_repo = 'https://github.com/wbthomason/packer.nvim'
 
 local function is_packer_missing()
@@ -25,11 +18,7 @@ local function is_packer_missing()
 end
 
 local function confirm_download_packer()
-  local input = vim.fn.confirm(
-    'Download Packer and install plugins?',
-    '&Yes\n&No',
-    2
-  )
+  local input = vim.fn.confirm('Download Packer and install plugins?', '&Yes\n&No', 2)
   if input ~= 1 then
     vim.notify('Unable to install plugins without Packer', vim.log.levels.WARN)
   end
@@ -92,11 +81,7 @@ function Bootstrap.first_time_setup()
 end
 
 function Bootstrap.hard_reset()
-  local input = vim.fn.confirm(
-    'Delete installed plugins and reset?',
-    '&Yes\n&No',
-    2
-  )
+  local input = vim.fn.confirm('Delete installed plugins and reset?', '&Yes\n&No', 2)
   if input ~= 1 then
     vim.notify('Reset aborted', vim.log.levels.INFO)
     return

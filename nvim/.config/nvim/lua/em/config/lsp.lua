@@ -139,16 +139,16 @@ LSP.config.servers = {
 local configs = require('lspconfig.configs')
 
 if not configs.roc_ls then
- configs.roc_ls = {
-   default_config = {
-     cmd = {'roc_ls'},
-     filetypes = {'roc'},
-     root_dir = function(fname)
-       return require('lspconfig').util.find_git_ancestor(fname)
-     end,
-     settings = {},
-   },
- }
+  configs.roc_ls = {
+    default_config = {
+      cmd = { 'roc_ls' },
+      filetypes = { 'roc' },
+      root_dir = function(fname)
+        return require('lspconfig').util.find_git_ancestor(fname)
+      end,
+      settings = {},
+    },
+  }
 end
 
 function LSP.setup()

@@ -106,11 +106,7 @@ Commands.config = {
 
 function Commands.setup()
   for cmd_name, cmd in pairs(Commands.config) do
-    vim.api.nvim_create_user_command(
-      cmd_name,
-      cmd[1],
-      require('em.lua').ktable(cmd)
-    )
+    vim.api.nvim_create_user_command(cmd_name, cmd[1], require('em.lua').ktable(cmd))
   end
 end
 

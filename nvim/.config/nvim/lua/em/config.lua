@@ -48,10 +48,7 @@ function Config.setup()
     local success, error_msg = pcall(setup_feature, feature)
 
     if not success then
-      vim.notify(
-        'Error loading ' .. feature .. ': ' .. error_msg,
-        vim.log.levels.ERROR
-      )
+      vim.notify('Error loading ' .. feature .. ': ' .. error_msg, vim.log.levels.ERROR)
     end
   end
 end
@@ -67,10 +64,7 @@ function Config.reload()
     local success, error_msg = pcall(reload_feature, feature)
 
     if not success then
-      vim.notify(
-        'Error reloading ' .. feature .. ': ' .. error_msg,
-        vim.log.levels.ERROR
-      )
+      vim.notify('Error reloading ' .. feature .. ': ' .. error_msg, vim.log.levels.ERROR)
     end
   end
 

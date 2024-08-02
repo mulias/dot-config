@@ -97,7 +97,16 @@ Plugins.config.specs = {
           border = true,
           borderchars = {
             '',
-            prompt = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
+            prompt = {
+              '─',
+              ' ',
+              ' ',
+              ' ',
+              '─',
+              '─',
+              ' ',
+              ' ',
+            },
             results = { ' ' },
             preview = {
               '─',
@@ -391,12 +400,7 @@ Plugins.config.specs = {
     'junegunn/vim-slash',
     config = function()
       -- center cursor after jumping to a match
-      vim.api.nvim_set_keymap(
-        '',
-        '<plug>(slash-after)',
-        'zz',
-        { noremap = true }
-      )
+      vim.api.nvim_set_keymap('', '<plug>(slash-after)', 'zz', { noremap = true })
     end,
   },
 

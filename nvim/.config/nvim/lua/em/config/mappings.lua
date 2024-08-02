@@ -79,7 +79,12 @@ Mappings.config = {
       'toggle format on write',
       silent = false,
     },
-    h = { 'yoh', 'toggle search highlight', noremap = false, silent = false },
+    h = {
+      'yoh',
+      'toggle search highlight',
+      noremap = false,
+      silent = false,
+    },
     -- i = {
     --   require('indent_blankline.commands').toggle,
     --   'toggle indent guides',

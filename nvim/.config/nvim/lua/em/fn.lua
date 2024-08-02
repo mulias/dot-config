@@ -23,10 +23,7 @@ end
 -- Check if format is enabled on the global or buffer level
 local function is_format_on_write_enabled()
   return vim.b.format_on_write == true
-    or (
-      vim.g.format_on_write_start_enabled == true
-      and vim.b.format_on_write == nil
-    )
+    or (vim.g.format_on_write_start_enabled == true and vim.b.format_on_write == nil)
 end
 
 -- Enable/disable the formatting performed by `format_buffer_if_enabled`.
@@ -68,10 +65,7 @@ end
 -- Check if window resizing is enabled globally
 local function is_window_resize_enabled()
   return vim.g.window_resize_enabled == true
-    or (
-      vim.g.window_resize_start_enabled == true
-      and vim.g.window_resize_enabled == nil
-    )
+    or (vim.g.window_resize_start_enabled == true and vim.g.window_resize_enabled == nil)
 end
 
 -- Resize windows unless window_resize is disabled. Does not run the Focus
@@ -121,10 +115,7 @@ end
 -- Check if highlighting on yank is enabled on the global or buffer level
 local function is_highlight_on_yank_enabled()
   return vim.b.highlight_on_yank == true
-    or (
-      vim.g.highlight_on_yank_start_enabled == true
-      and vim.b.highlight_on_yank == nil
-    )
+    or (vim.g.highlight_on_yank_start_enabled == true and vim.b.highlight_on_yank == nil)
 end
 
 -- Highlight text that was just yanked unless highlight_on_yank is disabled for
@@ -180,13 +171,10 @@ function Fn.always_show_vert_split()
   local is_vert_split_hidden = normal_bg == vert_split_fg and normal_bg ~= ''
 
   if is_vert_split_hidden then
-    local non_current_status_line_background_color =
-      em_vim.get_highlight_group_bg('StatusLineNC')
+    local non_current_status_line_background_color = em_vim.get_highlight_group_bg('StatusLineNC')
 
     vim.cmd('highlight clear VertSplit')
-    vim.cmd(
-      'highlight VertSplit guifg=' .. non_current_status_line_background_color
-    )
+    vim.cmd('highlight VertSplit guifg=' .. non_current_status_line_background_color)
   end
 end
 
