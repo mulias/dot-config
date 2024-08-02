@@ -156,6 +156,8 @@ if (( $+commands[htop] )); then
   alias top='htop'
 fi
 
+alias cd1='cd -1'
+
 
 # if a program is currently backgrounded, ctrl-z will foreground that program
 fancy-ctrl-z () {
