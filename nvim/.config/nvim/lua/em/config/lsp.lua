@@ -22,7 +22,6 @@ LSP.config.servers = {
     name = 'lua_ls',
     enabled = vim.env.NVIM_NVIM_LUA_LSP == 'true',
     settings = {
-      cmd = { vim.env.LUA_LS_EXECUTABLE, '-E', vim.env.LUA_LS_MAIN_FILE },
       settings = {
         Lua = {
           runtime = {
@@ -39,10 +38,10 @@ LSP.config.servers = {
             enable = false,
           },
         },
-        on_attach = function(client)
-          require('em.lsp').disable_formatting(client)
-        end,
       },
+      on_attach = function(client)
+        require('em.lsp').disable_formatting(client)
+      end,
     },
   },
   {
