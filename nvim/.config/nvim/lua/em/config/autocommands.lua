@@ -67,6 +67,14 @@ Autocommands.config = {
       vim.opt_local.filetype = 'roc'
     end,
   },
+  -- Possum filetype detection
+  roc_filetype = {
+    event = { 'BufRead', 'BufNewFile' },
+    pattern = '*.possum',
+    callback = function()
+      vim.opt_local.filetype = 'possum'
+    end,
+  },
 }
 
 function Autocommands.setup()
