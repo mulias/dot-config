@@ -140,17 +140,30 @@ Plugins.config.specs = {
         plugins = {
           marks = true,
           registers = true,
-          spelling = false,
-          presets = true,
+          spelling = {
+            enabled = true,
+            suggestions = 20,
+          },
+          presets = {
+            operators = true,
+            motions = true,
+            text_objects = true,
+            windows = true,
+            nav = true,
+            z = true,
+            g = true,
+          },
         },
-        key_labels = {
-          ['<space>'] = 'SPC',
-          ['<cr>'] = 'RET',
-          ['<tab>'] = 'TAB',
-          ['<esc>'] = 'ESC',
+        icons = {
+          mappings = false,
         },
-        ignore_missing = false,
-        triggers = { '<leader>', "'", '"', 'g', 'z' },
+        triggers = {
+          { '<leader>', mode = { 'n', 'v' } },
+          { "'", mode = { 'n', 'v' } },
+          { '"', mode = { 'n', 'v' } },
+          { 'g', mode = { 'n', 'v' } },
+          { 'z', mode = { 'n', 'v' } },
+        },
       })
     end,
   },
@@ -323,7 +336,7 @@ Plugins.config.specs = {
   --   cxW            to WORD CASE
   --   cxt            to Title Case
   --   cxn            to numeronym (n7m)
-  --   cx/            to path/case
+  --   cxp            to path/case
   -- <Leader>x{*}     change case for word under the cursor, as with cx{*}iw
   -- <Leader>X{*}     change case for WORD under the cursor, as with cx{*}iW
   {
@@ -356,7 +369,7 @@ Plugins.config.specs = {
           { keymap = 'W', case = em_str.to_word_upper_case, description = 'WORD CASE' },
           { keymap = 't', case = em_str.to_title_case, description = 'Title Case' },
           { keymap = 'n', case = case_m.to_numerical_contraction, description = 'numeronym (n7m)' },
-          { keymap = '/', case = case_m.to_path_case, description = 'path/case' },
+          { keymap = 'p', case = case_m.to_path_case, description = 'path/case' },
         },
       })
     end,

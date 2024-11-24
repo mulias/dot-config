@@ -22,20 +22,23 @@ original bindings have been repurposed for variable segments/sections.
 
 local TextObjects = {}
 
-TextObjects.config = {
-  iS = { 'is', 'inner sentence' },
-  aS = { 'as', 'a sentance (with whitespace)' },
-  is = { '<Plug>CamelCaseMotion_iw', 'variable segment' },
-  as = { '<Plug>CamelCaseMotion_iw', 'variable segment' },
+TextObjects.config = {}
+
+TextObjects.config.mappings = {
+  { 'iS', 'is', desc = 'inner sentence' },
+  { 'aS', 'as', desc = 'a sentance (with whitespace)' },
+  { 'is', '<Plug>CamelCaseMotion_iw', desc = 'variable segment' },
+  { 'as', '<Plug>CamelCaseMotion_iw', desc = 'variable segment' },
 }
 
 function TextObjects.setup()
-  local mappings = {}
-  for k, m in pairs(TextObjects.config) do
-    mappings['xo ' .. k] = m
+  local mappings = vim.deepcopy(TextObjects.config.mappings)
+
+  for _, mapping in ipairs(mappings) do
+    mapping['mode'] = { 'x', 'o' }
   end
 
-  require('em.vim').map(mappings)
+  require('which-key').add(mappings)
 end
 
 function TextObjects.reload()

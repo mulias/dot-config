@@ -236,4 +236,20 @@ function Fn.open_file_manager_if_default_start()
   vim.cmd('Dirvish')
 end
 
+function Fn.tab_complete()
+  if vim.fn.pumvisible() == 1 then
+    return require('em.vim').tc('<C-n>')
+  else
+    return vim.fn['compe#complete']()
+  end
+end
+
+function Fn.shift_tab_complete()
+  if vim.fn.pumvisible() == 1 then
+    return require('em.vim').tc('<C-p>')
+  else
+    return require('em.vim').tc('<S-Tab>')
+  end
+end
+
 return Fn

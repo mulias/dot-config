@@ -69,79 +69,66 @@ Mappings.config = {
   --   cxt            to Title Case
   --   cxl            to lowercase
   --   cxU            to UPPERCASE
-  ['nx C'] = { '"_c', 'change text, do not save to register' },
-  ['nx CC'] = { '"_cc', 'change line, do not save to register' },
-  co = {
-    name = 'toggle options',
-    b = { 'yob', 'toggle background', noremap = false, silent = false },
-    f = {
-      require('em.fn').toggle_format_on_write,
-      'toggle format on write',
-      silent = false,
-    },
-    h = {
-      'yoh',
-      'toggle search highlight',
-      noremap = false,
-      silent = false,
-    },
-    -- i = {
-    --   require('indent_blankline.commands').toggle,
-    --   'toggle indent guides',
-    --   silent = false,
-    -- },
-    n = { 'yon', 'toggle line numbers', noremap = false, silent = false },
-    r = {
-      'yor',
-      'toggle relative line numbers',
-      noremap = false,
-      silent = false,
-    },
-    s = { 'yos', 'toggle spellcheck', noremap = false, silent = false },
-    w = { 'yow', 'toggle line wrap', noremap = false, silent = false },
-    y = {
-      require('em.fn').toggle_highlight_yank,
-      'toggle highlight on yank',
-      silent = false,
-    },
-    ['|'] = {
-      require('em.fn').toggle_color_columns,
-      'toggle color columns',
-    },
-    ['-'] = { 'yo-', 'toggle cursorline', noremap = false, silent = false },
-    ['='] = {
-      require('em.fn').toggle_window_resize,
-      'toggle window auto-resize',
-      silent = false,
-    },
+  { 'C', '"_c', desc = 'change text, do not save to register', mode = { 'n', 'x' } },
+  { 'CC', '"_cc', desc = 'change line, do not save to register', mode = { 'n', 'x' } },
+  { 'co', group = 'toggle options' },
+  { 'cob', 'yob', desc = 'toggle background', noremap = false, silent = false },
+  {
+    'cof',
+    require('em.fn').toggle_format_on_write,
+    desc = 'toggle format on write',
+    silent = false,
   },
-  ['nx cx'] = {
-    name = 'change case',
-    c = { 'to camelCase' },
-    C = { 'to CamelCase' },
-    s = { 'to snake_case' },
-    S = { 'to SNAKE_CASE' },
-    k = { 'to kabab-Case' },
-    K = { 'to KABAB-CASE' },
-    d = { 'to dot.case' },
-    D = { 'to DOT.CASE' },
-    w = { 'to word case' },
-    W = { 'to WORD CASE' },
-    t = { 'to Title Case' },
-    n = { 'to numeronym (n7m)' },
-    ['/'] = { 'to path/case' },
-    l = { 'gu', 'to lowercase' },
-    U = { 'gU', 'to UPPERCASE' },
+  { 'coh', 'yoh', desc = 'toggle search highlight', noremap = false, silent = false },
+  -- {
+  --   'coi',
+  --   require('indent_blankline.commands').toggle,
+  --   desc = 'toggle indent guides',
+  --   silent = false,
+  -- },
+  { 'con', 'yon', desc = 'toggle line numbers', noremap = false, silent = false },
+  { 'cor', 'yor', desc = 'toggle relative line numbers', noremap = false, silent = false },
+  { 'cos', 'yos', desc = 'toggle spellcheck', noremap = false, silent = false },
+  { 'cow', 'yow', desc = 'toggle line wrap', noremap = false, silent = false },
+  {
+    'coy',
+    require('em.fn').toggle_highlight_yank,
+    desc = 'toggle highlight on yank',
+    silent = false,
   },
-  yo = 'which_key_ignore',
+  { 'co|', require('em.fn').toggle_color_columns, desc = 'toggle color columns' },
+  { 'co-', 'yo-', desc = 'toggle cursorline', noremap = false, silent = false },
+  {
+    'co=',
+    require('em.fn').toggle_window_resize,
+    desc = 'toggle window auto-resize',
+    silent = false,
+  },
+
+  { 'cx', group = 'change case' },
+  { 'cxc', desc = 'to camelCase', mode = { 'x', 'c' } },
+  { 'cxC', desc = 'to CamelCase', mode = { 'x', 'c' } },
+  { 'cxs', desc = 'to snake_case', mode = { 'x', 'c' } },
+  { 'cxS', desc = 'to SNAKE_CASE', mode = { 'x', 'c' } },
+  { 'cxk', desc = 'to kabab-case', mode = { 'x', 'c' } },
+  { 'cxK', desc = 'to KABAB-CASE', mode = { 'x', 'c' } },
+  { 'cxd', desc = 'to dot.case', mode = { 'x', 'c' } },
+  { 'cxD', desc = 'to DOT.CASE', mode = { 'x', 'c' } },
+  { 'cxw', desc = 'to word case', mode = { 'x', 'c' } },
+  { 'cxW', desc = 'to WORD CASE', mode = { 'x', 'c' } },
+  { 'cxt', desc = 'to Title Case', mode = { 'x', 'c' } },
+  { 'cxn', desc = 'to numeronym (n7m)', mode = { 'x', 'c' } },
+  { 'cxp', desc = 'to path/case', mode = { 'x', 'c' } },
+  { 'cxl', 'gu', desc = 'to lowercase', mode = { 'x', 'c' } },
+  { 'cxU', 'gU', desc = 'to LOWERCASE', mode = { 'x', 'c' } },
 
   -- d{motion}        delete text
   -- dd               delete line
   -- ds{c}            delete surrounding chars {c}
   -- D{motion}        delete text, do not save to register
   -- DD               delete line, do not save to register
-  ['nx D'] = { '"_d', 'delete text, do not save to register' },
-  ['nx DD'] = { '"_dd', 'delete line, do not save to register' },
+  { 'D', '"_d', desc = 'delete text, do not save to register', mode = { 'n', 'x' } },
+  { 'DD', '"_dd', desc = 'delete line, do not save to register', mode = { 'n', 'x' } },
 
   -- e                move to end of word
   -- E                move to end of WORD
@@ -179,18 +166,16 @@ Mappings.config = {
   --   g?             rot13 selection/motion
   --   g<C-]>         LSP goto definition
   -- G                jump to end of file
-  g = {
-    name = 'misc/variant',
-    b = { '<Cmd>Git blame<CR>', 'view fugitive git blame annotations' },
-    l = { 'V]e', 'swap current line with below', noremap = false },
-    L = { 'V[e', 'swap current line with above', noremap = false },
-    m = { '<Cmd>MagitOnly<CR>', 'open magit in current window' },
-    s = { 'z=', 'show spelling suggestions' },
-  },
-  ['nx gp'] = { '"+p`]', 'paste from system clipboard' },
-  ['nx gP'] = { '"+P', 'paste from system clipboard' },
-  ['n gy'] = { '"+y', 'yank to system clipboard' },
-  ['x gy'] = { '"+y`]', 'yank to system clipboard' },
+  { 'g', group = 'misc/variant' },
+  { 'gb', '<Cmd>Git blame<CR>', desc = 'view fugitive git blame annotations' },
+  { 'gl', 'V]e', desc = 'swap current line with below', noremap = false },
+  { 'gL', 'V[e', desc = 'swap current line with above', noremap = false },
+  { 'gm', '<Cmd>MagitOnly<CR>', desc = 'open magit in current window' },
+  { 'gs', 'z=', desc = 'show spelling suggestions', noremap = false },
+  { 'gp', '"+p`]', desc = 'paste from system clipboard', mode = { 'n', 'x' } },
+  { 'gP', '"+P', desc = 'paste from system clipboard', mode = { 'n', 'x' } },
+  { 'gy', '"+y', desc = 'yank to system clipboard' },
+  { 'gy', '"+y`]', desc = 'yank to system clipboard', mode = 'x' },
 
   -- h                left
   -- H                left 3 columns
@@ -198,12 +183,12 @@ Mappings.config = {
   -- {Term}<A-h>      previous buffer
   -- <C-h>            focus window left
   -- {Term}<C-h>      focus window left
-  ['nxo H'] = { 'hhh', 'left 3 columns' },
-  ['n <A-h>'] = { '<Cmd>bprevious<CR>', 'previous buffer' },
-  ['t <A-h>'] = { tc('<C-\\><C-n>:bprevious<CR>'), 'previous buffer' },
-  ['n <C-h>'] = { '<C-w>h', 'focus window left' },
-  ['i <C-h>'] = { '<ESC><C-w>h', 'focus window left, leave insert mode' },
-  ['t <C-h>'] = { tc('<C-\\><C-n><C-w>h'), 'focus window let' },
+  { 'H', 'hhh', desc = 'left 3 columns', mode = { 'n', 'x', 'o' } },
+  { '<A-h>', '<Cmd>bprevious<CR>', desc = 'previous buffer' },
+  { '<A-h>', tc('<C-\\><C-n>:bprevious<CR>'), desc = 'previous buffer', mode = 't' },
+  { '<C-h>', '<C-w>h', desc = 'focus window left' },
+  { '<C-h>', '<ESC><C-w>h', desc = 'focus window left, leave insert mode', mode = 'i' },
+  { '<C-h>', tc('<C-\\><C-n><C-w>h'), desc = 'focus window let', mode = 't' },
 
   -- i                insert before cursor
   -- I                insert at beginning of line
@@ -214,11 +199,11 @@ Mappings.config = {
   -- <C-j>            focus window below
   -- {Term}<C-j>      focus window below
   -- {Visual}<C-j>    move selection down one line
-  ['nxo J'] = { 'jjj', 'down 3 lines' },
-  ['n <C-j>'] = { '<C-w>j', 'focus window below' },
-  ['i <C-j>'] = { '<ESC><C-w>j', 'focus window below, leave insert mode' },
-  ['x <C-j>'] = { ":m '>+1<CR>gv=gv", 'move selection down one line' },
-  ['t <C-j>'] = { tc('<C-\\><C-n><C-w>j'), 'focus window below' },
+  { 'J', 'jjj', desc = 'down 3 lines', mode = { 'n', 'x', 'o' } },
+  { '<C-j>', '<C-w>j', desc = 'focus window below' },
+  { '<C-j>', '<ESC><C-w>j', desc = 'focus window below, leave insert mode', mode = 'i' },
+  { '<C-j>', ":m '>+1<CR>gv=gv", desc = 'move selection down one line', mode = 'x' },
+  { '<C-j>', tc('<C-\\><C-n><C-w>j'), desc = 'focus window below', mode = 't' },
 
   -- k                up
   -- K                up 3 lines
@@ -226,11 +211,11 @@ Mappings.config = {
   -- {Term}<C-k>      focus window above
   -- {Insert}<C-k>    insert a diagraph (e.g. 'e' + ':' = 'ë')
   -- {Visual}<C-k>    move selection up one line
-  ['nxo K'] = { 'kkk', 'up 3 lines' },
-  ['n <C-k>'] = { '<C-w>k', 'focus window above' },
-  ['i <C-k>'] = { '<ESC><C-w>k', 'focus window above, leave insert mode' },
-  ['x <C-k>'] = { ":m '<-2<CR>gv=gv", 'move selection up one line' },
-  ['t <C-k>'] = { tc('<C-\\><C-n><C-w>k'), 'focus window above' },
+  { 'K', 'kkk', desc = 'up 3 lines', mode = { 'n', 'x', 'o' } },
+  { '<C-k>', '<C-w>k', desc = 'focus window above' },
+  { '<C-k>', '<ESC><C-w>k', desc = 'focus window above, leave insert mode', mode = 'i' },
+  { '<C-k>', ":m '<-2<CR>gv=gv", desc = 'move selection up one line', mode = 'x' },
+  { '<C-k>', tc('<C-\\><C-n><C-w>k'), desc = 'focus window above', mode = 't' },
 
   -- l                right
   -- L                right 3 columns
@@ -239,22 +224,20 @@ Mappings.config = {
   -- <C-l>            focus window right
   -- {Insert}<C-l>    focus window right, leave insert mode
   -- {Term}<C-l>      focus window right
-  ['nxo L'] = { 'lll', 'right 3 columns' },
-  ['<A-l>'] = { '<Cmd>bnext<CR>', 'next buffer' },
-  ['n <C-l>'] = { '<C-w>l', 'focus window right' },
-  ['i <C-l>'] = { '<ESC><C-w>l', 'focus window right, leave insert mode' },
-  ['t <A-l>'] = { tc('<C-\\><C-n>:bnext<CR>'), 'next buffer' },
-  ['t <C-l>'] = { tc('<C-\\><C-n><C-w>l'), 'focus window right' },
+  { 'L', 'lll', desc = 'right 3 columns', mode = { 'n', 'x', 'o' } },
+  { '<A-l>', '<Cmd>bnext<CR>', desc = 'next buffer' },
+  { '<C-l>', '<C-w>l', desc = 'focus window right' },
+  { '<C-l>', '<ESC><C-w>l', desc = 'focus window right, leave insert mode', mode = 'i' },
+  { '<C-l>', tc('<C-\\><C-n>:bnext<CR>'), desc = 'next buffer', mode = 't' },
+  { '<C-l>', tc('<C-\\><C-n><C-w>l'), desc = 'focus window right', mode = 't' },
 
   -- m{a-Z}           set mark char, where a-z marks in buffer, A-Z cross-buffers
   -- M                jump middle, move cursor to middle line
   -- mm               set mark M (jump with <Leader>m)
   -- mn               set mark N (jump with <Leader>n)
-  m = {
-    name = 'set mark',
-    m = { 'mM', 'set mark M' },
-    n = { 'mN', 'set mark N' },
-  },
+  { 'm', group = 'set mark' },
+  { 'mm', 'mM', desc = 'set mark M' },
+  { 'mn', 'mN', desc = 'set mark N' },
 
   -- n                jump to next search result
   -- N                jump to previous search result
@@ -266,12 +249,12 @@ Mappings.config = {
   -- p                put/paste after cursor, place cursor at end of pasted text
   -- {Visual}p        put/paste over selection, place cursor at end of pasted text
   -- P                paste before cursor
-  ['nx p'] = { 'p`]', 'paste after cursor' },
+  { 'p', 'p`]', desc = 'paste after cursor', mode = { 'n', 'x' } },
 
   -- q{c}             record macro to register {c}
   -- @{c}             run macro from register {c}
   -- Q                run @q macro
-  ['nxo Q'] = { '@q', 'run @q macro' },
+  { 'Q', '@q', desc = 'run @q macro', mode = { 'n', 'x', 'o' } },
 
   -- r                replace single character
   -- R                enter replace mode
@@ -283,15 +266,19 @@ Mappings.config = {
   --   ds{c}          delete surrounding chars {c}
   --   ys{motion}{c}  add new surrounding chars {c}
   --   {Visual}vs{c}  surround visual selection with {c}
-  ['nxo s'] = {
+  {
+    's',
     '<Plug>CamelCaseMotion_w',
-    'move forward a section',
+    desc = 'move forward a section',
     noremap = false,
+    mode = { 'n', 'x', 'o' },
   },
-  ['nxo S'] = {
+  {
+    'S',
     '<Plug>CamelCaseMotion_b',
-    'move backwards a section',
+    desc = 'move backwards a section',
     noremap = false,
+    mode = { 'n', 'x', 'o' },
   },
 
   -- t{c}             find 'til {c} forward
@@ -303,14 +290,14 @@ Mappings.config = {
   -- {Visual}u        lowercase selection
   -- U                redo
   -- {Visual}U        uppercase selection
-  U = { '<C-r>', 'redo' },
+  { 'U', '<C-r>', desc = 'redo' },
 
   -- v                enter visual mode
   -- {Visual}vs{c}    surround visual selection with {c}
   -- V                enter visual line mode
   -- <C-v>            enter blockwise visual mode
   -- {Insert}<C-v>    insert a character literal (e.g. <TAB> instead of 2 spaces)
-  ['x vs'] = { '<Plug>VSurround', 'surround visual selection' },
+  { 'vs', '<Plug>VSurround', desc = 'surround visual selection', mode = 'x' },
 
   -- w                move word forward
   -- W                move WORD forward
@@ -318,15 +305,15 @@ Mappings.config = {
   -- x                delete char forward, don't save to register
   -- X                delete char backward, don't save to register
   -- <C-x>            decrement number under cursor (pairs with <C-a>)
-  ['nx x'] = { '"_x', 'delete char forward' },
-  ['nx X'] = { '"_X', 'delete char backwards' },
+  { 'x', '"_x', desc = 'delete char forward', mode = { 'n', 'x' } },
+  { 'X', '"_X', desc = 'delete char backwards', mode = { 'n', 'x' } },
 
   -- y                yank/copy text
   -- {Visual}y        yank selection, place cursor at end of selection
   -- ys{motion}{c}    add new surrounding chars {c}
   -- Y                join lines (Y looks like two lines joining into one)
-  ['x y'] = { 'y`]', 'yank/copy text' },
-  ['nx Y'] = { 'J', 'join lines' },
+  { 'y', 'y`]', desc = 'yank/copy text', mode = 'x' },
+  { 'Y', 'J', desc = 'join lines', mode = { 'n', 'x' } },
 
   -- z{*}             manage folds
   --   zc             close fold
@@ -364,25 +351,25 @@ Mappings.config = {
   -- <A-]>            next jump list location
   -- <C-]>            follow ctag, list all tags if there is more than one match
   -- <C-[>            <ESC>
-  ['[e'] = { 'g;', 'previous change list entry' },
-  [']e'] = { 'g,', 'next change list entry' },
-  ['[j'] = { '<C-o>', 'previous jump list location' },
-  [']j'] = { '<C-i>', 'next jump list location' },
-  ['<A-[>'] = { '<C-o>', 'previous jump list location' },
-  ['<A-]>'] = { '<C-i>', 'next jump list location' },
-  ['<C-]>'] = { 'g<C-]>', 'follow ctag' },
+  { '[e', 'g;', desc = 'previous change list entry' },
+  { ']e', 'g,', desc = 'next change list entry' },
+  { '[j', '<C-o>', desc = 'previous jump list location' },
+  { ']j', '<C-i>', desc = 'next jump list location' },
+  { '<A-[>', '<C-o>', desc = 'previous jump list location' },
+  { '<A-]>', '<C-i>', desc = 'next jump list location' },
+  { '<C-]>', 'g<C-]>', desc = 'follow ctag' },
 
   -- 0                go to first character of line
   -- ^                go to start of line
   -- $                go to end of line
-  ['nxo 0'] = { '^', 'go to first character of line' },
-  ['nxo ^'] = { '0', 'go to start of line' },
+  { '0', '^', desc = 'go to first character of line', mode = { 'n', 'x', 'o' } },
+  { '^', '0', desc = 'go to start of line', mode = { 'n', 'x', 'o' } },
 
   -- %                jump to matching brace/bracket/paren
 
   -- :                enter command mode
   -- ;                enter command mode
-  ['nxo ;'] = { ':', 'enter command mode', silent = false },
+  { ';', ':', desc = 'enter command mode', mode = { 'n', 'x', 'o' }, silent = false },
 
   -- {                jump to beginning of paragraph
   -- }                jump to end of paragraph
@@ -418,7 +405,7 @@ Mappings.config = {
 
   -- .                repeat last command
   -- {Visual}.        repeat last command once on each line
-  ['x .'] = { '<Cmd>norm.<CR>', 'repeat last command' },
+  { '.', '<Cmd>norm.<CR>', desc = 'repeat last command', mode = 'x' },
 
   -- -                open Dirvish in file's directory
   -- {Dirvish}-       move up to the parent directory
@@ -429,32 +416,44 @@ Mappings.config = {
   -- <S-Tab>          un-indent line/selection
   -- {Insert}<Tab>    show completion menu, scroll down through menu
   -- {Insert}<S-Tab>  if the completion menu is open scroll up, else insert a tab
-  ['n <Tab>'] = { '>>', 'indent line' },
-  ['n <S-Tab>'] = { '<<', 'un-indent line' },
-  ['x <Tab>'] = { '>', 'indent selection' },
-  ['x <S-Tab>'] = { '<', 'un-indent selection' },
-  ['i <Tab>'] = {
-    tc('pumvisible() ? "<C-n>" : compe#complete()'),
-    'show/scroll completion menu',
-    expr = true,
+  { '<Tab>', '>>', desc = 'indent line' },
+  { '<S-Tab>', '<<', desc = 'un-indent line' },
+  { '<Tab>', '>', desc = 'indent selection', mode = 'x' },
+  { '<S-Tab>', '<', desc = 'un-indent selection', mode = 'x' },
+  {
+    '<Tab>',
+    desc = 'show/scroll completion menu',
+    mode = { 'i', 's' },
   },
-  ['i <S-Tab>'] = {
-    tc('pumvisible() ? "<C-p>" : "<Tab>"'),
-    'scroll up through completion menu',
-    expr = true,
-  },
-  ['<Esc>'] = {
+  { '<S-Tab>', desc = 'scroll up through completion menu', mode = { 'i', 's' } },
+  {
+    '<Esc>',
     '<Esc>hl',
-    'Return to normal mode, clear highlights and close floating windows',
+    desc = 'Return to normal mode, clear highlights and close floating windows',
   },
-  ['nx <Down>'] = { 'gj', 'down through wrapped lines' },
-  ['i <Down>'] = { '<C-o>gj', 'down through wrapped lines' },
-  ['nx <Up>'] = { 'gk', 'up through wrapped lines' },
-  ['i <Up>'] = { '<C-o>gk', 'up through wrapped lines' },
+  { '<Down>', 'gj', desc = 'down through wrapped lines', mode = { 'n', 'x' } },
+  { '<Down>', '<C-o>gj', desc = 'down through wrapped lines', mode = 'i' },
+  { '<Up>', 'gk', desc = 'up through wrapped lines', mode = { 'n', 'x' } },
+  { '<Up>', '<C-o>gk', desc = 'up through wrapped lines', mode = 'i' },
 }
 
+vim.api.nvim_set_keymap('i', '<Tab>', '', { callback = require('em.fn').tab_complete, expr = true })
+vim.api.nvim_set_keymap('s', '<Tab>', '', { callback = require('em.fn').tab_complete, expr = true })
+vim.api.nvim_set_keymap(
+  'i',
+  '<S-Tab>',
+  '',
+  { callback = require('em.fn').shift_tab_complete, expr = true }
+)
+vim.api.nvim_set_keymap(
+  's',
+  '<S-Tab>',
+  '',
+  { callback = require('em.fn').shift_tab_complete, expr = true }
+)
+
 function Mappings.setup()
-  require('em.vim').map(Mappings.config)
+  require('which-key').add(Mappings.config)
 end
 
 function Mappings.reload()
