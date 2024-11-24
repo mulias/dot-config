@@ -52,7 +52,7 @@ UI.config = {
       local fn = require('em.fn')
       fn.underline_spell_groups()
       fn.underline_lsp_groups()
-      fn.always_show_vert_split()
+      fn.always_show_win_seperator()
       fn.subtle_highlight_cursorline()
     end
   end,

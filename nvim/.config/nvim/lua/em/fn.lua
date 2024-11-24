@@ -164,18 +164,12 @@ end
 
 -- Try to make the bar between vertical window splits visible by setting it to
 -- the same color as non-active statuslines.
-function Fn.always_show_vert_split()
+function Fn.always_show_win_seperator()
   local em_vim = require('em.vim')
-  local normal_bg = em_vim.get_highlight_group_bg('Normal')
-  local vert_split_fg = em_vim.get_highlight_group_fg('VertSplit')
-  local is_vert_split_hidden = normal_bg == vert_split_fg and normal_bg ~= ''
+  local non_current_status_line_background_color = em_vim.get_highlight_group_bg('StatusLineNC')
 
-  if is_vert_split_hidden then
-    local non_current_status_line_background_color = em_vim.get_highlight_group_bg('StatusLineNC')
-
-    vim.cmd('highlight clear VertSplit')
-    vim.cmd('highlight VertSplit guifg=' .. non_current_status_line_background_color)
-  end
+  vim.cmd('highlight clear WinSeparator')
+  vim.cmd('highlight WinSeparator guifg=' .. non_current_status_line_background_color)
 end
 
 -- Try to hide the `~` lines after the end of the buffer by setting them to the
