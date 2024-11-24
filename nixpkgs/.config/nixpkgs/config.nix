@@ -26,8 +26,10 @@ in {
         transmission_4-gtk
         unstable.discord
         unstable.firefox
+        unstable.fzf
         unstable.google-chrome
         unstable.kitty
+        unstable.neovim
         unstable.signal-desktop
         unstable.zed-editor
         vscode
